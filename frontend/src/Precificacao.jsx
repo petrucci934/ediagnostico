@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const CHAVE_PRECIFICACAO = "ediagnostico-precificacao";
 
@@ -65,27 +65,40 @@ function carregarConfiguracao() {
   }
 }
 function Precificacao() {
-  const [inicioSemana, setInicioSemana] = useState("08:00");
-  const [fimSemana, setFimSemana] = useState("18:00");
-  const [almocoSemana, setAlmocoSemana] = useState(60);
+  const [configuracao, setConfiguracao] = useState(carregarConfiguracao);
 
-  const [inicioSabado, setInicioSabado] = useState("08:00");
-  const [fimSabado, setFimSabado] = useState("12:00");
-  const [almocoSabado, setAlmocoSabado] = useState(0);
+  const {
+    inicioSemana,
+    fimSemana,
+    almocoSemana,
+    inicioSabado,
+    fimSabado,
+    almocoSabado,
+    despesas,
+    produtividade,
+    horasServico,
+    pecas,
+    margem,
+  } = configuracao;
 
-  const [despesas, setDespesas] = useState({
-    aluguel: "0",
-    energia: "0",
-    agua: "0",
-    internet: "0",
-    contabilidade: "0",
-    ferramentas: "0",
-    outros: "0",
-  });
-  const [produtividade, setProdutividade] = useState(70);
-  const [horasServico, setHorasServico] = useState("2");
-  const [pecas, setPecas] = useState("50");
-  const [margem, setMargem] = useState(30);
+  useEffect(() => {
+    try {
+      localStorage.setItem(CHAVE_PRECIFICACAO, JSON.stringify(configuracao));
+    } catch (erro) {
+      console.error("Não foi possível salvar a precificação:", erro);
+    }
+  }, [configuracao]);
+
+  function atualizarCampo(chave, valor) {
+    setConfiguracao((atual) => ({ ...atual, [chave]: valor }));
+  }
+
+  function atualizarDespesa(chave, valor) {
+    setConfiguracao((atual) => ({
+      ...atual,
+      despesas: { ...atual.despesas, [chave]: valor },
+    }));
+  }
 
   function calcularHoras(inicio, fim, almoco) {
     const [horaInicio, minutoInicio] = inicio.split(":").map(Number);
@@ -148,14 +161,14 @@ function Precificacao() {
             <input
               type="time"
               value={inicioSemana}
-              onChange={(e) => setInicioSemana(e.target.value)}
+              onChange={(e) => atualizarCampo("inicioSemana", e.target.value)}
             />
 
             <label>Horário de saída</label>
             <input
               type="time"
               value={fimSemana}
-              onChange={(e) => setFimSemana(e.target.value)}
+              onChange={(e) => atualizarCampo("fimSemana", e.target.value)}
             />
 
             <label>Almoço (minutos por dia)</label>
@@ -163,7 +176,7 @@ function Precificacao() {
               type="number"
               min="0"
               value={almocoSemana}
-              onChange={(e) => setAlmocoSemana(e.target.value)}
+              onChange={(e) => atualizarCampo("almocoSemana", e.target.value)}
             />
           </div>
 
@@ -174,14 +187,14 @@ function Precificacao() {
             <input
               type="time"
               value={inicioSabado}
-              onChange={(e) => setInicioSabado(e.target.value)}
+              onChange={(e) => atualizarCampo("inicioSabado", e.target.value)}
             />
 
             <label>Horário de saída</label>
             <input
               type="time"
               value={fimSabado}
-              onChange={(e) => setFimSabado(e.target.value)}
+              onChange={(e) => atualizarCampo("fimSabado", e.target.value)}
             />
 
             <label>Almoço (minutos)</label>
@@ -189,7 +202,7 @@ function Precificacao() {
               type="number"
               min="0"
               value={almocoSabado}
-              onChange={(e) => setAlmocoSabado(e.target.value)}
+              onChange={(e) => atualizarCampo("almocoSabado", e.target.value)}
             />
           </div>
 
@@ -228,6 +241,7 @@ function Precificacao() {
                 type="number"
                 min="0"
                 step="0.01"
+                placeholder="0"
                 value={despesas[chave]}
                 onChange={(e) => atualizarDespesa(chave, e.target.value)}
               />
@@ -237,21 +251,13 @@ function Precificacao() {
           <p className="total-despesas">
             Total de despesas mensais: <strong>{moeda(custos)}</strong>
           </p>
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            value={custos}
-            onChange={(e) => setCustos(e.target.value)}
-          />
-
           <label>Tempo produtivo da jornada (%)</label>
           <input
             type="number"
             min="1"
             max="100"
             value={produtividade}
-            onChange={(e) => setProdutividade(e.target.value)}
+            onChange={(e) => atualizarCampo("produtividade", e.target.value)}
           />
         </details>
         <div className="resultado-precificacao">
@@ -273,7 +279,7 @@ function Precificacao() {
           min="0"
           step="0.25"
           value={horasServico}
-          onChange={(e) => setHorasServico(e.target.value)}
+          onChange={(e) => atualizarCampo("horasServico", e.target.value)}
         />
 
         <label>Custo das peças (R$)</label>
@@ -282,7 +288,7 @@ function Precificacao() {
           min="0"
           step="0.01"
           value={pecas}
-          onChange={(e) => setPecas(e.target.value)}
+          onChange={(e) => atualizarCampo("pecas", e.target.value)}
         />
 
         <label>Margem de lucro desejada (%)</label>
@@ -291,7 +297,7 @@ function Precificacao() {
           min="0"
           max="99"
           value={margem}
-          onChange={(e) => setMargem(e.target.value)}
+          onChange={(e) => atualizarCampo("margem", e.target.value)}
         />
 
         <div className="resultado-precificacao destaque-preco">

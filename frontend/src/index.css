@@ -25,20 +25,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-:root[data-tema="light"] {
-  --text: #475569;
-  --text-h: #172033;
-  --bg: #f1f5f9;
-  --border: #d8e0e9;
-  --code-bg: #e8edf3;
-  --accent: #4d7c0f;
-  --accent-bg: rgba(77, 124, 15, 0.1);
-  --accent-border: rgba(77, 124, 15, 0.4);
-  --social-bg: #ffffff;
-  --shadow: rgba(0, 0, 0, 0.08) 0 10px 15px -3px;
-  color-scheme: light;
-}
-
 * {
   box-sizing: border-box;
 }

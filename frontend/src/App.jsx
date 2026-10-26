@@ -1,15 +1,151 @@
-import { useEffect, useState } from "react";
 import {
-  House,
+  Children,
+  cloneElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
   UserRound,
   Wrench,
-  ArrowDown,
   ShieldCheck,
   ClipboardList,
-  Settings,
 } from "lucide-react";
 import Precificacao from "./Precificacao";
 import "./App.css";
+
+function Carrossel({ className, children, label }) {
+  const galeriaRef = useRef(null);
+  const quantidade = Children.count(children);
+  const [indiceAtivo, setIndiceAtivo] = useState(0);
+  const [pausado, setPausado] = useState(false);
+  const indiceAtual = quantidade ? indiceAtivo % quantidade : 0;
+
+  useEffect(() => {
+    const galeria = galeriaRef.current;
+    const card = galeria?.children[indiceAtual];
+    if (!galeria || !card) return;
+
+    card.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  }, [indiceAtual]);
+
+  useEffect(() => {
+    if (pausado || quantidade < 2) return undefined;
+
+    const timer = window.setInterval(() => {
+      setIndiceAtivo((indice) => (indice + 1) % quantidade);
+    }, 4000);
+
+    return () => window.clearInterval(timer);
+  }, [pausado, quantidade]);
+
+  const cards = Children.map(children, (card, indice) =>
+    cloneElement(card, {
+      className: [
+        card.props.className,
+        indice === indiceAtual ? "card-autoplay-ativo" : "",
+      ]
+        .filter(Boolean)
+        .join(" "),
+      "aria-current": indice === indiceAtual ? "true" : "false",
+    }),
+  );
+
+  function retomarFoco(event) {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setPausado(false);
+    }
+  }
+
+  return (
+    <div
+      className="carrossel03-wrapper"
+      onMouseEnter={() => setPausado(true)}
+      onMouseLeave={() => setPausado(false)}
+      onFocusCapture={() => setPausado(true)}
+      onBlurCapture={retomarFoco}
+    >
+      <div className={className} ref={galeriaRef}>
+        {cards}
+      </div>
+
+      <button
+        type="button"
+        className="carrossel03-seta carrossel03-anterior"
+        aria-label={`${label}: item anterior`}
+        onClick={() =>
+          setIndiceAtivo((indice) => (indice % quantidade - 1 + quantidade) % quantidade)
+        }
+      >
+        ‹
+      </button>
+      <button
+        type="button"
+        className="carrossel03-seta carrossel03-proximo"
+        aria-label={`${label}: próximo item`}
+          onClick={() => setIndiceAtivo((indice) => (indice % quantidade + 1) % quantidade)}
+      >
+        ›
+      </button>
+
+      <div className="autoplay-indicadores" aria-label={label}>
+        {Children.map(children, (_, indice) => (
+          <button
+            type="button"
+            className={`autoplay-indicador ${indice === indiceAtual ? "ativo" : ""}`}
+            aria-label={`${label}: mostrar item ${indice + 1}`}
+            aria-current={indice === indiceAtual ? "true" : "false"}
+            onClick={() => setIndiceAtivo(indice)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function VisualizadorCodigo({ item, onFechar }) {
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (dialog && !dialog.open) dialog.showModal();
+    return () => {
+      if (dialog?.open) dialog.close();
+    };
+  }, []);
+
+  return (
+    <dialog
+      ref={dialogRef}
+      className="visualizador-codigo"
+      aria-labelledby="visualizador-codigo-titulo"
+      onCancel={(evento) => {
+        evento.preventDefault();
+        onFechar();
+      }}
+      onClick={(evento) => {
+        if (evento.target === evento.currentTarget) onFechar();
+      }}
+    >
+      <button
+        type="button"
+        className="visualizador-codigo-fechar"
+        aria-label="Fechar slide ampliado"
+        onClick={onFechar}
+      >
+        ×
+      </button>
+      <h2 id="visualizador-codigo-titulo">Código {item.codigo}</h2>
+      <img src={item.imagem} alt={`Slide completo do código ${item.codigo}`} />
+      <p>Pressione Esc ou clique fora do slide para fechar.</p>
+    </dialog>
+  );
+}
 
 function App() {
   const [codigo, setCodigo] = useState("");
@@ -21,6 +157,8 @@ function App() {
   const [fabricanteSelecionado, setFabricanteSelecionado] = useState("");
   const [modelos, setModelos] = useState([]);
   const [modeloSelecionado, setModeloSelecionado] = useState("");
+  // Mantém os procedimentos carregados para a exibição técnica futura.
+  // eslint-disable-next-line no-unused-vars
   const [procedimentos, setProcedimentos] = useState([]);
   const [telaAtual, setTelaAtual] = useState("diagnostico");
   const [filtroStatus, setFiltroStatus] = useState("todos");
@@ -29,139 +167,7 @@ function App() {
   const [carregandoAtendimentos, setCarregandoAtendimentos] = useState(false);
   const [erroAtendimentos, setErroAtendimentos] = useState("");
   const [abaTeste, setAbaTeste] = useState("biblioteca");
-
-  // CARROSSEL 03 — AUTOPLAY COM CARD CENTRAL EM DESTAQUE
-  useEffect(() => {
-    let timer;
-    let observer;
-    let gallery = null;
-    let wrapper = null;
-    let cards = [];
-    let active = 0;
-    let paused = false;
-
-    const showCard = (index) => {
-      if (!gallery || !cards.length) return;
-
-      active = (index + cards.length) % cards.length;
-
-      cards.forEach((card, i) => {
-        card.classList.toggle("card-autoplay-ativo", i === active);
-        card.setAttribute("aria-current", i === active ? "true" : "false");
-      });
-
-      const card = cards[active];
-      const left =
-        card.offsetLeft - (gallery.clientWidth - card.offsetWidth) / 2;
-
-      gallery.scrollTo({
-        left: Math.max(0, left),
-        behavior: "smooth",
-      });
-
-      wrapper?.querySelectorAll(".autoplay-indicador").forEach((el, i) => {
-        el.classList.toggle("ativo", i === active);
-        el.setAttribute("aria-current", i === active ? "true" : "false");
-      });
-    };
-   const setup = () => {
-    const seletor =
-      abaTeste === "biblioteca" ? ".galeria-guias" : ".galeria-codigos";
-
-    const galerias = Array.from(document.querySelectorAll(seletor));
-
-    const found = galerias.find(
-      (elemento) => elemento.getClientRects().length > 0,
-    );
-    if (!found || found === gallery) return;
-
-    if (timer) window.clearInterval(timer);
-
-    gallery = found;
-    const seletorCard =
-      abaTeste === "biblioteca" ? ".galeria-guia-card" : ".galeria-codigo-card";
-
-    cards = Array.from(gallery.querySelectorAll(`:scope > ${seletorCard}`));
-
-    if (cards.length < 2) return;
-    const wrapperExistente = gallery.closest(".carrossel03-wrapper");
-
-    if (wrapperExistente) {
-      wrapper = wrapperExistente;
-
-      // Remove somente as setas duplicadas, se houver
-      const setas = wrapper.querySelectorAll(".carrossel03-seta");
-      setas.forEach((seta, index) => {
-        if (index > 1) seta.remove();
-      });
-    } else {
-      wrapper = document.createElement("div");
-      wrapper.className = "carrossel03-wrapper";
-      gallery.parentNode.insertBefore(wrapper, gallery);
-      wrapper.appendChild(gallery);
-    }
-    if (!wrapper.querySelector(".carrossel03-anterior")) {
-      const anterior = document.createElement("button");
-      anterior.type = "button";
-      anterior.className = "carrossel03-seta carrossel03-anterior";
-      anterior.setAttribute("aria-label", "Material anterior");
-      anterior.textContent = "‹";
-      anterior.addEventListener("click", () => showCard(active - 1));
-      wrapper.appendChild(anterior);
-    }
-
-    if (!wrapper.querySelector(".carrossel03-proximo")) {
-      const proximo = document.createElement("button");
-      proximo.type = "button";
-      proximo.className = "carrossel03-seta carrossel03-proximo";
-      proximo.setAttribute("aria-label", "Próximo material");
-      proximo.textContent = "›";
-      proximo.addEventListener("click", () => showCard(active + 1));
-      wrapper.appendChild(proximo);
-    }
-    const indicadores = document.createElement("div");
-    indicadores.className = "autoplay-indicadores";
-    indicadores.setAttribute("aria-label", "Navegação da Biblioteca Técnica");
-
-    cards.forEach((_, index) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "autoplay-indicador";
-      button.setAttribute("aria-label", `Mostrar material ${index + 1}`);
-      button.addEventListener("click", () => showCard(index));
-      indicadores.appendChild(button);
-    });
-
-    wrapper.appendChild(indicadores);
-
-    wrapper.addEventListener("mouseenter", () => {
-      paused = true;
-    });
-    wrapper.addEventListener("mouseleave", () => {
-      paused = false;
-    });
-    wrapper.addEventListener("focusin", () => {
-      paused = true;
-    });
-    wrapper.addEventListener("focusout", () => {
-      paused = false;
-    });
-
-    showCard(0);
-    timer = window.setInterval(() => {
-      if (!paused && gallery?.isConnected) showCard(active + 1);
-    }, 3000);
-        };
-
-    observer = new MutationObserver(setup);
-    observer.observe(document.body, { childList: true, subtree: true });
-    setup();
-
-    return () => {
-      observer?.disconnect();
-      if (timer) window.clearInterval(timer);
-    };
-  }, [abaTeste]);
+  const [codigoAmpliado, setCodigoAmpliado] = useState(null);
 
   const [testesTecnicos, setTestesTecnicos] = useState([]);
   const [carregandoTestes, setCarregandoTestes] = useState(false);
@@ -177,18 +183,6 @@ function App() {
     evidence_notes: "",
     evidence_url: "",
   });
-  const [tema, setTema] = useState(() => {
-    return localStorage.getItem("ediagnostico-tema") || "dark";
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-tema", tema);
-    localStorage.setItem("ediagnostico-tema", tema);
-  }, [tema]);
-
-  const alternarTema = () => {
-    setTema((temaAtual) => (temaAtual === "dark" ? "light" : "dark"));
-  };
   const [codigosTeste, setCodigosTeste] = useState([]);
 
   const [perfil, setPerfil] = useState(() => {
@@ -263,14 +257,6 @@ function App() {
 
     carregarModelos();
   }, []);
-  useEffect(() => {
-    if (
-      (perfil === "mecanico" && telaAtual === "testes") ||
-      (perfil === "revisor" && telaAtual === "revisao")
-    ) {
-      carregarTestes();
-    }
-  }, [perfil, telaAtual]);
   async function fazerLogin(event) {
     event.preventDefault();
     setErroLogin("");
@@ -315,7 +301,7 @@ function App() {
     }
   }
 
-  async function carregarTestes() {
+  const carregarTestes = useCallback(async () => {
     setCarregandoTestes(true);
     setErroTestes("");
 
@@ -337,7 +323,18 @@ function App() {
     } finally {
       setCarregandoTestes(false);
     }
-  }
+  }, [token]);
+
+  useEffect(() => {
+    if (
+      (perfil === "mecanico" && telaAtual === "testes") ||
+      (perfil === "revisor" && telaAtual === "revisao")
+    ) {
+      // A carga é assíncrona e atualiza estado quando a resposta chegar.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      carregarTestes();
+    }
+  }, [perfil, telaAtual, carregarTestes]);
 
   async function carregarCodigosTeste(modeloId) {
     setCodigosTeste([]);
@@ -520,27 +517,6 @@ function App() {
           </span>
         </a>
 
-        <span className="status">
-          <span className="status-ponto" />
-          Sistema em desenvolvimento
-        </span>
-        <button
-          type="button"
-          className={`botao-tema ${tema === "dark" ? "tema-escuro" : "tema-claro"}`}
-          onClick={alternarTema}
-          aria-label={
-            tema === "dark" ? "Ativar tema claro" : "Ativar tema escuro"
-          }
-          title={tema === "dark" ? "Ativar tema claro" : "Ativar tema escuro"}
-        >
-          <span className="tema-icone" aria-hidden="true">
-            {tema === "dark" ? "☾" : "☀"}
-          </span>
-          <span>{tema === "dark" ? "Modo escuro" : "Modo claro"}</span>
-          <span className="tema-indicador" aria-hidden="true">
-            <span />
-          </span>
-        </button>
         <button
           type="button"
           className="botao-menu"
@@ -556,18 +532,6 @@ function App() {
           )}
         </button>
 
-        <pre style={{ color: "white", fontSize: "12px" }}>
-          {JSON.stringify(
-            {
-              perfil,
-              perfilEscolhido,
-              perfilUsuario: usuarioLogado?.perfil,
-              telaAtual,
-            },
-            null,
-            2,
-          )}
-        </pre>
         <nav
           id="menu-principal"
           className={`navegacao ${menuAberto ? "menu-aberto" : ""}`}
@@ -807,7 +771,10 @@ function App() {
                     </p>
                   </div>
 
-                  <div className="galeria-codigos">
+                  <Carrossel
+                    className="galeria-codigos"
+                    label="Códigos de diagnóstico"
+                  >
                     {[
                       { codigo: "P001", imagem: "/images/P001.png" },
                       { codigo: "P002", imagem: "/images/P002.png" },
@@ -818,18 +785,21 @@ function App() {
                       { codigo: "P007", imagem: "/images/P007.png" },
                       { codigo: "P008", imagem: "/images/P008.png" },
                     ].map((item) => (
-                      <article
+                      <button
+                        type="button"
                         className="galeria-codigo-card"
                         key={item.codigo}
+                        aria-label={`Ampliar slide do código ${item.codigo}`}
+                        onClick={() => setCodigoAmpliado(item)}
                       >
                         <img
                           src={item.imagem}
                           alt={`Card de diagnóstico ${item.codigo}`}
                         />
                         <h3>{item.codigo}</h3>
-                      </article>
+                      </button>
                     ))}
-                  </div>
+                  </Carrossel>
 
                   <div className="galeria-cabecalho galeria-guias-cabecalho">
                     <span className="etiqueta">MATERIAL DE APOIO</span>
@@ -839,7 +809,10 @@ function App() {
                     </p>
                   </div>
 
-                  <div className="galeria-guias">
+                  <Carrossel
+                    className="galeria-guias"
+                    label="Guias para o mecânico"
+                  >
                     <a
                       className="galeria-guia-card"
                       href="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
@@ -897,7 +870,7 @@ function App() {
                       <h3>Como usar o guia</h3>
                       <span>Ver material</span>
                     </a>
-                  </div>
+                  </Carrossel>
                 </section>
               )}
 
@@ -1077,32 +1050,6 @@ function App() {
                 </div>
 
                 {resultado.resultados.map((item, indice) => {
-                  const imagemCodigo = (resultado.imagens || []).find(
-                    (imagem) =>
-                      imagem.image_path?.includes(`/codigos/${item.code}.png`),
-                  );
-
-                  const imagemExibida =
-                    imagemCodigo ||
-                    (resultado.imagens || []).find(
-                      (imagem) => imagem.image_path,
-                    );
-
-                  const gravidade =
-                    {
-                      unknown: "Não classificada",
-                      low: "Baixa",
-                      medium: "Média",
-                      high: "Alta",
-                      critical: "Crítica",
-                    }[item.severity] || "Não classificada";
-
-                  const etapas = procedimentos.filter(
-                    (procedimento) =>
-                      procedimento.codigo === resultado.codigo &&
-                      procedimento.etapa > 1,
-                  );
-
                   return (
                     <div
                       className="card-imagem-gerado"
@@ -1476,7 +1423,10 @@ function App() {
                 </p>
               </div>
 
-              <div className="galeria-codigos">
+              <Carrossel
+                className="galeria-codigos"
+                label="Códigos de diagnóstico"
+              >
                 {[
                   { codigo: "P001", imagem: "/images/P001.png" },
                   { codigo: "P002", imagem: "/images/P002.png" },
@@ -1487,15 +1437,21 @@ function App() {
                   { codigo: "P007", imagem: "/images/P007.png" },
                   { codigo: "P008", imagem: "/images/P008.png" },
                 ].map((item) => (
-                  <article className="galeria-codigo-card" key={item.codigo}>
+                  <button
+                    type="button"
+                    className="galeria-codigo-card"
+                    key={item.codigo}
+                    aria-label={`Ampliar slide do código ${item.codigo}`}
+                    onClick={() => setCodigoAmpliado(item)}
+                  >
                     <img
                       src={item.imagem}
                       alt={`Card de diagnóstico ${item.codigo}`}
                     />
                     <h3>{item.codigo}</h3>
-                  </article>
+                  </button>
                 ))}
-              </div>
+              </Carrossel>
 
               <div className="galeria-cabecalho galeria-guias-cabecalho">
                 <span className="etiqueta">MATERIAL DE APOIO</span>
@@ -1503,7 +1459,10 @@ function App() {
                 <p>Materiais de consulta para apoiar os serviços da oficina.</p>
               </div>
 
-              <div className="galeria-guias">
+              <Carrossel
+                className="galeria-guias"
+                label="Guias para o mecânico"
+              >
                 <a
                   className="galeria-guia-card"
                   href="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
@@ -1524,7 +1483,11 @@ function App() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <div className="galeria-guia-pdf">PDF</div>
+                  <img
+                    className="capa-guia-mecanicos"
+                    src="/images/mecanico/Guia%20para%20Mec%C3%A2nicos%20de%20Scooters%20El%C3%A9tricas.png"
+                    alt="Capa do Guia para Mecânicos de Scooters Elétricas"
+                  />
                   <h3>Guia para mecânicos</h3>
                   <span>Abrir guia</span>
                 </a>
@@ -1537,7 +1500,7 @@ function App() {
                 >
                   <img
                     className="capa-codigos-erros"
-                    src="/images/mecanico/capa-codigos-erros.pdf"
+                    src="/images/mecanico/capa-codigos-erros.png"
                     alt="Capa do catálogo Códigos e erros"
                   />
                   <h3>Códigos e erros</h3>
@@ -1557,7 +1520,7 @@ function App() {
                   <h3>Como usar o guia</h3>
                   <span>Ver material</span>
                 </a>
-              </div>
+              </Carrossel>
             </section>
           )}
 
@@ -1763,6 +1726,13 @@ function App() {
             </section>
           )}
         </section>
+      )}
+
+      {codigoAmpliado && (
+        <VisualizadorCodigo
+          item={codigoAmpliado}
+          onFechar={() => setCodigoAmpliado(null)}
+        />
       )}
 
       <footer className="rodape">
