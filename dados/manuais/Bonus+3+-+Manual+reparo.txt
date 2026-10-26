@@ -1,0 +1,560 @@
+
+===== PÁGINA 1 =====
+BÔNUS #3
+
+GUIA DE
+
+Saiba onde encontrar bateria, controlador, display,
+
+acelerador e conectores compatíveis, o que verificar
+antes de comprar e quais peças vale a pena ter
+em estoque na oficina.
+
+
+===== PÁGINA 2 =====
+| BÔNUS #3 | #3
+
+COMO USAR
+ESTE GUIA
+
+Siga este passo a passo para encontrar peças
+compatíveis com mais segurança e menos retrabalho.
+
+IDENTIFICAR À
+PEÇA E O SINTOMA
+
+MODELO
+E-MAX PRO
+
+TENSÃO
+
+CONFIRMAR
+MODELO, TENSÃO
+E CONECTORES
+
+COMPARAR
+
+FORNECEDOR,
+GARANTIA E PRAZO
+
+VALIDAR
+COMPATIBILIDADE
+ANTES DA COMPRA
+
+LEMBRE-SE 6
+
+de
+
+É we Om O wan PRAZO DE
+vty e VEÍCULO 4 SISTEMA Ou: ENTREGA
+
+
+
+===== PÁGINA 3 =====
+0 QUE VERIFICAR
+
+Evite erro de compatibilidade e prejuízo
+analisando os pontos certos.
+we’
+
+O monet Exato O tensão: O trove
+
+AMPERAGEM CONECTOR
+
+E 72.0v ° BA
+
+30.0, |°
+
+BMS LE] aon
+
+4) MEDIDAS E QUALIDADE E REPUTACAO DO
+ENCAIXE o GARANTIA 6 FORNECEDOR
+
+dA A
+4,9/5
+
+iv) Entregas no prazo
+
+GARANTIA.
+
+iv} Suporte técnico
+
+PRODUTO TESTADO Q Avaliações positivas
+E COM GARANTIA
+
+COMPRAR ? IGNORAR MISTURAR mia ESQUECER
+[0] SÓ PELA FOTO CONECTOR 4 TENSÃO 2) prazo
+
+
+===== PÁGINA 4 =====
+BATERIAS E MÓDULOS
+ONDE COMPRAR E COMO AVALIAR
+
+Guia rápido para comprar baterias de tração e módulos de
+reposição com segurança, desempenho e compatibilidade
+para scooters e motos elétricas.
+
+O Baterias pe Tração
+
+Mais autonomia, potência e segurança
+para o seu veículo elétrico.
+
+O QUE VOCÊ PODE COMPRAR
+BATERIA À : CARCAÇA NOTA FISCAL
+COMPLETA ad — EMESIS? E FIXAÇÃO E GARANTIA
+
+NOTA FISCAL |
+
+qd
+
+Pack pronto para Módulos compatíveis Células de qualidade Placa de proteção Estrutura resistente Compra segura com
+instalar e rodar. para reposição para máxima e balanceamento e kit de fixação NF e garantia
+ouisapansão performance. inclusa. completo. formal.
+
+| @ O QUE CONFERIR ANTES DE COMPRAR
+
+4 TENSÃO NOMINAL
+
+& química
+CAPACIDADE
+É MEDIDAS
+
+PLUG PRINCIPAL
+DATA / ESTADO
+
+Deve ser compatível com o seu controlador (ex.: 60V, 72V).
+Li-ion (NMC, LFP) — priorize química estável e segura.
+
+Ah (ex.: 30Ah, 45Ah) — maior Ah, mais autonomia.
+
+Comprimento x Largura x Altura — verifique o espaço disponível.
+
+Conector de carga/descarga compatível com seu sistema.
+
+Fabricação recente, ciclos de uso e estado geral.
+
+DICA IMPORTANTE
+Sempre confirme a compatibilidade
+
+com seu controlador, limite de corrente
+(BMS) e tipo de conector antes da compra.
+
+Em caso de dúvida, consulte o vendedor
+e envie fotos do seu sistema.
+
+SEGURANÇA MAIS AUTONOMIA
+EM 1º LUGAR E DESEMPENHO
+
+© SINAIS DE BOM FORNECEDOR
+
+ESPECIFICAÇÃO CLARA FOTOS REAIS SUPORTE TÉCNICO o GARANTIA
+
+{ Ficha técnica completa: PO! Imagens reais do produto, fm Atendimento rapido, g | Garantia formal
+tensão, capacidade, química, ótimos detalhes e orientação na instalação Na E, por escrito e politica
+BMS, conexões e medidas. de etiquetas e pós-venda. + transparente
+
+4 INFORMAÇÃO + QUALIDADE = DECISÃO INTELIGENTE
+
+
+===== PÁGINA 5 =====
+BONUS #3
+
+CARREGADORES E PORTA DE CARGA
+
+Verifique os principais pontos de compatibilidade para evitar
+incompatibilidade, mau contato, superaquecimento e danos.
+
+O tensão pe saina
+
+A tensão deve ser
+igual à da bateria.
+
+O corrente de canca
+
+A corrente pode ser igual
+ou menor que a da bateria.
+
+(8) + (4)
+
+BATERIA CARREGADOR
+72V 5A
+
+72V 30Ah
+
+EXEMPLO:
+
+72V
+
+5A (recomendado)
+igual ou menor que 30Ah
+
+O FIXAÇÃO E VEDAÇÃO :
+
+O conector deve travar bem
+
+(4) PINAGEM E POLARIDADE
+
+A ordem dos pinos e a polaridade
+
+precisam ser idênticas. e vedar contra água e poeira.
+PINO 1 +
+PINO2 -
+PINO 3 SINAL
+
+CONFIRA SEMPRE A ORDEM
+E A POLARIDADE DOS PINOS
+
+CORRETO
++Y
+SINAL
+
+COMPATIBILIDADE É SEGURANÇA. VERIFIQUE, CONFIRA E COMPRE CERTO.
+
+INCORRETO
+
++00)
+
+SINAL
+
+Vv) TRAVA FIRME
+VEDAÇÃO EFICIENTE
+
+CONEXÃO SEGURA
+
+À)
+
+Ss DESEMPENHO SEMPRE.
+
+O conector precisa ser
+igual ao da porta de carga.
+
+PEÇA CERTA, CARGA CERTA,
+
+ANTES DE FECHAR
+
+COMPARE ETIQUETA
+
+Verifique tensão e
+corrente de saída.
+
+CONFIRME CONECTOR
+
+O plug deve ser igual
+ao da porta de carga.
+
+VEJA AQUECIMENTO
+
+Após alguns minutos,
+verifique se não
+aquece demais.
+
+TESTE TENSÃO
+
+Mega a tensão na saída
+do carregador antes
+
+de conectar.
+
+
+===== PÁGINA 6 =====
+CONTROLADORES
+INVERSORES E BMS
+
+COMO ESCOLHER
+À PEÇA CERTA
+
+A escolha correta evita falhas,
+queimas e incompatibilidades.
+
+Analise, compare e compre com segurança.
+
+1. VOLTAGEM 2. CORRENTE
+DO SISTEMA SUPORTADA
+
+Y Confira a tensão
+nominal (Ex.: 48V,
+60V, 72V, 96V).
+
+3. PINAGEM DOS
+CONECTORES
+
+» Confira o formato,
+quantidade de vias
+e a função de
+cada pino.
+
+Y Verifique a corrente
+continua (A) e de pico.
+
+Vv Escolha uma peça com
+margem de segurança Ex: 420A cont. did x
+para o seu projeto. 250A pico 7 A bli are
+
+v A peça deve ser
+compatível com o
+sistema do veículo.
+
+4. PROTOCOLO / 5. DISSIPAÇÃO E 6. FIRMWARE OU
+COMUNICAÇÃO CARCAÇA PROGRAMAÇÃO
+
+* Identifique o protocolo Vv Avalie a potência e a Y Verifique se o firmware
+(CAN, UART, RS485, necessidade de dissipação. atende à aplicação.
+
+Modbus, etc.).
+v Carcaças de alumínio e * Algumas peças permitem
+
+grau de proteção (IP) parametrização via
+fazem a diferença. software.
+
+COMPATÍVEL EQUIVALENTE ADAPTAÇÃO
+
+“e “o
+
+@ Mesma especificação do fabricante @ Desempenho equivalente @ Pode exigir ajustes em pinagem ou software
+
+» Garanta compatibilidade
+com o display, BMS e
+demais módulos.
+
+PEÇA ORIGINAL
+
+@ Ajuste perfeito e máxima confiabilidade @ Excelente custo-benefício @ Ideal quando não há equivalentes diretos
+
+9 DICA FINAL: Sempre confirme os dados técnicos, diagramas e compatibilidades antes da compra. Pes as
+
+
+
+===== PÁGINA 7 =====
+BÔNUS #3
+
+DISPLAY, PAINEL que
+E CHICOTE
+
+Escolher o display, painel e chicote corretos
+garante funcionamento perfeito e instalação
+
+sem dor de cabeça.
+
+COMPATIBILIDADE
+DO PROTOCOLO
+
+Verifique o protocolo do
+controlador e do display
+(ex.: UART, CAN, R$485).
+Protocolos diferentes
+não se comunicam.
+
+TENSÃO DE
+ALIMENTAÇÃO
+
+Verifique se a tensão
+é 4gy do display/painel é
+
+compatível com o
+Gew
+
+@ 72V 72V, 84v).
+Gs
+
+O) COMPATÍVEL
+
+Aya FUNCIONA JUNTO
+
+sistema (ex.: 48V, 60V,
+
+FORMATO
+DO DISPLAY
+
+Confirme o tipo e o
+tamanho do display
+e o tipo de fixação
+para o painel.
+
+JC)
+
+=
+FUNÇÕES
+oo DO PAINEL
+
+Confirme as funções
+necessárias: velocidade,
+nível de bateria, modos,
+luzes, setas, falhas,
+odômetro, entre outras.
+
+A [rh] BED SA
+
+g CONFIRA 'o ee ipa
+
+O PLUG IGUAL @ PINAGEM
+
+CONFIAVEL
+MAIS SEGURANCA
+
+CONECTOR E
+QUANTIDADE DE VIAS
+
+Confira o tipo do conector
+e a quantidade de vias.
+Diferenças impedem
+
+a instalação.
+
+CHICOTE PRINCIPAL
+E DERIVAÇÕES
+
+Avalie o chicote principatl,
+as derivações e os
+
+terminais. Qualidade e
+bitola corretas evitam
+falhas e aquecimento.
+
+FW: V2.1
+Q
+
+@ SUPORTE @ versão
+
+E
+
+INSTALAÇÃO FÁCIL
+SEM DOR DE CABEÇA
+
+
+===== PÁGINA 8 =====
+ACELERADOR,
+SENSORES E CONECTORES
+
+PEÇAS PEQUENAS QUE FAZEM DIFERENÇA
+
+@ tiro De aceLerador O rensionosensor O) sensormL/sina
+
+[sv }
+
+Comum em
+sistemas
+modernos
+
+(12)
+
+Mais comum
+em sistemas
+antigos
+
+* Verifique o modelo: punho, dedo * Confira se o sensor é 5V ou 12V. * Sensores Hall exigem alimentação
+
+ou polegar. PR correta e polaridade.
+: * Tensão incorreta pode causar mau = j d a
+* Confirme o sistema: Hall funcionamento ou danos. * Verifique o tipo de sinal: Hall digital
+(analógico) ou resistivo. ou analógico.
+
+Q CONECTOR CORRETO O COMPRIMENTO DO CABO (6) QUALIDADE DO TERMINAL
+
+a -
+wy
+
+* Use conectores compatíveis com o * Cabo curto demais pode tensionar * Terminais de baixa qualidade oxidam
+sistema original. os conectores. e perdem contato.
+
+* Conector errado gera mau contato * Cabo longo demais pode causar * Prefira terminais estanhados e
+e falhas. interferências e desorganização. vedação adequada.
+
+DICAS RÁPIDAS
+
+LEVE A PEÇA ANTIGA COMPARE CORES DOS FIOS TESTE CONTINUIDADE TENHA SOBRESSALENTES
+Leve a peça antiga para As cores indicam função. Use multímetro para Mantenha peças pequenas
+
+comparar modelo, Compare sempre antes verificar continuidade e em estoque para ganhar
+
+conector e medidas. de conectar. evitar falhas ocultas. tempo e evitar paradas.
+
+Peças pequenas. Impacto gigante. Y xe}, Sh 8;
+
+Escolha certo. Instale com confiança. QUALIDADE COMPATIBILIDADE ENTREGA SUPORTE
+E SEGURANÇA GARANTIDA RÁPIDA ESPECIALIZADO
+
+
+===== PÁGINA 9 =====
+BÔNUS #3
+
+PEÇAS PARA É
+TER EM ESTOQUE
+
+O QUE VALE A PENA MANTER NA OFICINA
+
+Tenha sempre à mão as peças e componentes mais
+procurados. Evite atrasos, aumente sua eficiência
+e não perca vendas por falta de estoque.
+
+POR QUE
+
+ESTOCAR?
+
+HK < »
+ane G (|
+
+RÁPIDO dd né
+Paces qual FUSÍVEIS CONECTORES TERMINAIS ACELERADOR MENOS ESPERA
+ad PO Vários valores 2,3,4,6e Bvias Macho e fêmea Punho completo Atenda o cliente
+(SA a 40A) Macho e fêmea Diversos tipos | Universal náhora é evito
+retrabalho.
+| MAIS
+ad x PRODUTIVIDADE
+BAIXO e Tenha tudo à mão
+e ganhe tempo
+CUSTO SENSOR DE FREIO DISPLAY COMUM CARREGADOR CHICOTE CURTO nos serviços.
+Pequeno valor, Universal 24V/36V/48V/60V 36V/48V/60V Instalações
+grande saída. 2fios Modelos básicos Diversas potências e reparos
+
+MAIS
+Kgs FECHAMENTO
+
+Não perca venda
+
+por falta de peça
+ou componente.
+tens que salvam FITA ISOLANTE ABRAÇADEIRAS SUPORTE DE FUSÍVEL RELÉS
+na hora certa. 19mm x 10m Diversos tamanhos Com tampa 12v/24v ATENDIMENTO
+Alta qualidade (100mm a 300mm) (SA a 304) 4e5 pinos IMEDIATO
+Seu cliente sai
+
+satisfeito e volta
+
+ALTA SAÍDA (9 Me sda o
+
+Peças que CONVERSOR DC-DC PISCA LED BUZINA /ALARME INTERRUPTORES RESULTADO GARANTIDO.
+geram ticket 48V para 12V Universal 12V / 24V / 36V / 48V Partida, luz, seta
+e fidelização. 104/20A 12V/24v Diversos modelos e combinados
+
+MONTE SUA LISTA
+
+Faça uma revisão semanal do estoque, acompanhe o giro das peças
+DICA EXTRA E ala PERSONALIZADA
+=e e reponha sempre os itens de alto giro e baixa margem. Era on Gale take
+
+nossa planilha de estoque.
+
+
+
+===== PÁGINA 10 =====
+CHECKLIST FINAL
+
+Use esta validação rápida
+para reduzir erro e retrabalho
+
+© MODELO CONFIRMADO
+Q VOLTAGEM CORRETA
+
+CONECTOR COMPATÍVEL
+
+© MEDIDAS CONFERIDAS
+FORNECEDOR CONFIÁVEL
+Q GARANTIA INFORMADA
+
+PRAZO ACEITÁVEL
+
+DU CC CIC CI CIC)
+
+VALOR FECHADO
+
+Y COMPRA BEM VALIDADA

@@ -1,0 +1,6 @@
+RELATÓRIO DE CSS
+Arquivo: frontend/src/App.css
+Duplicatas exatas removidas: 0
+
+Seletores repetidos com conteúdos diferentes (não removidos):
+- Nenhum seletor com conteúdo diferente repetido foi encontrado.

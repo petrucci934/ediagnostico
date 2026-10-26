@@ -1,0 +1,115 @@
+:root {
+  --text: #aab8c9;
+  --text-h: #eaf0f6;
+  --bg: #0b1220;
+  --border: #34445a;
+  --code-bg: #172638;
+  --accent: #b7f36b;
+  --accent-bg: rgba(183, 243, 107, 0.12);
+  --accent-border: rgba(183, 243, 107, 0.5);
+  --social-bg: #111c2c;
+  --shadow: rgba(0, 0, 0, 0.25) 0 10px 15px -3px;
+
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 16px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-tema="light"] {
+  --text: #475569;
+  --text-h: #172033;
+  --bg: #f1f5f9;
+  --border: #d8e0e9;
+  --code-bg: #e8edf3;
+  --accent: #4d7c0f;
+  --accent-bg: rgba(77, 124, 15, 0.1);
+  --accent-border: rgba(77, 124, 15, 0.4);
+  --social-bg: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.08) 0 10px 15px -3px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+#root {
+  width: 1126px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  border-inline: 1px solid var(--border);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+}
+
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+}

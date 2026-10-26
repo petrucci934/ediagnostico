@@ -1,0 +1,1637 @@
+
+===== PÁGINA 1 =====
+MANUAL DE
+
+REPAROS
+
+EM SCOOTERS E MOTOS ELETRICAS
+
+
+
+===== PÁGINA 2 =====
+ANATOMIA VISUAL
+
+DA SCOOTER ELETRICA
+
+Conheça os principais componentes e pontos do sistema
+elétrico da scooter para diagnosticar com mais segurança.
+
+PAINEL / DISPLAY
+
+Exibe velocidade, nivel de
+bateria, modos de condução
+e alertas do sistema.
+
+CHAVE DE IGNIÇÃO
+
+Ativa o sistema elétrico
+e libera a partida da
+scooter.
+
+BATERIA
+
+Armazena energia elétrica
+e fornece potência para
+todo o sistema.
+
+LE
+
+CONTROLADOR
+
+Gerencia o fluxo de
+energia entre bateria e
+motor, processando os
+comandos do piloto.
+
+MOTOR HUB TRASEIRO
+
+Motor elétrico integrado
+à roda traseira que
+fornece tração e torque
+à scooter.
+
+CHICOTE PRINCIPAL
+
+Conjunto de cabos que
+interliga todos os
+componentes elétricos
+da scooter.
+
+FUSÍVEL PRINCIPAL
+
+Protege o sistema elétrico
+contra sobrecorrentes e
+curtos-circuitos.
+
+ACELERADOR
+
+Controla eletronicamente
+a potência do motor
+conforme a aceleração.
+
+MANETE COM SENSOR
+DE CORTE DE FREIO
+
+Interrompe a tração do
+motor ao acionar o freio,
+aumentando a segurança.
+
+PORTA DE CARGA
+
+Conexão externa para
+carregar a bateria com
+segurança e praticidade.
+
+e
+
+SENSOR DO CAVALETE
+
+Detecta a posição do
+cavalete lateral e impede
+a aceleração com o
+cavalete abaixado.
+
+DO-DC |
+ALIMENTAÇÃO AUXILIAR
+
+Converte a alta tensão da
+bateria em 12V para alimentar
+os sistemas auxiliares e
+carregar a bateria 12V.
+
+COMO TUDO =
+FUNCIONA JUNTO = Ig
+
+Energia, controle e tração
+trabalhando em harmonia
+para a sua mobilidade.
+
+ENERGIA
+
+A bateria armazena a energia
+elétrica e alimenta o controlador
+através do fusivel principal.
+
+CONTROLE
+
+O controlador interpreta os
+comandos (acelerador, freios,
+
++ i} +
+
+sensores) e regula a potência
+enviada 20 motor.
+
+TRAÇÃO |
+O motor hub traseiro converte
+aererga elétrica em movimenta
+
+impulsionando a scocter com
+eficácia e silêncio. |
+
+
+
+===== PÁGINA 3 =====
+SCOOTER
+NAO LIGA
+
+Siga o fluxo abaixo para identificar a causa
+e encontrar a solução.
+
+12"
+
+A scooter
+não liga?
+
+O painel
+acende?
+
+Provável problema no
+sistema elétrico.
+
+PAINEL
+APAGADO
+
+FOCOS PRINCIPAIS
+
+BATERIA PRINCIPAL
+
+Verifique a carga, conexões
+e possíveis danos.
+
+ee
+ep
+
+\( £
+FUSÍVEL
+é Verifique se há fusíveis
+” queimados ou soltos.
+w~
+CHAVE DE IGNIÇÃO
+A Teste o funcionamento
+e a continuidade.
+| RELE PRINCIPAL
+
+Verifique se o relé está
+funcionando corretamente.
+
+NE
+
+CHICOTE
+
+Procure por fios soltos,
+rompidos, oxidação
+ou mau contato.
+
+PAINEL
+ACESO
+
+Provável problema em
+comandos ou sensores.
+
+FOCOS PRINCIPAIS
+
+KILL SWITCH
+
+Confira se o interruptor
+de emergência não está
+acionado.
+
+SENSOR DO CAVALETE
+
+Verifique se o cavalete está
+recolhido e o sensor ok.
+
+|
+
+MANETE DE FREIO
+
+Teste os sensores das
+manetes de freio.
+
+ACELERADOR
+
+Verifique se o acelerador
+está funcionando e retorna
+corretamente.
+
+CONTROLADOR
+
+» Verifique se o controlador
+
+está recebendo alimentação
+e operando corretamente.
+
+»
+
+
+
+===== PÁGINA 4 =====
+VERIFICAÇÕES COM
+
+O painel não liga e permanece totalmente apagado?
+Siga as verificações abaixo para identificar a causa.
+
+~
+
+TENSAO DA
+BATERIA PRINCIPAL
+
+O que verificar:
+
+@ Meca a tensão nos terminais.
+Valor esperado: acima de 12,4 V
+(com carga) ou acima de 12,0 V
+(repouso).
+
+0 Abaixo de 12,0 V, a bateria pode
+não fornecer energia suficiente
+para o sistema
+
+Ne
+
+A
+
+RELÉ
+PRINCIPAL
+
+O que verificar:
+
+@ Escute ou sinta o clique do relé
+ao ligar a chave
+
+iv} Verifique se há tensão na bobina (85/86)
+e se saída (30 para 87) é energizada.
+
+@ Relé inoperante interrompe a alimentação
+
+do sistema.
+
+NE )
+
+Localize o fusível principal
+do sistema.
+
+Verifique se está integro
+(fio interno não deve estar
+rompido).
+
+0 Se estiver queimado, substitua
+por outro da mesma corrente.
+
+Inspecione conectores e pontos de
+
+aterramento.
+
+Procure fios soltos, oxidados,
+queimados ou com isolamento
+danificado.
+
+Mau contato ou fio rompido pode
+impedir a alimentação do sistema.
+
+Após realizar as verificações, tente ligar novamente.
+
+Gire a chave para ON e verifique
+se há resposta do sistema.
+
+Confirae continuidade nos terminais
+de saida da chave.
+
+@ Contatos desgastados ou oxidados
+podem impedir a alimentação.
+
+N
+BATERIA 12V OU
+
+ALIMENTAÇÃO AUXILIAR*
+
+O que verificar:
+
+@ Em scooters com bateria auxiliar 12V,
+verifique a tensão (min. 12,0 V)
+
+© Confira conectores e chicote de
+alimentação da bateria auxiliar.
+
+(1) Bateria descarregada ou com mau
+
+contato pode deixar o painel apagado.
+
+yy,
+
+Consulte o diagrama elétrico e prossiga com o diagnóstico.
+
+
+===== PÁGINA 5 =====
+BATERIA DA SCOOTER
+NAO CARREGA
+
+Se a bateria não carrega, a causa pode estar no carregador,
+na porta de carga, nas proteções, na bateria ou nos cabos.
+Confira os principais pontos e veja como agir.
+
+COMPORTAMENTO ESPERADO NA CARGA
+
+O +O-+-i -0
+
+Conectou o O LED do carregador Ao finalizar, o LED Desconecte primeiro
+carregador à scooter acende VERMELHO, fica VERDE oumuda da tomada e depois
+é à tomada correta. indicando carga para VERDE. da scooter.
+
+em andamento.
+
+CARREGADOR INCOMPATÍVEL
+OU COM DEFEITO
+
+Sintomas:
+
+PORTA DE CARGA
+COM MAU CONTATO
+
+e
+
+FUSÍVEL OU PROTEÇÃO
+
+Sintomas: Sintomas:
++ LED não acende, + Carregador intermitente. + Nenhuma resposta ao
++ LED verde ao conectar. o Precisa mesas no plague conectar o carregador.
+
+* Carga não inicia ou para iniciar a carga. + Totalmente inoperante.
+
+desliga sozinho. + Aquecimento no conector.
+O que fazer:
+O que fazer: O que fazer: E be EA
+Velfique o avchagen ee Dá os apontem mea le “oe
+© fusivel do carregador
+corrente (A) do carregador são ar seco ou limpa-contato, E) aSEMEcADO odie
+compativeis com a bateria. Verifique se não há oxidação, Eds ‘a
+Teste em outra tomada ou peste tortos ou folga. os x
+com outro carregador igual Se necessário, reaperte ou Se estiver queimado, troque
+e funcionando. substitua a porta de carga. \ por outro lgual.
+ia La
+> L=. . > awa '
+OU EM PROTEÇÃO Ê DESCARREGADA CONECTORES
+Sintomas: Sintomas: Sintomas:
+* Carga não inícia. * Carregador não inicia. * Carga intermitente.
++ LED do carregador verde * LED não acende ou + Aquecimento no conector.
+imediatamente. pisca rapidamente. + Sinais de oxidação
+* Bateria não responde. « Tensão muito baixa. ou folga.
+O que fazer: | O que fazer: O que fazer:
+O BMS pode ter desigado a Baterias de litio em tensão Inspecione todo o chicote
+carga por proteção (tensão muito baixa podem precisar entre a porta de carga,
+baixa, alta corrente, temperatura de “pré-carga” ou de um © carregador e a bateria.
+ou curto), Deixe a bateria carregador especifico para Limpe os conectores, verifique
+repousar e tente novamente. reativação. Não insista com Enio foumalfco partidos
+Se persistir, avaliação técnica carregadores comuns. a rafa Conentas rúlas!
+é necessária Procure assistência técnica. |
+No 7 N
+lá re -
+TESTE DA TENSÃO | NA TOMADA (CA) , NA SAÍDA DO CARREGADOR (CC) NA BATERIA (CC)
+COM MULTÍMETRO (| Mesa tensão Conecte o carregador à Meça a tensão nos
+: da tomada. “e tomada e meça na saído. | BEM terminals ca bateria
+Medir a tensão ajuda a -
+identificar a origem do problema. Esperado: 110-127 V ou Esperado: a tensão deve Esperado: conforme a
+220-240 V (conforme a ser a especificada no especificação da bateria
+sua rede). carregador (ex.: 58,8 V). (ex.: 48 V nominal).
+Desconecte o carregador
+e siga as instruções de
+
+Se a tensão estiver muito
+baixa (< 30 V em 48 V),
+pode estar em proteção.
+
+Se não houver a tensão
+correta, o carregador
+está com defeito.
+
+Se não houver tensão,
+resolva a alimentação
+elétrica.
+
+segurança antes de medir.
+
+SEGURANÇA
+SEMPRE
+
+Evite calor excessivo
+durante a carga.
+
+Mantenha conectores
+e cabos secos e limpos.
+
+Use apenas carregadores
+originais ou homologados.
+
+/ Não force conexões
+f nom utilize adaptadores.
+
+
+===== PÁGINA 6 =====
+ANATOMIA INTERNA
+
+Conheça os principais componentes e suas funções
+dentro da scooter elétrica.
+
+Ativa o sistema elétrico
+
+Conexão externa para
+
+carregar a bateria com
+
+segurança e praticidade.
+
+CARREGADOR ONBOARD |
+(ENTRADA DE CARGA)
+
+Converte a energia da tomada
+
+BATERIA PRINCIPAL
+
+Armazena energia elétrica
+em ai 3 va
+ita tensão pa AC para DC, carregando a
+
+alimentar o mot
+Some bateria principal com segurança.
+
+todo o sistema da scooter.
+
+CONTROLADOR
+
+Gerencia o fluxo de
+
+da bateria principal
+
+energia entre a bateria,
+
+em 12V para alimentar
+o motor e os comandos
+
+os sistemas auiliares.
+
+do piloto,
+
+Pr Ea SOM =)
+BATERIA 12V AUXILIAR
+
+Alimenta os sistemas
+
+auxiliares como iluminação,
+
+painel, alarme e ECU
+aaa o,
+\
+SENSOR DO cw
+Detecta a posição do co integrado
+
+»
+a sobrecor
+
+curtos-cir
+
+e lateral e impede seira que
+
+ração e torque
+
+leração com o
+
+ralete abaixado.
+
+ARMAZENA GERENCIA
+
+— "
+A bateria armazena O controlador gerencia A | Osconversores transforma
+Cada componente trabalha 4 a energia elétrica. mb ofluxodeenergia mp ( \v- fornecem energia à energia elétrica
+em harmonia para garantir eos comandos. NS prratodosos em movimento
+
+performance, segurança sistemas. com eficiência.
+
+e eficiência energética.
+
+
+===== PÁGINA 7 =====
+REPAROS COM
+PAINEL ACESO
+
+a! 4 Opainelliga, mas a scooter
+- © = não parte ou não se move?
+=
+
+Veja os principais pontos de
+verificação e como resolver.
+
+AJUSTAR OU SUBSTITUIR
+SENSOR DO CAVALETE
+
+Cavalete abaixado ou sensor com
+falha bloqueia a partida e o motor.
+
+COLOCAR O
+KILL SWITCH EM RUN
+
+O interruptor de segurança
+deve estar na posição correta
+para liberar o sistema.
+
+O)
+
+PAINEL LIGA
+
+Sistema com energia.
+Agora é verificar o
+que impede o movimento.
+
+AJUSTAR OU TROCAR
+SENSOR/MANETE DE FREIO
+
+Sensor de freio acionado ou
+com defeito impede o acionamento
+do motor.
+
+>
+
+PROBLEMA | | SOLUÇÃO | | PROBLEMA | | SOLUÇÃO | | | PROBLEMA | | SOLUÇÃO |
+Kill switch em OFF Gire o kill switch Cavalete abaixado ou Levante o cavalete Manete pressionada Solte o freio ou ajuste/
+impede a partida para RUN. sensor desajustado/ ou ajuste/substitua ou sensor de freio substitua o sensor
+
+e o movimento. o sensor.
+
+J q danificado. Q
+
+com falha.
+
+ou a manete.
+
+E
+NO > _—
+TESTAR E SUBSTITUIR REVISAR CONECTORES E CORRIGIR CONFIGURAÇÃO /
+ACELERADOR LINHA DE COMANDO P LOCK / TRAVA ELETRÔNICA
+DO CONTROLADOR (QUANDO APLICÁVEL) |
+Acelerador com falha ou fora
+de faixa não envia comando Conexões frouxas, oxidadas ou Recursos de segurança ou |
+para o controlador. fios rompidos interrompem os configurações podem manter |
+sinais de comando. o motor bloqueado.
+4
+PROBLEMA SOLUÇÃO | PROBLEMA | | soLução | | PROBLEMA SOLUÇÃO |
+Sinal ausente, instável Teste o acelerador. Conectores soltos, Limpe, reconecte Modo P LOCK ativo Desative o P LOCK |
+ou fora da faixa Recalibre ou substitua oxidados ou fios e vede os conectores. ou trava eletrônica ou a trava eletrônica
+esperada. se necessário. rompidos/curtos. Repare ou substitua habilitada. conforme o manual
+fios danificados. do fabricante. |
+Me PN A +
+DICA FINAL E»
+Após cada reparo, teste a scooter: => esa! => >
+ligue, verifique o acelerador, os
+freios e faça um teste de movimento
+em local seguro. Painel aceso Freios OK Acelerador OK Scooter pronta
+
+para rodar
+
+
+
+===== PÁGINA 8 =====
+SEQUÊNCIA CORRETA
+
+Siga cada etapa na ordem correta para garantir uma partida segura,
+proteger os componentes e ter a melhor experiência de condução.
+
+BATERIA CARREGADA KILL SWITCH EM RUN CAVALETE RECOLHIDO
+
+Certifique-se de que a bateria Gire a chave de ignição Deslize o interruptor de Recolha totalmente o cavalete
+está carregada e conectada para a posição ON. desligamento do motor lateral ou central antes
+corretamente. para a posição RUN. de iniciar a condução.
+
+Racer
+
+MODO DE CONDUÇÃO ACELERADOR PRONTO
+
+Verifique se o painel acende, SELECIONADO Com tudo pronto, gire
+Acione pelo menos uma das realiza o auto-check e exibe Escolha o modo ideal (ECO, suavemente o acelerador
+manetes de freio para liberar o status READY. NORMAL, SPORT) de acordo e comece a aproveitar
+o sistema de partida. com sua necessidade. sua scooter!
+
+SE ALGUMA CONDIÇÃO —O — x Ex) @
+
+NAO FOR ATENDIDA: = & 1 —
+
+A scooter pode não iniciar, desligar
+
+automaticamente ou operar com Bateria descarregada Chave desligada Kill switch em OFF Cavalete aberto Freio não acionado
+restrições de segurança. pode impedir a partida mantém o sistema interrompe a alimentação impede a condução (quando exigido) impede
+ou causar desligamentos inativo. do motor. por segurança a liberação do sistema.
+inesperados.
+
+Siga a sequência e conduza com tranquildade!
+
+
+===== PÁGINA 9 =====
+COMO FUNCIONA,
+O SISTEMA ELETRICO
+DA SCOOTER
+
+A scooter elétrica transforma energia armazenada na bateria
+em movimento, de forma inteligente e segura.
+
+CAMINHO DE TRAÇÃO (ALTA TENSÃO)
+
+Fornece energia para o motor e gera o movimento da scooter.
+
+—j» Alta tensão (tração)
+
+—— Baixa tensão (12V)
+
+---D Sinais e informações
+
+Ko (A o A A » (6 » á >)
+1. BATERIA 2. FUSIVEL 3. CHAVE DE 4. RELÉ 5. CONTROLADOR 6. MOTOR HUB
+PRINCIPAL PRINCIPAL IGNIÇÃO PRINCIPAL (ESC) TRASEIRO
+
+Armazena a energia Protege o sistema Ativa o sistema elétrico Conecta a bateria Recebe os comandos e Converte a energia
+élétrica de alta tensão. elétrico contra elibera a energia da ao controlador controla a potência elétrica em torque
+sobrecorrentes é bateria. com segurança. enviada ao motor. e movimento para
+
+q ) q curtos-circuitos. Ke ) q lg ) \___arodatraseira.  )
+
+1
+mo E a na 4
+ENTRADAS DE SINAIS
+c--> PARA 0 CONTROLADOR
+
+0 RAMO DE BAIXA TENSAO (12V) ! Informações que o controlador
+
+Ali ' usa para decidir como o motor
+imenta os componentes 1 deve funcionar.
+
+E elétricos auxiliares da scooter. ! E
+
+1
+q H ACELERADOR
+tee a ieee
+CONVERSOR ' pelo piloto.
+H )
+fj 1
+H SENSORES DE FREIO
+--» Informam quando
+Reduz a alta tensão H os freios são
+da bateria principal 1 acionados.
+para 12V. !
+1
+' SENSOR DO CAVALETE
+Lp» Detecta a posição do
+H cavalete lateral para
+1 travar a aceleração.
+1 XL
+1
+' (-
+ue PAINEL / DISPLAY | LUZES BUZINA SETAS . PAINEL / DISPLAY
+É > 88 Envia configurações
+> e recebe dados do
+sistema.
+Ed ; é
+Armazena energia para | | Exibe velocidade, nível luminação frontal, Emite sinal sonoro Indicam a intenção
+partidas, iluminação de bateria, modos de traseira e de posição para alertar de mudança de
+e acessórios. condução e alertas. para sua segurança. pedestres e veículos. direção.
+
+
+
+===== PÁGINA 10 =====
+REPAROS COM
+
+Se o painel da scooter não liga e não há sinais de vida elétrica,
+verifique os principais pontos abaixo para restaurar a alimentação.
+
+SIGA A ENERGIA ATÉ A CAUSA.
+
+Mega a tensão da bateria. Se estiver abaixo do ideal (12V: < 11,5V),
+carregue totalmente e teste novamente.
+
+LIMPAR E REAPERTAR TERMINAIS
+
+de
+TERMINAL OXIDADO
+
+Oxidação ou folga nos terminais pode interromper o fluxo de energia.
+Limpe com escova e aperte firmemente.
+
+Na
+
+Aa,
+o)
+
+ay
+
+FUSIVEL QUEIMADO
+
+Verifique todos os fusiveis do sistema. Se estiverem queimados,
+substitua pelo valor correto.
+
+CONECTOR SOLTO CONECTOR FIXO
+
+Conectores soltos ou fios rompidos no chicote principal
+impedem o sistema de ligar. Repare e isole corretamente.
+
+=
+
+CHAVE COM DEFEITO CHAVE NOVA
+
+Chaves internas desgastadas ou com mau contato podem
+
+cortar a alimentação do sistema. Substitua se necessário.
+
+Na
+
+SUBSTITUIR RELÉ PRINCIPAL TRAVADO
+
+RELÉ NOVO
+
+O relé principal pode travar ou queimar, impedindo a passagem
+
+de corrente. Teste e substitua se necessário.
+
+é
+
+:
+iy
+
+| SEM SAIDA 12V
+
+CORRIGIR ALIMENTAÇÃO AUXILIAR / 12V (SE APLICÁVEL)
+
+=
+
+Sistemas com acessórios, alarme
+ou conversor DC-DC podem
+apresentar falhas que cortam
+
+a alimentação principal.
+
+Verifique a saída 12V e repare
+se não houver tensão.
+
+12V PRESENTE
+
+
+
+===== PÁGINA 11 =====
+VERIFICAÇÕES COM
+
+O PAINEL LIGA, MAS O SCOOTER NÃO ANDA
+
+Siga as verificações abaixo para identificar o que
+impede o scooter de se movimentar com o painel ligado.
+
+SENSOR DO
+CAVALETE
+
+dp / MANETE
+RSE FREIO
+
+© Cavalete lateral deve estar @ Ambas as manetes de freio devem
+
+recolhido. estar liberadas.
+O Como cavalete abaixado, o @ Falha no sensor ou manete
+sistema bloqueia a tração. | tra ode impedir a partida
+
+
+
+===== PÁGINA 12 =====
+BATERIADA
+SCOOTER NAO CARREGA
+
+FLUXOGRAMA *—————_
+
+el | Siga o passo a passo para
+
+identificar a causa da falha
+- de carga e tomar a ação
+correta com segurança.
+
+O carregador conectano?
+
+Conecte o carregador à tomada
+e à porta de carga da scooter.
+
+[2) LED DO CARREGADOR ACENDE?
+
+Observe o LED indicador do carregador.
+
+NÃO ACENDE
+
+Sem alimentação.
+
+ACENDE (VERDE)
+
+Carregador energizado.
+
+J não
+
+Ação: Verifique tomada, Ê Ação: Verifique a tomada
+cabo e conectores. Corrija SIM NAO elétrica, fusivel da rede e
+T a conexão e tente novamente. o carregador. Substitua
+se necessário.
+ie E 3 A EN (A
+© PORTA De cARGA ESTA FIRME E INTEGRA? HA TENSAO NA SAIDA O BareRa ResPONDE?
+Verifique se o conector está bem encaixado DO CARREGADOR? Após alguns segundos, verifique
+e sem danos ou oxidação. Mega a tensão no conector se a bateria apresenta sinais
+de saida do carregador. de carga ou atividade.
+ff ) ‘a
+SIM | SIM
+Conector firme Tensão presente
+e integro. e estável.
+NÃO
+Solto, danificado Tensão ausente
+ou oxidado.
+»
+ad - A
+
+Sá Ação: Limpe os contatos, | Ação: Carregador com falha.
+
+repare ou substitua a porta IS} Realize teste em outro
+de carga se necessário. carregador compativel.
+
+Er FE “SISTEMA OK
+na A bateria está indo
+O Bits PODE ESTAR TRAVA DO OU EM PROTEÇÃO? normaimate, Mente
+
+© tempo de carga.
+Bateria pode estar em proteção por subtensão, sobretensão, ee ay
+sobretemperatura ou sobrecorrente.
+
+ai or. Lh E SIM O rum INTERNA NA BATERIA?
+PROBLEMA RESOLVIDO sas eae Bateria votou a Possivel dano em células,
+BMS liberado. | * Desconecte o carregador responder. fusível interno, BMS ou chicote.
+A carga foi restabelecida * Aguarde 1-2 minutos
+com sucesso. + Reconecte o carregador NAO
+aa =) Permanece sem
+resposta.
+o os Encaminhe para
+assistência técnica especializada
+[FM pera diagnéstc [FM pra diagnóstico detalhado.
+SEGURANÇA SEMPRE
++ Use equipamentos adequados
+* Não force conexões
++ Em caso de dúvida, procure
+assistência técnica
+Carregador Porta de carga Multímetro BMS (Placa de Proteção) tout
+
+
+
+===== PÁGINA 13 =====
+ANATOMIA VISUAL
+
+CONHEÇA OS PRINCIPAIS COMPONENTES
+QUE MOVEM DESEMPENHO E TECNOLOGIA.
+
+PAINEL/
+
+PORTA
+DISPLAY
+
+DE CARGA
+
+120:
+
+CARREGADOR
+ONBOARD
+
+INVERSOR/
+CONTROLADOR
+
+*»
+
+ELETRICO
+
+E: BATERIA DE
+By / TRAÇÃO
+
+FREIO FREIO
+TRASEIRO DIANTEIRO
+TRANSMISSAO CHICOTE CONVERSOR BATERIA
+FINAL PRINCIPAL DC-DC AUXILIAR 12 V
+
+O QUE OBSERVAR
+
+O mM 7
+
+TEMPERATURA CONEXÕES E CHICOTE SISTEMA DE FREIOS DIAGNÓSTICOS
+
+Verifique níveis de carga, Monitore o aquecimento Confira fixação, isolamento Avalie desgaste de pastilhas, Leia códigos de falha e
+saúde (SOH) e histórico da bateria, motor e e sinais de oxidação ou discos e fluido de freio. registros do sistema para
+de uso. controlador. superaquecimento. manutenção precisa.
+
+teen
+
+DAI
+
+
+===== PÁGINA 14 =====
+OMOIDENTIFICAR =
+TODO OSISTEMA E
+ANTES DO REPARO
+
+Mapeie, confirme e registre cada parte do sistema
+para um diagnóstico preciso e seguro.
+
+PORTA DE CARGA
+
+Localize a porta e
+confirme o padrão.
+
+Ex.: CCS2/GB/T
+
+TENSÃO NOMINAL
+DO SISTEMA
+
+Verifique a tensão
+nominal (ex.: 72 V).
+
+TIPO DE CARREGADOR
+
+Identifique o carregador
+compativel e sua
+potência.
+
+QUÍMICA DA BATERIA
+
+Confirme a química
+(LFP, NMC, etc.) e
+capacidade.
+
+INVERSOR /
+CONTROLADOR
+
+Localize e confira
+o modelo e a
+referência.
+
+LOCALIZAÇÃO
+DA BATERIA
+
+Identifique onde a
+bateria está instalada
+e como é fixada.
+
+TIPO DE MOTOR
+Identifique o tipo:
+PMSM, BLDC, etc.
+e potência.
+
+Localize o módulo
+
+BMS e verifique
+suas conexões.
+FUSÍVEIS CONECTOR DE CONVERSOR BATERIA MÉTODO DE CONECTORES
+PRINCIPAIS COMUNICAÇÃO DC-DC AUXILIAR 12 V REFRIGERAÇÃO PRINCIPAIS
+Localize e confira Encontre o conector Confirme a presença Localize, confira a Ar, líquido ou óleo. Inspecione os conectores
+os fusiveis de de diagndstiao/ e a referência do tensão e o estado Verifique bombas, de alta tensão e sinal.
+proteção. comunicação. conversor DC-DC. da bateria 12 V. radiador e dutos. Verifique travas e
+
+condição.
+
+P 0) 8 6 mé
+
+TENSÃO QUÍMICADA LOCALIZAÇÃO TIPO DE INVERSOR / CARGA DIAGNÓSTICO REFRIGERAÇÃO PROTEÇÕES 12 VEDC-DC
+
+NOMINAL BATERIA DA BATERIA MOTOR CONTROLADOR Localizado. | Portao caregador E CONECTORES Método Fusíveis Verificados.
+
+Confirmada, Identificada, Mapeada. Identificado. Verificado. identificados. Localizados. confirmado. conferidos.
+
+
+
+===== PÁGINA 15 =====
+SEQUÊNCIA CORRETA DE
+
+O QUE ACONTECE, PASSO A PASSO, ATÉ A MOTO ESTAR PRONTA PARA MOVER.
+
+CHAVE / IGNIÇÃO ATIVADA
+Você gira a chave ou
+
+aciona o botão de ignição.
+A eletrônica de 12 V é energizada.
+
+PAINEL FAZ SELF-CHECK
+Todos os segmentos acendem,
+
+icones são verificados e
+alarmes são testados.
+
+BMS DESPERTA
+
+O BMS inicializa, verifica as
+células da bateria e libera
+as condições de segurança.
+
+CONTATORES FECHAM
+E PRE-CARGA ACONTECE
+Os contatores principais fecham
+
+após a pré-carga do barramento,
+e a alta tensão é habilitada.
+
+SISTEMA ENTRA EM READY
+
+O painel exibe READY.
+Todos os sistemas críticos
+estão operacionais.
+
+READY
+
+ACELERADOR LIBERADO
+
+Verificação do acelerador:
+posição zero validada e
+resposta confirmada.
+
+MOTO PRONTA PARA MOVER
+
+Sistema validado. Aplique o freio,
+selecione o modo de condução
+e gire o acelerador.
+
+FALHAR
+
+a A PARTIDA É INTERROMPIDA E UM ALARME É EXIBIDO NO PAIN
+
+12 V FRACA
+
+TRAVAMEN
+Algum intertravamento
+não está satisfeito
+(chave, botão,
+sensor, etc.).
+
+FREIO
+
+Falha no sinal do freio
+ou manete acionada
+no momento da
+partida
+
+CAVALETE
+
+Cavalete lateral
+acionado ou mal
+recolhido.
+
+Tensão abaixo do
+minimo. Carregue
+ou substitua a
+bateria 12 V.
+
+PRE-REQUISITOS
+PARA A PARTIDA
+Bateria 12 V com carga adequada
+
+Cavalete recolhido
+Freios operacionais
+
+Acelerador em posição zero
+
+EL.
+
+FALHA DE COMUNICACAC
+
+Perda de comunicação
+
+entre BMS, inversor,
+painel ou controlador
+
+CONTATORES
+
+Falha ao fechar
+contatores ou erro
+na pré-carga do
+barramento.
+
+
+===== PÁGINA 16 =====
+SISTEMA DE ALTA TENSÃO
+E SISTEMA AUXILIAR DE 12 V
+
+DOIS SISTEMAS, UMA MESMA MISSÃO: ENERGIA COM SEGURANÇA E EFICIÊNCIA.
+
+ER
++
+
+SISTEMA DE ALTA TENSÃO (TRAÇÃO)
+
+SISTEMA AUXILIAR DE 12 V
+
+Responsável por armazenar e fornecer energia
+para o movimento da moto.
+
+6 BATERIA DE TRAÇÃO
+
+Armazena energia
+em alta tensão
+
+que conectam e
+desconectam a bateria
+do sistema.
+
+O Inversor — fi
+
+Converte a energia CC
+(da bateria) em CA
+para alimentar o motor
+elétrico.
+
+© Mororetérrico
+
+Transforma a energia
+elétrica em movimento
+(tração da roda).
+
+© carrecaDor onsoaro
+
+Converte a energia da
+rede elétrica (CA) para
+carregar a bateria
+
+de tração.
+
+e.
+
+(centenas de volts). ay ponasegxs
+e eficiente.
+(O) BATERIA AUXILIAR 12 v
+O casos de atta tensão Armazena energia para
+partidas, segurança e
+Concert agraria sustentação dos sistemas
+com segurança e auxiliares.
+isolamento específico.
+PAINEL / DISPLAY
+(639) CONTATORES Interface com o piloto, of
+Chaves de alta tensão informações e comandos.
+
+o ooo oOooO
+
+Alimenta os sistemas eletrônicos, conforto e segurança
+da moto.
+
+CONVERSOR DC-DC
+
+Reduz a alta tensão da
+bateria de tração para
+
+ILUMINAÇÃO
+
+Farol, lanterna, setas
+e luzes de posição.
+
+BUZINA
+
+Alerta sonoro Fa cio
+
+para segurança.
+
+RELÉS E PROTEÇÕES
+
+Distribuem e protegem
+os circuitos de 12 V.
+
+SISTEMA ABS
+one
+
+Módulo e sensores
+para controle de frenagem.
+
+ACESSÓRIOS E OUTROS & N
+Carregador USB, sensores, ~~
+
+ECU, ventiladores e outros = é
+consumidores de 12 V.
+
+ALTA TENSÃO (TRAÇÃO)
+
+_+e
+
+A
+
+Alta Tensão CC
+
+Bateria de Tração
+(centenas de volts)
+
+CONVERSOR DC-DC
+
+Reduz a alta tensão
+para 12 V CC.
+
+COMO SE CONECTAM
+O conversor DC-DC é a ponte que liga a energia de alta tensão aos sistemas de 12 V.
+
+SISTEMA AUXILIAR DE 12 V
+
+i 7
+— fic
+12VCC
+
+Alimenta todos os sistemas
+de 12 V da moto.
+
+Sistemas de alta tensão possuem isolamento, intertravamentos e proteções dedicadas.
+
+4) SEGURANÇA EM PRIMEIRO LUGAR
+
+Nunca manipule componentes de alta tensão sem treinamento adequado.
+
+— Circuito de Alta Tensão
+— Circuito de 12 V
+
+
+===== PÁGINA 17 =====
+BATERIA DE TRAÇÃO
+
+Alta performance, segurança e durabilidade.
+O coração que fornece energia para cada viagem.
+
+TAMPA SUPERIOR
+
+@ Proteção contra
+impactos e vedação
+IP67.
+
+BMS
+
+Monitora células,
+equilibra cargas,
+protege e comunica
+com a moto.
+
+SENSORES E FIAÇÃO
+
+Monitora tensão
+das células e
+temperatura em
+múltiplos pontos.
+
+n
+
+Alta densidade de EA
+energia, longo ciclo
+de vida e alta
+
+corrente de descarga.
+
+E CÉLULAS LÍTIO
+
+SISTEMA DE
+RESFRIAMENTO
+
+Canais de fluído
+mantêm a temperatura
+ideal e garantem
+performance.
+
+CARCAÇA INFERIOR
+Estrutura resistente
+
+à torção e proteção
+mecânica total.
+
+O QUE INSPECIONAR
+B) GQ
+rh (o)
+
+ESTADO DE SAÚDE (SOH) INCHAÇO/DANOS CONECTORES
+Verifique o nível de carga Acompanhe a capacidade Inspecione visualmente Verifique firmeza,
+e utilize o recemendado disponível e a perda de sinais de inchaço, limpeza e ausência
+pelo fabricante. desempenho ao longo do deformações, corrosão de aquecimento ou
+
+tempo. ou vazamentos. oxidação.
+
+DESCONEXÃO
+
+DE SERVIÇO
+Permite isolamento
+seguro da bateria
+para manutenção.
+
+TERMINAIS
+PRINCIPAIS
+Conexão de alta
+corrente para o
+inversor/motor.
+
+INVÓLUCRO
+PROTETOR
+
+Proteção contra
+poeira, umidade,
+vibração e EMC.
+
+Monitore a temperatura
+da bateria em repouso
+eemuso.
+
+72V
+
+(nominal)
+
+CAPACIDADE
+45 Ah
+
+(tipico)
+
+ENERGIA
+3,24 kWh
+
+(tipico)
+
+Proteções contra
+sobrecarga,
+sobredescarga,
+curto-circuito,
+sobrecorrente e
+superaquecimento.
+
+Resfriamento liquido
+com controle ativo
+de temperatura para
+maxima eficiéncia e
+vida útil.
+
+A
+
+cn
+
+Confira o isolamento
+elétrico entre bateria,
+chassi e carcaça.
+
+
+===== PÁGINA 18 =====
+ANATOMIA INTERNA
+
+COM CARENAGEM REMOVIDA
+
+CARREGADOR 120 cs
+PORTA ONBOARD
+DE CARGA
+[E BMS Ea BATERIA <>, INVERSOR/
+(PACK) “ey, ) CONTROLADOR
+
+CABOS DE |
+CAIXA ALTA TENSÃO
+
+DE FUSÍVEIS
+
+i MOTOR CONVERSOR BATERIA FLUXO D
+TRANSMISSÃO o ELÉTRICO DCD BS E
+c AUXILIAR 3
+© FINAL CENTRAL ar ARREFECIMENTO
+
+O QUE FICA ESCONDIDO
+
+AAA EA
+
+Canais e placas que
+distribuem o calor Cabos organizados Isolamento, contatores Bomba, radiador e dutos | Monitora células, tensão, Software sempre
+
+da bateria e do motor. e protegidos contra e sensores garantem mantêm a temperatura corrente e temperatura atualizado para mais
+vibração e umidade. segurança total ideal de operação. de todos os módulos. desempenho e segurança
+
+
+===== PÁGINA 19 =====
+CAMINHO DA ENERGIA
+
+DA ENERGIA ELÉTRICA AO MOVIMENTO QUE TE LEVA MAIS LONGE.
+
+BATERIA BMS + CONTATORES INVERSOR / CONTROLADOR MOTOR ELÉTRICO
+Armazena energia Gerencia, protege e Converte CC em CA e controla Converte energia elétrica
+elétrica em alta tensão. libera a energia. a entrega de potência. em torque.
+
+REDUÇÃO / TRANSMISSÃO
+
+RAMO AUXILIAR A = e) Multiplica o torque e
+
+reduz a rotação.
+
+Alimenta sistemas auxiliares
+e eletrônicos da moto.
+
+DC-DC CONVERSOR REDE 12 V
+
+Reduz a tensão de alta Alimenta luzes, painel,
+para 12 V. bomba, ECU e acessórios.
+
+RODA TRASEIRA
+
+Torque aplicado.
+Movimento gerado.
+
+TRAMSFORMAÇÃO DE ENERGIA
+
+ENERGIA ENERGIA ENERGIA ENERGIA
+
+ARMAZENADA —> CONTROLADA —> &o MECÂNICA —> EM MOVIMENTO
+)
+
+(CC - ALTA TENSÃO) E CONVERTIDA (TORQUE) (RODA)
+
+
+
+===== PÁGINA 20 =====
+CIRCUITO DE PRE CARGA 7
+
+COMO O BMS PROTEGE O SISTEMA E GARANTE A CONEXÃO SEGURA
+ENTRE A BATERIA DE TRAÇÃO E O INVERSOR.
+
+CONTATOR POSITIVO (CH+)
+BATERIA DE TRAÇÃO _— INVERSOR / CONTROLADOR
+
+CAPACITOR
+DC-LINK
+
+RESISTOR DE
+PRE-CARGA
+
+CONTATOR NEGATIVO (CH-)
+Medição de A Comando e
+Tensão e Corrente =: Monitoramento
+
+=== Circuito de Potência (HV+)
+
+p--— ===
+
+— Circuito de Potência (HV-)
+=== Circuito de Pré-Carga
+— — — Sinal/Controle (BMS)
+
+SEQUÊNCIA DE E OPERAÇÃO
+
+WAKE-UP VERIFICAÇÃO PRÉ-CARGA FECHAMENTO DOS | SISTEMA READY
+m 'o : O CONTATORES AS)
+
+Or (Dre aa
+
+O BMS ativa o sistema O BMS verifica a tensão O BMS fecha o circuito | Coma tensão estabilizada, Conexão completa.
+e realiza autochecagens. da bateria e do barramento de pré-carga para carregar | o BMS fecha os contatores Sistema pronto para
+do inversor. gradualmente o capacitor positivo e negativo e abre operação com segurança.
+do inversor. o circuito de pré-carga.
+7
+
+\
+
+BMS CONTATORES RESISTOR DE CAPACITOR DO
+n (CH+ / CH-) PRE-CARGA INVERSOR
+EUS abe Monitora células, corrente, Interruptores de alta Limita a corrente inicial Armazena energia no
+5 À temperatura e isolamento. tensão que conectam e carrega gradualmente barramento DC (OC-Link).
+Comanda os contatores ou isolam a bateria © capacitor do inversor, Precisa ser carregado antes
+e protege todo o sistema. do inversor. evitando picos. da conexão direta
+
+Nunca realize manutenções sem seguir os procedimentos de segurança. ALTA
+AN SEGURANÇA SEMPRE | Alta tensão pode causar danos graves ou fatais. NSÃO
+
+
+
+===== PÁGINA 21 =====
+OMO FUNCIONA Va
+OSISTEMAELETRICO «OF
+DA MOTO ELETRICA
+
+— ALTA TENSÃO (HV)
+— CONTROLE / SINAIS
+2. CARREGADOR 3. BATERIA DE TRAÇÃO —— 12 V AUXILIAR
+1. REDE ELÉTRICA (CA) ONBOARD (ALTA TENSÃO)
+4. BMS
+(GERENCIAMENTO)
+| > -— >
+«+ —
+>
+——
+
+Monitora células, tensão,
+corrente e temperatura
+
+110 /220V CA Converte CA em
+CC e carrega a bateria
+
+5. CONTATORES +
+PRE-CARGA
+
+10. CONVERSOR DC-DC
+<--,
+
+Reduz a alta tensão
+para 12V
+
+Conecta a bateria ao
+inversor com segurança
+
+«-
+x c Converte CC em CA trifásico
+9. RODA TRASEIRA 8. TRANSMISSÃO FINAL 7. MOTOR ELÉTRICO à Sonia dincdor
+A força chega ao solo Reduz a rotação e Converte energia elétrica
+e move a moto multiplica o torque em movimento
+FONTE E CARGA ARMAZENAMENTO DISTRIBUIÇÃO CONVERSÃO TRAÇÃO SISTEMA 12 V CONTROLE
+E PROTEÇÃO DE POTÊNCIA E CONTROLE AUXILIAR INTELIGENTE
+Energia da rede é A bateria fornece alta Contatores e pré-carga  Oinversorcontrolao fluxo Motor e transmissão Alimenta sistemas Integra e monitora
+convertida em CC energia; o BMS protege garantem conexões de energia para o motor transformam energia essenciais de bordo todas as funções
+e armazenada na e gerencia todo o seguras e sem picos com eficiência e elétrica em movimento com segurança e para máxima
+bateria. sistema. de corrente. precisão. nas rodas. estabilidade. segurança e
+desempenho.
+
+t
+
+
+
+===== PÁGINA 22 =====
+O QUE SIGNIFICA
+
+NA MOTO ELÉTRICA
+
+E-DRIVE
+
+E O.
+
+RANGE
+128
+78% km
+
+ODO 3568 km
+
+ONDE O READY ATUA?
+
+BATERIA
+
+PAINEL /
+CONTROLE
+
+INVERSOR
+
+ELETRICO
+
+PRONTA PARA MOVER &
+
+o modo READY
+
+> 20%
+CHAVE / FOB SISTEMAS BATERIA COM TEMPERATURA
+RECONHECIDO SEM FALHAS CARGA SUFICIENTE DENTRO DO NORMAL
+
+Q Q
+
+Q Q
+
+O QUE SIGNIFICA ?
+
+SISTEMA ENERGIZADO
+
+A moto está ligada e
+todos os sistemas ativos.
+
+PRÉ-CARGA CONCLUÍDA
+
+Barras de alta tensão
+pré-carregadas com segurança
+
+CONTATORES FECHADOS
+
+Circuito principal fechado,
+energia disponível.
+
+BATERIA E INVERSOR
+EM COMUNICAÇÃO
+Troca de dados OK.
+
+ACELERADOR HABILITADO
+
+Resposta ao acelerador
+liberada.
+
+PROPULSÃO DISPONÍVEL
+MESMO EM SILÊNCIO
+
+Sem ruído não é sinônimo
+de inatividade
+
+O QUE NÃO SIGNIFICA
+
+Re NAO ESTA CARREGANDO
+
+O carregador precisa estar
+conectado e em sessão ativa.
+
+NÃO ESTÁ EM FALHA
+
+Falhas impedem o READY.
+Verifique alertas no painel
+
+NÃO HÁ ROTAÇÃO MECÂNICA
+EM MARCHA LENTA
+
+O motor elétrico não gira
+sem comando de acelerador.
+
+READY
+
+VOCÊ COMANDA.
+A ENERGIA
+RESPONDE.
+
+FREIOS OK
+DESCANSO RECOLHIDO
+
+O

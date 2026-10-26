@@ -1,0 +1,588 @@
+
+===== PÁGINA 1 =====
+BONUS #4
+
+GUIA
+
+A ordem certa para verificar
+cada componente, evitar
+
+retrabalho e chegar na causa
+mais rapido.
+
+
+===== PÁGINA 2 =====
+BONUS #4
+
+COMO USAR
+
+| Sequência prática para um diagnóstico e reparo eficientes.
+
+| CONFIRMAR O SINTOMA
+
+Converse com o cliente e reproduza
+o problema com atenção.
+
+Observe, verifique conexões, cabos,
+fusíveis e garanta a segurança antes
+de qualquer teste.
+
+| INSPEÇÃO VISUAL E SEGURANÇA
+
+MEDIÇÕES E TESTES
+
+Use os instrumentos corretos para
+verificar tensões, resistências e sinais.
+
+ISOLAR A CAUSA
+
+Analise os resultados e localize
+o componente ou circuito defeituoso.
+
+VALIDAR O REPARO
+
+Após o reparo, teste novamente e
+confirme se o problema foi resolvido.
+
+SEGUIR ORDEM MEDIR ANTES REGISTRAR
+DE TROCAR ACHADOS
+
+Evite substituições Anote valores e
+desnecessárias. observações.
+
+Cada etapa tem
+um propósito.
+
+VALIDAR
+NO FINAL
+
+Confirme o reparo
+na prática.
+
+
+===== PÁGINA 3 =====
+ETAPA 1
+CONFIRMARO
+SINTOMA E O HISTORICO
+
+que vão direcionar o diagnóstico.
+
+A primeira etapa é ouvir o cliente e coletar informações OBJETIVO
+
+Entender exatamente
+
+(J
+
+Qual é o problema relatado?
+
+QUEIXA DO CLIENTE G o defeito antes de
+
+abrir o sistema.
+
+QUANDO ACONTECE?
+
+Sempre / Às vezes / Em situações específicas?
+
+PAINEL ACENDE?
+
+Sim / Não / Intermitente
+
+CARREGA?
+
+Carrega normalmente?
+
+CORTA EM SUBIDA?
+
+Perde força ou desliga?
+
+APARECE CÓDIGO?
+
+Qual código aparece no display?
+
+REPAROS ANTERIORES?
+
+O que já foi feito no veículo?
+
+ICI CI CI CC)
+
+9000000
+
+—
+e SISTEMAS PRINCIPAIS |
+CONVERSA DE DIAGNÓSTICO
+DISPLAY
+‘ Verifique mensagens,
+Pode me contario que está FORMULÁRIO DE DIAGNÓSTICO ge:
+4 acontecendo com o veículo? Cliente: alertas e códigos.
+Veículo:
+e O problema acontece quando... Modelo: BATERIA A
+a> As Verifique tensão,
+tz carga e conexões.
+KM / Horas:
+Data: MOTOR
+e E E Técnico: Verifique ruídos,
+a Entendi. Vamos verificar juntos. falhas desempenho:
+S
+
+"(© Inrormação BEM COLETADA = DIAGNÓSTICO MAIS RÁPIDO E PRECISO |
+
+
+
+===== PÁGINA 4 =====
+BONUS #4
+
+ETAPA 2
+
+Antes de qualquer teste, faça uma inspeção física completa.
+Isso evita danos, garante sua segurança e aumenta a
+confiabilidade do diagnóstico.
+
+@ 1. CARCAÇA E DANOS & 2. CHEIRO DE AQUECIMENTO
+Verifique trincas, quebras, Odor forte ou de queimado ANTES DE MEDIR
+
+parafusos soltos e pode indicar superaquecimento
+fixações danificadas. ou curto-circuito.
+
+DESENERGIZAR
+
+(8) Desligue o sistema e
+retire a chave.
+OLHAR CONECTORES
+Verifique encaixes,
+
+travas e sinais de
+
+dano ou oxidação.
+3. FIOS E CONECTORES O: SINAIS DE ÁGUA/OXIDAÇÃO ta
+Confira se há fios soltos, Procure por umidade, ferrugem
+descascados, amassados ou esverdeamento nos terminais
+
+CHECAR FUSÍVEL
+
+Confirme se o fusível
+não está aberto e
+como valor correto.
+
+ou conectores mal encaixados.
+IDENTIFICAR RISCO
+
+E i
+Avalie riscos elétricos,
+
+© ©: PNEUS / FREIOS LIVRES ©: DESLIGAMENTO SEGURO 7. EPIs mecánicos e térmicos
+
+Rodas devem girar livres © o sistema, remova a Use sempre os EPIs antes de prosseguir.
+
+e freios devem estar chave e desconecte a bateria adequados para sua
+sem travamentos, ou plug de serviço. proteção.
+
+A “EV
+
+INSPEÇÃO VIS PREVENÇÃO + SEGURANÇA + DIAGNÓ PRECISO
+
+ão pule esta etapa. Ela pode evitar acidentes e retrabalho.
+
+
+===== PÁGINA 5 =====
+ETAPA 3
+ALIMENTAÇÃO
+PRINCIPAL E AUXILIAR
+
+Sempre comece pela alimentação.
+Sem energia estável, nada funciona corretamente.
+
+rc a Ve = ~) a > r EN a
+
+TOMADA / BATERIA LINHA 12 V
+CARREGADOR PRINCIPAL BMS FUSIVEL 0¢-0¢ AUXILIAR
+FONTE EXTERNA ALIMENTAÇÃO GERENCIA E PROTEGE PROTEGE 0 SISTEMA | CONVERTE PARA ALIMENTACAO DOS
+AC 100-240 V DC ALTA TENSAO ABATERIA DE SOBRECARGA 12 V AUXILIAR CIRCUITOS 12 V
+
+r COMO VERIFICAR § N
+
+o TENSÃO DA BATERIA (2) SAÍDA DO FUSÍVEL O ALIMENTAÇÃO DO PAINEL [4] LINHA DE 12 V
+
+Meça diretamente nos Mega a tensão após Meça a entrada Verifique outros pontos
+terminais da bateria. o fusível. do painel/display. da linha auxiliar.
+
+OK | 60 V a 84 V (tipico) G Tensão igual à da bateria G 11,5Va13,5V [OK] 11,5Va 13,5V
+PROBLEMA PROBLEMA PROBLEMA PROBLEMA
+
+Muito baixa ou zero. Sem tensão. Sem 12V. Queda de tensão.
+Carregar ou substituir. Fusível queimado Verificar DC-DC Verificar cabos e
+ou mau contato. e conexões. conexões.
+
+SE FALTAR ALIMENTAÇÃO
+mm BATERIA CS) FUSÍVEL CHAVE DC-DC
++ Verifique carga + Verifique fusível * Verifique chave E + Verifique entrada
+* Conexões [hi] + Substitua se geral / ignição É o + Verifique saída 12 V
+
++ Substitua se |] |] queimado * Contatos ULo * Substitua se
+necessário + Verifique os * Fiação defeituoso
+conectores
+
+0) ALIMENTAÇÃO BOA = DIAGNÓSTICO CERTO = REPARO RÁPIDO E CONFIÁVEL
+
+
+
+===== PÁGINA 6 =====
+ETAPA 4
+
+COMANDOS E SENSORES
+
+DE BLOQUEIO
+
+Verifique os comandos de entrada e os intertravamentos
+de segurança que podem impedir o funcionamento do sistema.
+
+1. VERIFIQUE CADA ENTRADA
+
+O Aceeraoor O wanete de FREIO E) sensorpecamere
+Retorne livremente Ao acionar, Cavalete abaixado
+e sem travamentos. o sistema deve deve bloquear
+reduzir potência. a partida/tração.
+
+© miouenoesica O) oisptav/Paine
+
+Ca E
+
+O suave cera
+
+Verifique se esta Confirme o Verifique mensagens,
+ligada e com boa acionamento e alertas e status
+conexão. o retorno correto. de intertravamento.
+
+2. ALGUM INTERTRAVAMENTO ATIVO?
+
+Algum item acima
+está fora do padrão
+ou acionado?
+
+TUDO OK! BLOQUEIO ATIVO!
+Sistema liberado Corrija o item
+para funcionar. identificado e
+
+teste novamente.
+
+Q A
+
+3. O QUE PODE BLOQUEAR O SISTEMA SINAIS DE BLOQUEIO
+
+Painel liga, motor não responde
+Intertravamento ativo.
+
+Corte ao acionar freio
+Comportamento normal de segurança.
+
+Não liga com cavalete abaixado
+Intertravamento do sensor de cavalete.
+
+Mensagem de erro no painel
+Consulte o código e verifique o item.
+
+Travamentos aleatórios
+Verifique conexões e sinais de entrada.
+
+ACELERADOR PRESO FREIO ACIONADO =)
+“a Sinal fora do faixa oo Corte de poténcia
+ou travado. por seguranga. 9
+CAVALETE ABAIXADO CHAVE GERAL DESLIGADA
+Impede partida Alimentação Zz
+ou tração. interrompida.
+|] BOTÃO DESLIGADO A FALHA DE SINAL EIN
+® Sistema em Standby Cabo solto, conector
+ou desligado. ¢ oxidado ou danificado. %
+SEGURANÇA EM PRIMEIRO LUGAR:
+Intertravamentos existem para proteger você e o sistema.
+
+a 8 4
+
+DICA: Faça os testes com o sistema
+“e* desligado e em ambiente seguro.
+
+
+
+===== PÁGINA 7 =====
+| BÔNUS #4 | sa
+
+ETAPA 9
+BATERIA, BMS E CARREGAMENTO
+
+Sequência de verificação para identificar falhas
+relacionadas à bateria e ao sistema de carga.
+
+MEDIR TENSÃO EM REPOUSO
+
+Meça a tensão total da bateria
+com o veículo desligado.
+
+QUEDA SOB CARGA
+
+Aplique carga e verifique se a tensão
+cai abaixo do normal rapidamente.
+
+PORTA DE CARGA
+
+Inspecione a porta de carga, conexões
+e soldas. Verifique folgas ou oxidação.
+
+CARREGADOR COMPATÍVEL Re
+
+Confirme se o carregador é compatível
+com a tensão e corrente da bateria.
+
+BMS TRAVADO / PROTEÇÃO
+
+Verifique se o BMS está bloqueando
+a saída por proteção (sobretensão,
+subtensão, temperatura, corrente).
+
+COMUNICAÇÃO DE ERRO ?
+Leia o display ou ferramenta de \ ERRO BMS
+diagnóstico para identificar códigos CÓDIGO: E-BAT-01
+
+de erro relacionados à bateria.
+
+QUANDO SUSPEITAR DA BATERIA
+
+Ei a Me
+
+NÃO CARREGA CAI AUTONOMIA DESLIGA SOB CARGA TENSÃO IRREGULAR
+
+(0) DIAGNÓSTICO PRECISO = REPARO ASSERTIVO
+
+
+
+===== PÁGINA 8 =====
+ETAPA 6
+CONTROLADOR,
+
+MOTOR E ACIONAMENTO
+
+Onoo
+ovao
+
+38
+
+ca
+
+Verifique os itens de propulsão somente após DIAGNÓSTICO PASSO A PASSO
+concluir todas as etapas anteriores.
+
+1. SINAL CHEGA?
+
+Acelerador envia ~) ee,
+
+sinal ao controlador?
+
+o, q.
+
+CONTROLADOR /
+INVERSOR
+
+Processa os sinais e
+alimenta o motor.
+
+2. CONTROLADOR
+
+FASES DO MOTOR RESPONDE? O)
+(U, V, w) LEDs acendem? [~ i
+Aas Tensão de saída H
+Levam a potência do presente? !
+controlador ao motor. H
+SENSORES HALL 3. FASES DO |
+(5 FIOS) oo MOTOR OK? ~ Lai
+Informam a posição do rotor Há tensão trifásica H
+para o controlador. saindo para o motor? '
+MOTOR 4. HALL OK?
+(HUB OU CENTRAL) Sinais Hall pesentes. (J) ---4
+Converte energia elétrica e coerentes? !
+em movimento. H
+DD, qo
+ACELERADOR 5. MOTOR LIVRE
+(SINAL) MECÂNICO? ~ Lead!
+Envia o comando de Gira leve sem atritos
+ou travamentos?
+
+potência ao controlador.
+
+SISTEMA PRONTO
+PARA TESTE
+
+YE CORRIGIR
+PONTO FALHO
+
+SINALDD = ly CONTROLADOR POTÊNCIA PARA HALLINFORMA __y, MOTOR GIRA
+ACELERADOR PROCESSA O MOTOR GRD arosíção EP nove
+
+PENSE NESSA ORDEM
+e 0
+
+g Seguir a ordem evita trocas desnecessárias e acelera o diagnóstico.
+
+
+===== PÁGINA 9 =====
+BONUS #4
+
+ETAPA /
+
+Após o reparo, é essencial validar o funcionamento
+
+do sistema. Siga os testes abaixo para garantir
+segurança, desempenho e satisfação do cliente.
+
+4
+4
+4)
+
+Verifique se o
+painel liga, exibe
+informações
+corretamente e
+se não há códigos
+de erro.
+
+CARREGAMENTO
+
+Confirme se o
+carregador
+funciona, indica
+corretamente e
+completa o ciclo
+normalmente.
+
+RUÍDOS
+
+Escute atentamente
+por chiados,
+estalos, batidas
+
+ou atritos fora
+
+do normal.
+
+O
+
+ACELERAÇÃO
+
+=. |
+
+Teste a resposta
+do acelerador.
+Deve ser suave,
+progressiva e
+sem falhas.
+
+TESTE EM VAZIO
+
+Eleve a roda e
+acelere. Verifique
+rotação estável,
+sem ruídos ou
+trepidações.
+
+O
+
+AQUECIMENTO
+
+Acompanhe a
+temperatura de
+motor, controlador
+e bateria. Não deve
+
+haver superaquecimento.
+
+Q TESTES REALIZADOS
+Q TODOS OS ITENS OK
+
+Q SISTEMA FUNCIONANDO
+
+CORTE DE SEGURANÇA
+
+Verifique os
+sensores, freios
+
+e interruptores.
+O sistema deve
+cortar a tração
+quando acionado.
+
+TESTE EM USO
+
+Faça um teste
+prático. Avalie
+desempenho,
+frenagem,
+estabilidade e
+autonomia.
+
+REGISTRO FINAL
+
+Registre os testes,
+medições finais,
+peças utilizadas e
+orientações dadas
+ao cliente.
+
+O
+
+DEFEITO SUMIU
+
+Problema original
+não se repete.
+
+</>
+
+SEM CÓDIGO
+
+Nenhum erro ativo
+no sistema.
+
+REPARO
+
+CLIENTE ORIENTADO
+
+Explique o que foi feito
+e os cuidados para
+manter a bike em dia.
+
+MEDIÇÕES OK
+
+Tensões, correntes
+e sinais dentro do
+esperado.
+
+VALIDADO
+
+
+
+===== PÁGINA 10 =====
+CHECKLISTFINAL (2
+
+@*
+_
+
+ily Q SINTOMA CONFIRMADO
+iv O O Inspeção visua rem
+
+Siga cada etapa e garanta um diagnóstico
+preciso, seguro e eficiente! @ O) SEGURANÇA APLICADA
+
+O 4 aumentição veriricana
+O = comoosresranos
+O Gwe patervems cuecanos
+
+O + wororconreo.avoe cuecanos
+© G cus encon
+
+O KF Remo execunoo
+O O VALIDAÇÃO CONCLUÍDA
+
+E
+
++"
+
+O) SEQUÊNCIA CERTA =
+
+| A MÉTODO SEGURANÇA AGILIDADE NO RESULTADOS
+©) COMPROVADO EM 1º LUGAR DIAGNÓSTICO CONFIÁVEIS

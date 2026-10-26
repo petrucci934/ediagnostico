@@ -1,0 +1,20 @@
+# Dependências e arquivos locais de desenvolvimento
+node_modules/
+.venv/
+.env
+**/.env
+**/.env.*
+!**/.env.example
+
+# Saídas geradas
+frontend/dist/
+coverage/
+*.log
+
+# Cópias de segurança locais. Mantidas no disco, mas fora do controle de versão.
+*.bak*
+*.backup
+*.backup_*
+*.backup-*
+*.dump
+*.tar.gz

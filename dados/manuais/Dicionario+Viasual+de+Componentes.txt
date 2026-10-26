@@ -1,0 +1,925 @@
+
+===== PÁGINA 1 =====
+DICIONARIO
+
+Guia visual para identificar peças de
+scooters, motos e bikes elétricas
+
+
+
+===== PÁGINA 2 =====
+COMO USAR
+ESTE DICIONARIO
+
+Abriu a scooter e não sabe qual peça é qual?
+
+Ache ela aqui pela foto. Cada página mostra
+
+o nome, o que faz, onde fica e como saber se
+está com defeito só de olhar.
+
+1 ACHE A PEÇA
+PELA FOTO
+
+fot Navegue pelas fotos
+dos componentes
+e encontre a peça
+
+igual à que você tem
+na scooter.
+
+RELÉ AUXILIAR
+
+Também conhecido como relé de potência.
+Controla a passagem de corrente elétrica
+para componentes da scooter.
+
+O vir
+
+Compare o formato, pinos e inscrições
+com a peça que você encontrou.
+
+Veja o nome oficial
+da peça para ter
+
+certeza de que é
+o componente correto.
+
+Ne
+
+oO FUNÇÃO
+Liga e desliga circuitos de alta corrente
+
+comando de baixa corrente.
+
+Q ONDE FICA
+Geralmente no porta-objetos sob o banco
+
+ou próximo à bateria.
+
+3 VEJA A FUNÇÃO
+E A LOCALIZAÇÃO
+
+Entenda o que a peça faz
+e onde ela fica instalada
+
+na scooter.
+
+OBSERVE 0S O QUE OBSERVAR
+E! SINAIS VISUAIS
+DE DEFEITO
+
+© Identifique problemas )
+só de olhar, antes
+e NA OXIDAÇÃO QUEIMADO PINOS DANIFICADOS RACHADURAS
+estar. Pinos esverdeados Marcas de calor, Pinos tortos, frouxos Trincas no corpo
+ou enferrujados. plástico derretido ou quebrados. da peça.
+
+ou escurecido.
+
+
+
+===== PÁGINA 3 =====
+DE COMPONENTES
+
+“BATERIA DE
+
+Energia confiável para a sua
+bike elétrica ir mais longe.
+
+Armazena energia para
+alimentar todo o sistema.
+
+Trilho do quadro,
+tubo inferior ou
+rack traseiro.
+
+Pode causar danos
+graves ou incêndio.
+
+Mau contato e falhas Risco de curto-circuito Indício de superaquecimento
+no funcionamento. e superaquecimento. ou falha interna.
+
+gear
+
+4 0
+
+Evite calor extremo Use apenas carregador Mantenha os contatos Armazene com carga
+e exposição direta original ou homologado limpos e secos. entre 30% e 60%
+ao sol pelo fabricante. quando não usar.
+
+
+
+===== PÁGINA 4 =====
+E COMPONENTES .
+
+BATERIA DE LÍTIO
+
+Geralmente fica
+sob o banco ou
+sob o assoalho.
+
+Energia que move sua scooter elétrica
+com eficiência e autonomia.
+
+Facilita inspeção,
+
+manutenç:
+
+substituição.
+
+Conexões, cabos e
+fixação devem estar
+
+firmes e integros.
+
+Armazena energia Fornece energia
+' Interna, geralmente Lens ‘
+do sistema para elétrica estável e
+
+alimentar o motor sob o assoalho
+
+e os componentes.
+
+contínua para a
+ou banco. scooter.
+
+SINAIS VISUAIS DE DEFEITO
+
+Deformação do pack Oxidação nos terminais Conector quente indica Odor forte de queimado
+a ab maga Jem
+pode indicar risco aumenta a resistência Cabos esmagados pode mau contato, sobrecarga indica superaquecimento
+A À F romper o isolamento e f
+de superaquecimento élétrica e pode causar ou oxidação interna. ou falha grave. Desligue
+rovocar curto-circuito.
+ou falha interna mau contato. Lite, cu : e faça inspeção.
+
+Bateria de lítio armazena alta energia.
+
+Sempre desligue a scooter antes de Inspecione Mantenha seco Use conectores
+
+E Ms Use sempre EPIs
+inspecionar ou desconectar regularmente e ventilado originais e firmes
+
+
+===== PÁGINA 5 =====
+Monitora a tensão
+
+de cada célula
+
+Battery Management System
+
+Protege a bateria contra
+
+sobrecarga, subtensão Conexão de carga
+
+e temperatura. E e descarga
+
+Dentro do pack,
+
+fixado junto Circuito que gerencia
+
+às células e protege a bateria. E
+
+Fique atento aos principais indícios de problema no BMS.
+
+Marcas escuras ou Mau contato ou fio
+
+Conector fora do lugar Alteração de cor ou
+
+resina queimada desconectado 3 Re
+ou mal encaixado oxidação por calor.
+
+
+===== PÁGINA 6 =====
+Monitora a tensão
+
+de cada célula
+
+Battery Management System
+
+Protege a bateria contra
+
+sobrecarga, subtensão Conexão de carga
+
+e temperatura. E e descarga
+
+Dentro do pack,
+
+fixado junto Circuito que gerencia
+
+às células e protege a bateria. E
+
+Fique atento aos principais indícios de problema no BMS.
+
+Marcas escuras ou Mau contato ou fio
+
+Conector fora do lugar Alteração de cor ou
+
+resina queimada desconectado 3 Re
+ou mal encaixado oxidação por calor.
+
+
+===== PÁGINA 7 =====
+MOTOR
+
+Motor elétrico integrado ao cubo da roda.
+Gera movimento direto na roda, sem corrente ou transmissão.
+
+”
+
+Saída do cabo |
+do motor
+
+Transforma energia Dentro da roda Folga lateral no eixo
+elétrica em movimento dianteira ou traseira. ou rolamento
+da roda.
+= Roda gira pesada VA
+=
+iy N À Cabo do chicote
+danificado perto do eixo
+
+Carcaça marcada
+ou superaquecida
+
+
+===== PÁGINA 8 =====
+DE COMPONENTES
+
+MOTOR
+
+O motor central que usa a transmissão da bike
+para gerar potência e eficiência.
+
+Fornece assistência No centro do quadro,
+usando a transmissão junto ao pedivela. * Estalo ao pedalar
+da bike. * Folga no eixo
+
+* Óleo vazando
+
+* Trinca ou desgaste
+no conjunto
+
+Multiplicam o torque gerado
+Protege os componentes pelo motor.
+internos contra impacto
+
+e sujeira
+
+Mede a força aplicada
+Transfere o torque do motor
+
+no pedal para ajustar
+
+a assis
+
+para o pedivela e a coroa. cia.
+
+Transmitem e multiplicam Detecta a força do pedal Conecta o motor ao pedivela Veda e protege o conjunto
+
+o torque do motor. em tempo real e à transmissão de poeira e água
+
+
+===== PÁGINA 9 =====
+DICIONÁRIO VISUAL DE
+
+COMPONENT
+
+Identifique, entenda e reconheça os principais
+modelos de displays de bicicletas elétricas.
+
+Leitura clara e direta
+em tela monocromática.
+
+O QUE FAZ
+
+Mostra velocidade, bateria,
+modo de assistência e
+configurações da bike.
+
+Design compacto com
+
+informações essenciais.
+
+ONDE FICA
+
+Instalado no guidão,
+
+facilmente visível
+pelo ciclista.
+
+Tela colorida com mais
+dados e personalização.
+
+Integrado ao quadro
+
+com visual clean.
+
+SINAIS VISUAIS DE DEFEITO
+
+Tela apagada
+
+Sem iluminação ou
+informações visíveis.
+
+Pixels falhando
+
+Falhas na imagem
+ou trechos piscando.
+
+Botões sem resposta
+
+Comandos não funcionam
+ao serem pressionados.
+
+Conector solto atrás
+
+Conexão instável ou
+fios desconectados
+
+
+===== PÁGINA 10 =====
+E COMPONENTES
+
+DISPLAY E PAINEL
+
+Painéis e mostradores que informam e controlam
+o funcionamento da scooter elétrica.
+
+Informações essenciais Velocidade, bateria e odômetro Design moderno com indicadores
+de forma clara e objetiva em tela de fácil leitura. integrados de luzes e setas
+
+>
+
+00... -
+
+E 100% 000 000123km
+
+Tela TFT com nível de bateria, modos Informações detalhadas de velocidade, Aparência original de fábrica com
+de condução, odômetro e alertas carga, trip, modo e falhas. indicadores completos
+Exibe velocidade, carga da Instalado no guidão © Tela apagada ou totalmente escura
+bateria, luzes, setas e avisos ou no painel frontal © Falha parcial nos segmentos ou ícones
+
+importantes ao condutor. da scooter. a ã
+Lú ç 4 © Botões não respondem aos comandos
+
+É Umidade ou condensação interna
+
+© Conector solto ou oxidação visível
+
+
+
+===== PÁGINA 11 =====
+DICIONÁRIO VISUAL
+
+Thumb e twist: o comando que envia o sinal
+de aceleração ao controlador.
+
+ao contro Controlar a acele
+
+nação de quanto
+
+je forma prog
+
+e segura, garant
+
+Cabo danificado interrompe Oxidação causa mê
+
+o sinal para o controlador e falhas intermite
+
+Acionamento cor Acionamento com a mão.
+
+Ideal para controle preciso
+
+sta rápida e intuitiva
+
+Mais comum em e-bikes
+
+Otimo para subidas técnicas
+
+
+===== PÁGINA 12 =====
+DICIONÁRIO VISUAL DE COMPONENTES
+
+Pedal assistido: o sensor que detecta a pedalada na bike elétrica.
+
+1a2mm
+Detecta a rotação dos Instalado no quadro, Os ímãs passam em frente
+ímãs no disco quando próximo ao pedivela, ao sensor e geram pulsos
+alinhado com o disco magnéticos. O controlador
+
+você pedala e envia o
+interpreta esses pulsos
+
+sinal para o controlador, de ímãs
+ativando o motor. e fornece assistência
+[6] conforme a pedalada
+
+Disco fora de alinhamento Distância maior que o idea Fio mal posicionado pode Suporte danificado c
+
+prender na corrente e danificar o alinhamento e a distância
+
+causa falhas na leitura ou mpede a detecção corret
+
+funcionamento irregula s. sor ou o cabo. correta do sensor.
+Verifique o alinhamento Mantenha ímãs e Fixe bem o suporte Jse conectores
+sensor limpos, se para evitar vib: es firmes e bem
+
+resíduos metálicos. e desalinhamentos. icaixado:
+
+
+===== PÁGINA 13 =====
+Detecta a passagem
+do ímã e envia o sinal
+
+de
+
+o
+aos
+da roda
+
+assa próximo
+
+ao controlador e ao
+
+display.
+
+Sem o ímã, o sensor não
+
+recebe o sinal e não há
+
+leitura de velocidade.
+
+à a rotação da roda
+
+DE COMPONENTES
+
+SENSOR DE
+
+Leitura da roda por sensor e ímã
+para informar a velocidade ao sistema.
+
+Fixado no raio ou
+no disco. Gera o
+pulso para o sensor
+
+Entre o ideal
+para leitura precisa
+
+e estável.
+
+Na roda dianteira Converter o movimento
+
+ou traseira, fixado no m sinal elétrico
+
+da rod:
+
+a a velocidade
+
+para o sistema funcionar
+corretamente.
+
+garfo ou no quadro
+próximo ao disco ou raio.
+
+SINAIS VISUAIS DE DEFEITO
+
+ferrugem Folga ou vibração n
+
+Se o sensor não ficar de
+fre
+
+para o ímã, a leitura rrompe ir a leitura altera a distância e causa
+
+falhas de leitura
+
+ar ou falhar intermitente. o sinal do sensor. precisa do sensor
+
+do do cabx
+
+fique semp:
+
+tores.
+
+nça e fixação do imã
+
+
+
+===== PÁGINA 14 =====
+DICIONÁRIO VISUAL DE COMPONENTES
+
+DE FREIO
+
+Cut-off: o sensor que manda =
+cortar o motor ao acionar o freio. q
+
+Aciona o sistema
+
+de fi
+
+Detecta o acionamento
+
+do freio e envia o
+
+para cortar o motor.
+
+ação da moto.
+
+O sensor é ativado im
+
+Integrado ao próprio manete,
+
+discreto e protegido. que o manete inicia o curso
+
+Informa à central ou No manete de freio Essencial para a segurança
+controlador que o freio (embutido) ou fixado e para o funcionamento
+foi acionado, cortando próximo ao manete do sistema de cut-off
+
+étrica
+
+o motor para segurang¢, (sensor magnético). da scooter e
+
+Se
+e imã no manete.
+
+O sensor fica dentro r fixo
+
+do manete e é
+acionado pelo Ao aproximar,
+movimento da o sinal é gerado.
+
+alavanca.
+
+Fácil ajuste
+
+e substituição.
+
+Folga excessiva pode Fixação frouxa pode Distância ou desalinhe ção danificada causa
+impedir o acionamento gerar falhas intermitentes impedem o acioname perda de sinal ou curto
+do sensor. ou falta de sinal correto do senso! circuito.
+
+Se o motor não cortar ao
+
+pare de usar nspecione Mantenha o ímã Us
+a scooter e faça a inspeção.
+
+onar o frei
+
+conectores
+
+rmente alinhado originais e firmes
+
+gula
+
+
+
+===== PÁGINA 15 =====
+DICIONÁRIO VISUAL
+DE COMPONENTES
+
+O conjunto de fios que distribui energia e sinais por todo o veículo.
+
+Distribuem energia
+
+e sinais para os
+
+igações seguras entr
+diversos sistemas. Ligações seg e
+
+o chicote e os
+
+componentes
+
+« jo o vel igando a bateria
+
+mais finos que
+
+nais grossos que
+
+Revestime
+
+to q
+
+e proteg
+
+duzem alta corrente
+
+os fios contra atrito, calos ria,
+
+rolador e outros.
+
+istribui energia da b
+
+assi e carenagens, >
+
+o funcionamento
+e sinais de controle entre
+
+culo tegrado e seguro de todo
+
+ds OR TEX
+dos os c o da
+
+elétricos
+
+ter ou bike elétrica
+
+solação danificada pode causar Oxidação nos terminais Sinal de superaquecimento A pressão constante danifica o
+curto-circuito ou mau contato. a resistência elétrica e pode Pode haver curto-circuito ou fio e pode provocar falhas
+nterroi r O funcionamer carga no sistema. intermitentes ou curtos.
+ATENÇPÃN
+ATENÇÃO
+Nunca puxe pelo fio ao desconectar.
+Sempre segure pelo conect Não force os conectores. Mantenha o chicote Evite umidade Va do
+
+ado e produtos químicos c regularmente
+
+Isso evita rompimentos internos. Respeite o encaixe correto
+
+de partes móveis. os conectores. durante a manutenção.
+
+
+
+===== PÁGINA 16 =====
+DICIONÁRIO VISUAL
+
+CONECTO
+
+Principais tipos usados em scooters, motos e bikes elétricas.
+
+a
+
+A Baterias de alta Baterias e controladores Aplicações de alta @ =: de bateria
+corrente e fácil conexão. compactos. corrente e potência. e circuitos eletrônicos.
+
+HIGO/JULET CONECTOR BALA CONECTOR IMPERMEÁVEL
+
+eve
+
+5 Motores e sensores 4 Ligações de motor Ambientes externos
+com conexão à prova e bateria. ou com umidade.
+
+de água.
+
+( ONDE SAO USADOS ( COMO IDENTIFICAR ( SINAIS VISUAIS DE DEFEITO
+
+Formato e | PINO TORTO Q
+dimensões | Mau contato e
+
+| aquecimento.
+
+|
+
+Corrente e OXIDAÇÃO VERDE |
+
+tensão suportadas OU BRANCA
+
+Perda de condução
+e falhas.
+
+PLÁSTICO DERRETIDO x)
+
+Superaquecimento
+e risco de curto.
+
+Baterias e
+controladores
+
+Motores e
+
+sensores Sistema de trava
+
+|
+(macho e fêmea) |
+|
+
+Resistência
+
+“sy
+
+à água e poeira “ai
+
+Corese | TRAVA QUEBRADA
+izaçã Conexão solta,
+
+padronização rity
+
+Use sempre conectores de qualidade, compativeis com a corrente
+
+DICA IMPORTANTE! e tensão da sua aplicação. Conexões firmes e bem feitas garantem
+
+segurança, eficiência e maior vida útil do sistema.
+
+e acessórios
+
+00090
+
+Ne X
+
+E) Placas, displays ERES
+
+
+
+===== PÁGINA 17 =====
+DICIONÁRIO VISUAL
+DE COMPONENTES
+
+FUSÍVEL
+
+A proteção simples que abre o circuito
+em caso de curto ou sobrecarga.
+
+o fe ~~
+
+FUSIVEL LAMINA FUSÍVEL CARTUCHO OU TUBULAR
+
+Usado principalmente em motos e scooters. Utilizado em controladores, carregadores
+Instalado em caixas de fusíveis. e em circuitos específicos.
+
+EXEMPLOS DE INSTALAÇÃO CONHEÇA AS PARTES
+
+Amperagem
+Indica a corrente
+nominal (A).
+
+Corpo do fusível
+Material isolante
+que protege o
+elemento interno.
+
+Terminais
+Conduzem a
+corrente elétrica.
+
+Caixa de fusíveis próxima à bateria. Fusível cartucho em porta-fusível inline.
+
+Porta-fusível
+XR | Aloja o fusível
+S e garante a conexão
+O QUE FAZ ONDEFICA | IMPORTANTE segura no circuito.
+Protege o circuito elétrico Próximo à bateria, Sempre substitua por um fusível
+interrompendo a passagem dentro da caixa de fusíveis com a mesma amperagem.
+da corrente quando há curto- ou em série com o circuito | Usar um valor maior pode causar
+circuito ou sobrecarga. que deseja proteger. } danos graves ou incêndio.
+TIPOS [ TIPOS MAIS COMUNS |) COMUNS
+LÂMINA MINI LAMINA PADRÃO LAMINA BAKO PERFIL | TUBULAR DE VIDRO CARTUCHO CERÂMICO “o /MIDI
+a SA - 30A SA - 40A 2A-30A i 0,1A-25A 1A -30A 30A - 200A )
+par TR ae aay E =a
+[ SINAIS VISUAIS DE DEFEITO | VISUAIS DE DEFEITO
+O Fitamento Rompino O) vidro Escurecino © rusíve perrerino @ suporte aquecioo ou oxiDavo
+O fio interno está partido, Indica aquecimento excessivo Corpo deformado ou derretido Sinais de superaquecimento,
+interrompendo a passagem e possivel sobrecarga devido a corrente acima mau contato ou umidade.
+da corrente. no circuito. do limite ou curto-circuito. Risco de falha intermitente.
+
+
+
+===== PÁGINA 18 =====
+DICIONÁRIO VISUAL DE COMPONENTES
+
+O comando que liga e desliga o circuito principal da scooter.
+
+Liga ou desliga o
+sistema elétrico da
+
+scooter
+
+Encaixe da chave
+
+para acionamento
+
+do ci
+
+á Conexão elétrica
+
+A chave é fixada no :
+
+painel frontal com qusjenvislereceve
+sinais do sistema
+
+suporte e trava.
+
+Aciona ou interrompe z
+oe eau" pee No painel frontal
+alimentação elétrica da |
+
+próximo à coluna
+
+bateria e dos componentes
+
+de direção.
+
+principais da sc
+
+SINAIS VISUAIS DE DEFEITO
+
+Folga excessiva
+
+miolo
+
+ou pode causar
+
+desga
+
+> chave. P.
+
+falta de lubrificação
+
+Se a scooter não ligar ou
+
+desligar sozinha, verifique
+primeiro a chave de ignição Use sempre EPis
+
+Oxidação nos
+
+u contato, podem pe:
+
+ou
+
+Cilindro metálico com
+
+chave, posições marcadz
+e conector traseiro com
+
+vários fios
+
+incas no cc
+
+de e comprometer
+
+nha sec Verifique o cone
+
+e as conex
+
+
+
+===== PÁGINA 19 =====
+COMPONENTES
+
+Botão de corte de emergência do sistema de aceleração.
+
+iga o motor
+
+quando acionado.
+
+Pressione para desliga
+
+o motor imediatamente
+
+Fixado no lado direi
+
+do guic
+
+Interrompe o sinal elétrico No lado direito do guidão, Botão vermelho com ícones
+
+de ignição ou da ECU próximo à manopla do de corte. Geralmente possu
+
+ligando o motor acelerado simbolos de motor desligado
+
+latamente em situações ou “X” sobre o motor.
+
+de emergê
+
+R e
+
+ncia.
+
+ição R Oxidação nos terminais Trine podem
+esc tác pode causar mau contate ex
+je nto, alha intermitente interr
+Verifique o funcionamento do
+kill switch regularmente. Teste o botão Evite exposição Faça manutenção Use conectores
+
+Ele pode salvar o jo água e umidade preventiva originais e firmes
+
+
+
+===== PÁGINA 20 =====
+DICIONÁRIO TELA.
+
+E DE COMPONENTES | ES
+
+SENSOR DO
+
+O sensor que impede a partida ou o
+movimento com o cavalete abaixado.
+
+Impede a partida do motor Instalado na estrutura Quando o cavalete é
+
+ou o movimento da scooter do chassi, próximo ao abaixado, ele aciona o sensor.
+quando o cavalete está cavalete lateral, onde A central eletrônica interpreta
+abaixado, garantindo seu acionador é tocado o sinal e bloqueia a partida
+segurança. pelo cavalete ou o movimento
+
+df
+Chicote danificado Sensor fora da posição Suporte rachado ou Sujeira, barro ou corrosão
+a Cavalete torto ou com É
+interrompe o sinal. correta não é acionado quebrado pode soltar podem travar o acionamento
+| folga não aciona o sensor
+Pode impedir a partida pelo cavalete. Ajuste o sensor e causar falhas e causar mau contato
+falha a corretamente. AEE R
+ou gerar falhas. ou fixação comprometida intermitentes ou constantes,
+Nunca altere ou desative o sensor do cavalete
+Ele é essencial para sua segurança. Manter ixações Evite acúmulo Inspecione Use conectores
+
+Faça inspeções regulares. e conexões firmes de sujeira e água regularmente originais e firmes
+

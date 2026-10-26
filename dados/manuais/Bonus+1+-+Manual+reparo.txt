@@ -1,0 +1,475 @@
+
+===== PÁGINA 1 =====
+TABELA MESTRA DE
+
+CODIGOS
+
+DE DISPLAY E PAINEL
+
+CONSULTE O CÓDIGO
+QUE APARECEU NO DISPLAY
+E DESCUBRA NA HORA O QUE
+
+ELE SIGNIFICA E O QUE VERIFICAR.
+
+
+
+===== PÁGINA 2 =====
+COMO USAR ESTA TABELA
+
+a Leia o código exibido
+no display ou painel.
+
+Encontre o grupo e o código
+correspondente na tabela.
+
+(3) Confira o significado do erro.
+
+(4) Siga as verificações recomendadas.
+
+Ay ATENÇÃO
+
+Cada marca pode usar códigos
+diferentes para o mesmo defeito.
+
+Sempre confirme se o código exibido
+é o mesmo do display.
+
+Em caso de dúvida, verifique também
+os conectores, fios e alimentação.
+
+900 0080
+
+ÍCONES UTILIZADOS
+
+ALTA PRIORIDADE
+
+Risco de falha grave ou de danos a componentes.
+
+MÉDIA PRIORIDADE
+
+Pode afetar o desempenho do equipamento.
+
+BAIXA PRIORIDADE
+
+Pode limitar funções ou conforto.
+
+
+
+===== PÁGINA 3 =====
+GRUPOS DE ERROS
+
+Os códigos estão organizados por sistema.
+
+POXX
+
+TR
+
+$ Pax
+(6) P3XX
+
+PAXX
+
+O; P5XX
+
+BATERIA E BMS
+
+Problemas de tensão, comunicação,
+temperatura e proteções.
+
+MOTOR E CONTROLADOR
+
+Falhas no motor, controlador,
+fases e comutação.
+
+ACELERADOR E CONTROLES
+
+Falhas no acelerador, comandos
+e sensores de resposta.
+
+FREIOS E SEGURANÇA
+
+Falhas em sensores de freio,
+cavalete, chaves e intertravamentos.
+
+COMUNICAÇÃO E PAINEL
+
+Falhas na comunicação entre
+módulos e no display.
+
+OUTROS SISTEMAS
+
+Iluminação, buzina, carregador
+e sistemas auxiliares.
+
+Os | OS CÓDIGOS PODEM VARIAR ENTRE MARCAS E MODELOS.
+
+USE ESTA TABELA COMO GUIA DE REFERÊNCIA.
+
+
+
+===== PÁGINA 4 =====
+CÓDIGOS POXX ==
+BATERIA E BMS
+
+Códigos de erro relacionados à bateria, ao BMS e ao sistema de gerenciamento.
+
+CÓDIGO — SIONFICADO À VERIFICAÇÕES RECOMENDADAS PRIOR.
+
+Verifique se a tensão da bateria
+
+P001 Sebratenshe esta acima do limite permitido.
+da bateria :
+Inspecione o carregador e o BMS.
+Subisnaito Verifique se a Eas da bateria
+P002 é está abaixo do nível adequado.
+da bateria .
+Inspecione descarga profunda.
+Falha de Uma ou mais células fora da faixa.
+
+P003
+
+célula Verifique balanceamento e BMS.
+
+Bateria acima da temperatura
+
+Temperatura ; ait
+P004 segura. Inspecione ventilação
+
+alta
+
+e sensores.
+Temperatura Bateria abaixo da temperatura
+P005 ;
+baixa segura. Aquega antes do uso.
+PO06 Falha de Verifique conectores, chicote
+comunicação À ja
+e alimentação do BMS.
+com BMS :
+
+Corrente de descarga ou carga
+acima do limite. Verifique carga,
+controlador ou carregador.
+
+Proteção por
+P007 op
+corrente
+
+Carregador não liberado.
+
+Falha de
+P008 duda Verifique carregador, porta
+9 de carga e BMS.
+
+Oo > FP Fr >>>
+
+
+===== PÁGINA 5 =====
+=) CÓDIGOS PIXX
+EE) MOTOR E CONTROLADOR
+
+Códigos relacionados a falhas no motor elétrico e no controlador.
+
+CÓDIGO | SIGNIFICADO
+
+VERIFICAÇÕES RECOMENDADAS
+
+Falha de Hall Verifique os sensores Hall,
+
+P100 do motor Q a fiação e o conector do motor. A
+Falha de fase Verifique os cabos de fase,
+
+P1 01 U ou Vou W Q os conectores e a resistência A
+
+interna do motor.
+
+Curto entre Verifique o isolamento dos cabos
+
+Pi 02 fases Q e do motor. A
+
+PI 03 Controlador Q Verifique a dissipação de calor A
+sobretemperatura e a carga aplicada.
+
+P1 0 4 Falha de E Q Inspecione chicote, conectores A
+snide ci e sensores de posição do motor.
+com motor
+Corrent
+
+P1 05 FA Q Verifique a rotação da roda A
+motor sobrecarregado e o estado do controlador.
+ou travado
+
+P106 Falhade Q Verifique o sinal do acelerador A
+aceleração inicial e os parâmetros do controlador.
+Falha no
+
+P107 inversor, Q Verifique a alimentação A
+
+problema interno
+do controlador
+
+e os sinais.
+
+
+===== PÁGINA 6 =====
+CÓDIGOS P2XX
+ACELERADOR E CONTROLES
+
+CÓDIGO  SNFCADO VERIFICAÇÕES RECOMENDADAS | PRIOR.
+
+P200 Falha no e Verifique conector, fios A
+
+acelerador e sinal do acelerador.
+
+P201 dy e Calibre ou substitua o acelerador
+acelerador fora E d pa
+É e inspecione a fiação.
+da faixa
+Acelerador
+P202 travado, e Inspecione o acelerador A
+sinal fixo em eo chicote.
+aceleração
+Falha no Verifi Ê
+P203 ciriadado e Verifique o seletor, conectores
+
+e a alimentação.
+marcha
+
+botão mode e a programação.
+
+P20 4 Falha no e Verifique o botão, a fiação Q
+
+P205 Falha no modo e Verifique comunicação entre
+de condução o painel e o controlador.
+
+Problemas no acelerador podem deixar a scooter
+sem força ou fazer o motor não responder.
+
+
+
+===== PÁGINA 7 =====
+FREIOS E SEGURANÇA
+
+CÓDIGOS P3XX
+
+CÓDIGO
+
+P300
+
+P301
+
+P302
+
+P303
+
+P304
+
+P305
+
+SIGNIFICADO
+
+Freio dianteiro
+acionado
+
+Freio traseiro
+acionado
+
+Cavalete
+acionado
+
+Kill switch
+acionado
+
+Falha no
+sensor de freio
+
+Sistema de
+segurança
+bloqueado,
+interlock ativo
+
+VERIFICAÇÕES RECOME
+
+Verifique o sensor do freio dianteiro
+e o ajuste da manete.
+
+Verifique o sensor do freio traseiro
+e o ajuste da manete.
+
+Verifique o sensor do cavalete lateral
+ou seu ajuste de segurança.
+
+Inspecione a chave de emergência
+ou a chave de segurança.
+
+Verifique o sensor, chicote
+e conector.
+
+Inspecione todos os sensores
+de segurança.
+
+> > FP Oo pb
+
+RAN
+
+Sensores de segurança evitam partida e aceleração
+para proteger o condutor.
+
+
+
+===== PÁGINA 8 =====
+CÓDIGO
+
+CÓDIGOS P4XX
+COMUNICAÇÃO E PAINEL
+
+SIGNIFICADO
+
+VERIFICAÇÕES RECOMENDADAS
+
+PRIOR.
+
+P400
+
+P401
+
+P402
+
+P403
+
+P404
+
+P405
+
+Falha de
+comunicação CAN
+
+Painel sem
+comunicação
+
+Display
+apagado
+
+Display com
+erro interno
+
+Dados incorretos
+no painel
+
+Falha no
+firmware
+
+Verifique os fios CAN, terminações
+e alimentação dos módulos.
+
+Verifique a alimentação do painel
+e a conexão com o controlador.
+
+Verifique o fusível, a alimentação
+e possível defeito no display.
+
+Verifique falha interna do painel
+e substitua se necessário.
+
+Verifique parâmetros do sistema
+e sensores.
+
+Atualize o software ou verifique
+erro de programação.
+
+>> > er
+
+Erros de comunicação podem impedir a partida
+ou mostrar informações incorretas.
+
+
+
+===== PÁGINA 9 =====
+cómico | SIGNIFICADO |
+
+P500
+
+P501
+
+P502
+
+P503
+
+P504
+
+P505
+
+CODIGOS P5XX
+OUTROS SISTEMAS
+
+Falha no Verifique carregador, conector
+carregador e temperatura.
+
+Falha na Verifique lâmpadas, fios
+iluminação e controlador de luz.
+
+Falha na Verifique buzina, relé
+
+buzina e alimentação 12V.
+
+Falha no Verifique conversor
+
+conversor DC-DC ' esaída 12V.
+
+Falha no Verifique bateria auxiliar 12V,
+
+sistema 12V fusiveis e conexões.
+
+Alarme iai arg ativo.
+
+ationddo erifique chave, app ou
+módulo de segurança.
+
+VERIFICAÇÕES RECOMENDADAS | PRIOR.
+
+di
+Q
+
+Q
+EA
+A
+Q
+
+ic
+
+Outros sistemas podem afetar conforto, luzes,
+carregamento e recursos auxiliares.
+
+
+
+===== PÁGINA 10 =====
+DICAS FINAIS
+
+Leal SEMPRE ANOTE 0 CODIGO
+
+4 = Anotar o código ajuda a identificar
+padrões recorrentes.
+
+NÃO TROQUE PEÇAS SEM TESTAR
+Siga as verificações recomendadas
+
+antes de substituir qualquer peça.
+
+a VERIFIQUE ALIMENTAÇÃO E CHICOTE
+
+w Muitos erros acontecem por mau contato,
+fio rompido ou conector oxidado.
+
+| ATUALIZE E REINICIE O SISTEMA
+
+Reiniciar o painel ou o controlador pode
+resolver falhas temporárias.
+
+EM CASO DE DÚVIDA, CONSULTE O MANUAL
+
+Cada marca pode ter pantcularidades
+nos códigos e procedimentos.
+
+SEMPRE DESLIGUE O SISTEMA
+ANTES DE REALIZAR QUALQUER REPARO.
+
