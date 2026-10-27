@@ -55,6 +55,15 @@ psql -d ediagnostico -f backend/schema.sql
 
 O esquema cria as tabelas usadas pela API, incluindo usuários, atendimentos, relação entre modelos e códigos, testes técnicos e revisões. Em uma base que já contém dados, faça uma cópia de segurança e compare o esquema antes de aplicar alterações: o arquivo inicial não é uma migração incremental.
 
+Para atualizar uma base existente com o cadastro administrativo de clientes e a proteção contra e-mails repetidos, aplique as migrações incrementais:
+
+```sh
+psql -d ediagnostico -f backend/migrations/20261027_criar_clientes.sql
+psql -d ediagnostico -f backend/migrations/20261027_email_usuarios_case_insensitive.sql
+```
+
+Para criar a primeira conta de administrador, com o banco configurado no `backend/.env`, execute `npm run criar-admin` dentro da pasta `backend/`. O script solicita nome, e-mail e uma senha de pelo menos 12 caracteres; a senha não é exibida no terminal.
+
 ## Comandos úteis
 
 Na pasta `frontend/`:

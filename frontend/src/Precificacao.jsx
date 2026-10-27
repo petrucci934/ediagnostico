@@ -66,6 +66,29 @@ function carregarConfiguracao() {
 }
 function Precificacao() {
   const [configuracao, setConfiguracao] = useState(carregarConfiguracao);
+  const [servicosOficina, setServicosOficina] = useState(() => {
+    try {
+      return JSON.parse(
+        localStorage.getItem("ediagnostico-servicos-oficina"),
+      ) || [
+        {
+          id: "exemplo-manete",
+          nome: "Troca de manete acelerador",
+          categoria: "Bicicleta elétrica",
+          maoDeObra: 120,
+          materiais: 300,
+        },
+      ];
+    } catch {
+      return [];
+    }
+  });
+  const [novoServico, setNovoServico] = useState({
+    nome: "",
+    categoria: "Bicicleta elétrica",
+    maoDeObra: "",
+    materiais: "",
+  });
 
   const {
     inicioSemana,
@@ -88,6 +111,17 @@ function Precificacao() {
       console.error("Não foi possível salvar a precificação:", erro);
     }
   }, [configuracao]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        "ediagnostico-servicos-oficina",
+        JSON.stringify(servicosOficina),
+      );
+    } catch (erro) {
+      console.error("Não foi possível salvar a lista de serviços:", erro);
+    }
+  }, [servicosOficina]);
 
   function atualizarCampo(chave, valor) {
     setConfiguracao((atual) => ({ ...atual, [chave]: valor }));
@@ -133,6 +167,28 @@ function Precificacao() {
       style: "currency",
       currency: "BRL",
     });
+
+  function adicionarServico(evento) {
+    evento.preventDefault();
+    const nome = novoServico.nome.trim();
+    if (!nome) return;
+
+    setServicosOficina((atuais) => [
+      {
+        ...novoServico,
+        id: crypto.randomUUID(),
+        nome,
+        maoDeObra: Number(novoServico.maoDeObra) || 0,
+        materiais: Number(novoServico.materiais) || 0,
+      },
+      ...atuais,
+    ]);
+    setNovoServico({ ...novoServico, nome: "" });
+  }
+
+  const totalNovoServico =
+    (Number(novoServico.maoDeObra) || 0) +
+    (Number(novoServico.materiais) || 0);
 
   return (
     <section className="principal">
@@ -312,6 +368,121 @@ function Precificacao() {
           Estimativa inicial. Confira impostos, taxas, garantia e demais
           despesas antes de definir o preço final.
         </p>
+
+        <section className="catalogo-servicos-oficina" aria-labelledby="titulo-catalogo-servicos">
+          <span className="etiqueta">CATÁLOGO DA OFICINA</span>
+          <h2 id="titulo-catalogo-servicos">Preço de cada serviço</h2>
+          <p className="catalogo-servicos-descricao">
+            Some a mão de obra (MO) aos materiais e peças (MA) para chegar ao
+            preço final.
+          </p>
+
+          <form className="form-servico-oficina" onSubmit={adicionarServico}>
+            <label className="campo-servico-nome">
+              Serviço
+              <input
+                required
+                value={novoServico.nome}
+                onChange={(evento) =>
+                  setNovoServico({ ...novoServico, nome: evento.target.value })
+                }
+                placeholder="Ex.: Troca de manete acelerador"
+              />
+            </label>
+            <label>
+              Tipo de veículo
+              <select
+                value={novoServico.categoria}
+                onChange={(evento) =>
+                  setNovoServico({ ...novoServico, categoria: evento.target.value })
+                }
+              >
+                <option>Bicicleta elétrica</option>
+                <option>Autopropelido</option>
+                <option>Ciclomotor elétrico</option>
+              </select>
+            </label>
+            <label>
+              Mão de obra (MO)
+              <span className="campo-servico-valor">
+                <span>R$</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={novoServico.maoDeObra}
+                  onChange={(evento) =>
+                    setNovoServico({ ...novoServico, maoDeObra: evento.target.value })
+                  }
+                  placeholder="0,00"
+                />
+              </span>
+            </label>
+            <label>
+              Materiais e peças (MA)
+              <span className="campo-servico-valor">
+                <span>R$</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={novoServico.materiais}
+                  onChange={(evento) =>
+                    setNovoServico({ ...novoServico, materiais: evento.target.value })
+                  }
+                  placeholder="0,00"
+                />
+              </span>
+            </label>
+
+            <div className="resumo-preco-servico" aria-live="polite">
+              <span>Preço final</span>
+              <strong>{moeda(totalNovoServico)}</strong>
+              <small>MO {moeda(Number(novoServico.maoDeObra) || 0)} + MA {moeda(Number(novoServico.materiais) || 0)}</small>
+            </div>
+            <button className="botao-adicionar-servico" type="submit">
+              Adicionar à lista
+            </button>
+          </form>
+
+          <div className="lista-servicos-oficina">
+            <h3>Serviços cadastrados</h3>
+            {servicosOficina.length ? (
+              servicosOficina.map((servico) => (
+                <article className="item-servico-oficina" key={servico.id}>
+                  <div>
+                    <strong>{servico.nome}</strong>
+                    <span>{servico.categoria}</span>
+                  </div>
+                  <div className="item-servico-valores">
+                    <small>MO {moeda(Number(servico.maoDeObra) || 0)}</small>
+                    <small>MA {moeda(Number(servico.materiais) || 0)}</small>
+                    <strong>
+                      {moeda(
+                        (Number(servico.maoDeObra) || 0) +
+                          (Number(servico.materiais) || 0),
+                      )}
+                    </strong>
+                  </div>
+                  <button
+                    type="button"
+                    className="remover-servico-oficina"
+                    aria-label={`Remover ${servico.nome}`}
+                    onClick={() =>
+                      setServicosOficina((atuais) =>
+                        atuais.filter((item) => item.id !== servico.id),
+                      )
+                    }
+                  >
+                    ×
+                  </button>
+                </article>
+              ))
+            ) : (
+              <p className="lista-servicos-vazia">Adicione o primeiro serviço da oficina.</p>
+            )}
+          </div>
+        </section>
       </div>
     </section>
   );

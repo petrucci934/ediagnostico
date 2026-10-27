@@ -35,7 +35,7 @@ NEW_ARTICLE = r'''
         <figure className="imagem-manual">
           <img src={imagemExibida.image_path}
             alt={imagemExibida.caption || `Imagem do código ${item.code}`} loading="lazy" />
-          <figcaption>{imagemExibida.caption || `Recorte individual do código ${item.code}`}</figcaption>
+          {imagemExibida.caption && !imagemExibida.caption.toLowerCase().startsWith("recorte individual") && <figcaption>{imagemExibida.caption}</figcaption>}
           {imagemExibida.page_reference && <p className="referencia-imagem">{imagemExibida.page_reference}</p>}
         </figure>
       ) : <p className="imagem-indisponivel">Não há imagem cadastrada para este código.</p>}

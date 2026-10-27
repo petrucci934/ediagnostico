@@ -13,12 +13,16 @@ import {
   ClipboardList,
 } from "lucide-react";
 import Precificacao from "./Precificacao";
+import Orcamento from "./Orcamento";
+import CadastrosOficina from "./CadastrosOficina";
+import Administrador from "./Administrador";
+import videosBiblioteca from "./data/videos-biblioteca.json";
 import "./App.css";
 
 function Carrossel({ className, children, label }) {
   const galeriaRef = useRef(null);
   const quantidade = Children.count(children);
-  const [indiceAtivo, setIndiceAtivo] = useState(0);
+  const [indiceAtivo, setIndiceAtivo] = useState(quantidade > 2 ? 1 : 0);
   const [pausado, setPausado] = useState(false);
   const indiceAtual = quantidade ? indiceAtivo % quantidade : 0;
 
@@ -27,10 +31,15 @@ function Carrossel({ className, children, label }) {
     const card = galeria?.children[indiceAtual];
     if (!galeria || !card) return;
 
-    card.scrollIntoView({
+    const limitesGaleria = galeria.getBoundingClientRect();
+    const limitesCard = card.getBoundingClientRect();
+    const deslocamentoHorizontal =
+      limitesCard.left + limitesCard.width / 2 -
+      (limitesGaleria.left + galeria.clientWidth / 2);
+
+    galeria.scrollTo({
+      left: galeria.scrollLeft + deslocamentoHorizontal,
       behavior: "smooth",
-      block: "nearest",
-      inline: "center",
     });
   }, [indiceAtual]);
 
@@ -38,7 +47,13 @@ function Carrossel({ className, children, label }) {
     if (pausado || quantidade < 2) return undefined;
 
     const timer = window.setInterval(() => {
-      setIndiceAtivo((indice) => (indice + 1) % quantidade);
+      setIndiceAtivo((indice) =>
+        quantidade > 2
+          ? indice >= quantidade - 2
+            ? 1
+            : indice + 1
+          : (indice + 1) % quantidade,
+      );
     }, 4000);
 
     return () => window.clearInterval(timer);
@@ -49,6 +64,7 @@ function Carrossel({ className, children, label }) {
       className: [
         card.props.className,
         indice === indiceAtual ? "card-autoplay-ativo" : "",
+        Math.abs(indice - indiceAtual) <= 1 ? "card-carrossel-visivel" : "",
       ]
         .filter(Boolean)
         .join(" "),
@@ -79,7 +95,13 @@ function Carrossel({ className, children, label }) {
         className="carrossel03-seta carrossel03-anterior"
         aria-label={`${label}: item anterior`}
         onClick={() =>
-          setIndiceAtivo((indice) => (indice % quantidade - 1 + quantidade) % quantidade)
+          setIndiceAtivo((indice) =>
+            quantidade > 2
+              ? indice <= 1
+                ? quantidade - 2
+                : indice - 1
+              : (indice - 1 + quantidade) % quantidade,
+          )
         }
       >
         ‹
@@ -88,7 +110,15 @@ function Carrossel({ className, children, label }) {
         type="button"
         className="carrossel03-seta carrossel03-proximo"
         aria-label={`${label}: próximo item`}
-          onClick={() => setIndiceAtivo((indice) => (indice % quantidade + 1) % quantidade)}
+          onClick={() =>
+            setIndiceAtivo((indice) =>
+              quantidade > 2
+                ? indice >= quantidade - 2
+                  ? 1
+                  : indice + 1
+                : (indice + 1) % quantidade,
+            )
+          }
       >
         ›
       </button>
@@ -105,6 +135,296 @@ function Carrossel({ className, children, label }) {
         ))}
       </div>
     </div>
+  );
+}
+
+function CartaoVideo({ video, onAssistir }) {
+  return (
+    <article className="cartao-video-biblioteca">
+      <button
+        type="button"
+        className={`video-poster ${video.disponivel === false ? "indisponivel" : ""}`}
+        disabled={video.disponivel === false}
+        aria-label={
+          video.disponivel === false
+            ? `Vídeo indisponível: ${video.modelo}`
+            : `Assistir vídeo: ${video.modelo}`
+        }
+        onClick={() => onAssistir(video)}
+      >
+        <span className="video-poster-icone" aria-hidden="true">
+          {video.disponivel === false ? "×" : "▶"}
+        </span>
+        <span className="video-poster-legenda">
+          {video.disponivel === false
+            ? "Vídeo indisponível"
+            : "Desbloqueio de Veículos Elétricos"}
+        </span>
+      </button>
+      <div className="cartao-video-conteudo">
+        <span className="video-categoria">
+          {video.geral ? "Instruções gerais" : "Por modelo"}
+        </span>
+        <h3>{video.modelo}</h3>
+        <p>
+          {video.modelo.includes("Aula")
+            ? "Etapa de procedimento técnico."
+            : video.geral
+              ? "Orientações gerais de manutenção e desbloqueio."
+              : "Procedimento de desbloqueio e orientações técnicas."}
+        </p>
+        <small>Data da revisão técnica: 2026</small>
+      </div>
+    </article>
+  );
+}
+
+function VisualizadorVideo({ video, onFechar }) {
+  const dialogRef = useRef(null);
+  const [usarOrigem, setUsarOrigem] = useState(false);
+  const [erroVideo, setErroVideo] = useState(false);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (dialog && !dialog.open) dialog.showModal();
+    return () => {
+      if (dialog?.open) dialog.close();
+    };
+  }, []);
+
+  return (
+    <dialog
+      ref={dialogRef}
+      className="visualizador-video"
+      aria-labelledby="visualizador-video-titulo"
+      onCancel={(evento) => {
+        evento.preventDefault();
+        onFechar();
+      }}
+      onClick={(evento) => {
+        if (evento.target === evento.currentTarget) onFechar();
+      }}
+    >
+      <button
+        type="button"
+        className="visualizador-codigo-fechar"
+        aria-label="Fechar vídeo"
+        onClick={onFechar}
+      >
+        ×
+      </button>
+      <span className="video-categoria">
+        {video.geral ? "Instruções gerais" : "Por modelo"}
+      </span>
+      <h2 id="visualizador-video-titulo">{video.modelo}</h2>
+      {erroVideo ? (
+        <div className="video-indisponivel" role="alert">
+          <strong>Não foi possível reproduzir este vídeo.</strong>
+          <span>Tente novamente mais tarde.</span>
+        </div>
+      ) : (
+        <video
+          key={usarOrigem ? video.origem : video.local}
+          className="visualizador-video-player"
+          controls
+          playsInline
+          preload="metadata"
+          src={usarOrigem ? video.origem : video.local}
+          onError={() => {
+            if (!usarOrigem) setUsarOrigem(true);
+            else setErroVideo(true);
+          }}
+        />
+      )}
+      <p>Esc fecha este painel. A reprodução abre somente quando você escolher.</p>
+    </dialog>
+  );
+}
+
+function BibliotecaVideos() {
+  const trilhoVideosRef = useRef(null);
+  const [busca, setBusca] = useState("");
+  const [filtro, setFiltro] = useState("todos");
+  const [marcaSelecionada, setMarcaSelecionada] = useState("todas");
+  const [videoSelecionado, setVideoSelecionado] = useState(null);
+  const [paginaCarrossel, setPaginaCarrossel] = useState(0);
+  const [totalPaginasCarrossel, setTotalPaginasCarrossel] = useState(1);
+  const videos = videosBiblioteca.map((video) => ({
+    ...video,
+    geral: video.modelo.includes("(Geral)"),
+    marca: (() => {
+      if (video.modelo.includes("(Geral)")) return "Geral";
+      if (/moto ?chefe/i.test(video.modelo)) return "Moto Chefe";
+      if (/^foston/i.test(video.modelo)) return "Foston";
+      if (/^jet /i.test(video.modelo)) return "Jet";
+      if (/^kimbo/i.test(video.modelo)) return "Kimbo";
+      if (/^nxt/i.test(video.modelo)) return "NXT";
+      if (/^sudu/i.test(video.modelo)) return "Sudu";
+      return "Outros modelos";
+    })(),
+    local: `/videos/${video.arquivo}`,
+    origem: `https://pub-c4a1e03d410a4b8a86df09223cab2563.r2.dev/${video.arquivo}`,
+  }));
+  const marcas = [...new Set(videos.map((video) => video.marca))].sort(
+    (a, b) => a.localeCompare(b, "pt-BR"),
+  );
+  const termo = busca
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .trim();
+  const filtrados = videos.filter((video) => {
+    const correspondeBusca = video.modelo
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLocaleLowerCase("pt-BR")
+      .includes(termo);
+    const correspondeFiltro =
+      filtro === "todos" ||
+      (filtro === "gerais" ? video.geral : !video.geral);
+    const correspondeMarca =
+      marcaSelecionada === "todas" || video.marca === marcaSelecionada;
+    return correspondeBusca && correspondeFiltro && correspondeMarca;
+  });
+  const disponiveis = filtrados.filter(
+    (video) => video.disponivel !== false,
+  ).length;
+
+  useEffect(() => {
+    const trilho = trilhoVideosRef.current;
+    if (!trilho) return;
+    trilho.scrollTo({ left: 0, behavior: "smooth" });
+    setPaginaCarrossel(0);
+    const passo = trilho.clientWidth * 0.85;
+    const maximo = Math.max(0, trilho.scrollWidth - trilho.clientWidth);
+    setTotalPaginasCarrossel(
+      Math.max(1, Math.ceil(maximo / passo) + 1),
+    );
+  }, [busca, filtro, marcaSelecionada]);
+
+  function atualizarPaginaCarrossel() {
+    const trilho = trilhoVideosRef.current;
+    if (!trilho) return;
+    const passo = trilho.clientWidth * 0.85;
+    const maximo = Math.max(0, trilho.scrollWidth - trilho.clientWidth);
+    const paginas = Math.max(1, Math.ceil(maximo / passo) + 1);
+    setTotalPaginasCarrossel(paginas);
+    setPaginaCarrossel(
+      Math.min(paginas - 1, Math.round(trilho.scrollLeft / passo)),
+    );
+  }
+
+  function moverCarrossel(direcao) {
+    const trilho = trilhoVideosRef.current;
+    if (!trilho) return;
+    trilho.scrollBy({
+      left: trilho.clientWidth * 0.85 * direcao,
+      behavior: "smooth",
+    });
+  }
+
+  return (
+    <section className="biblioteca-videos" aria-labelledby="titulo-videos">
+      <div className="galeria-cabecalho">
+        <span className="etiqueta">VÍDEOS DE REFERÊNCIA</span>
+        <h2 id="titulo-videos">Biblioteca por modelo</h2>
+        <p>
+          Busque um modelo ou navegue pelos procedimentos disponíveis.
+        </p>
+      </div>
+      <div className="biblioteca-videos-filtros">
+        <label>
+          <span>Buscar por modelo</span>
+          <input
+            type="search"
+            value={busca}
+            onChange={(evento) => setBusca(evento.target.value)}
+            placeholder="Ex.: Foston, Jet, Motochefe..."
+          />
+        </label>
+        <label>
+          <span>Marca</span>
+          <select
+            value={marcaSelecionada}
+            onChange={(evento) => setMarcaSelecionada(evento.target.value)}
+          >
+            <option value="todas">Todas as marcas</option>
+            {marcas.map((marca) => (
+              <option key={marca} value={marca}>
+                {marca}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>Tipo de material</span>
+          <select value={filtro} onChange={(evento) => setFiltro(evento.target.value)}>
+            <option value="todos">Todos os vídeos</option>
+            <option value="modelos">Por modelo</option>
+            <option value="gerais">Instruções gerais</option>
+          </select>
+        </label>
+        <p className="biblioteca-videos-contagem">
+          {disponiveis} {disponiveis === 1 ? "vídeo disponível" : "vídeos disponíveis"}
+          {filtrados.length > disponiveis &&
+            ` · ${filtrados.length - disponiveis} indisponível`}
+        </p>
+      </div>
+      {filtrados.length ? (
+        <div className="biblioteca-videos-carrossel">
+          <div className="biblioteca-videos-controles">
+            <button
+              type="button"
+              aria-label="Vídeos anteriores"
+              onClick={() => moverCarrossel(-1)}
+              disabled={paginaCarrossel === 0}
+            >
+              ‹
+            </button>
+            <span aria-live="polite">
+              {paginaCarrossel + 1} / {totalPaginasCarrossel}
+            </span>
+            <button
+              type="button"
+              aria-label="Próximos vídeos"
+              onClick={() => moverCarrossel(1)}
+              disabled={paginaCarrossel >= totalPaginasCarrossel - 1}
+            >
+              ›
+            </button>
+          </div>
+          <div
+            className="biblioteca-videos-trilho"
+            ref={trilhoVideosRef}
+            onScroll={atualizarPaginaCarrossel}
+            aria-label="Carrossel de vídeos"
+            tabIndex={0}
+          >
+            {filtrados.map((video) => (
+              <CartaoVideo
+                key={video.arquivo}
+                video={video}
+                onAssistir={setVideoSelecionado}
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <p className="biblioteca-videos-vazia">
+          Nenhum vídeo encontrado. Tente outro modelo.
+        </p>
+      )}
+      <p className="biblioteca-videos-aviso">
+        Confirme o modelo, as orientações do fabricante e a legislação local
+        antes de executar qualquer procedimento.
+      </p>
+      {videoSelecionado && (
+        <VisualizadorVideo
+          video={videoSelecionado}
+          onFechar={() => setVideoSelecionado(null)}
+        />
+      )}
+    </section>
   );
 }
 
@@ -147,6 +467,137 @@ function VisualizadorCodigo({ item, onFechar }) {
   );
 }
 
+const IMAGENS_PADRAO_CODIGO = {
+  P001: "/images/P001.png",
+  P002: "/images/P002.png",
+  P003: "/images/P003.png",
+  P004: "/images/P004.png",
+  P005: "/images/P005.png",
+  P006: "/images/P006.png",
+  P007: "/images/P007.png",
+  P008: "/images/P008.png",
+};
+
+function criarCardsResultado(resultado) {
+  const imagens = Array.isArray(resultado.imagens) ? resultado.imagens : [];
+
+  if (imagens.length > 0) {
+    return imagens.map((imagem, indice) => ({
+      ...imagem,
+      chave: imagem.id || `${imagem.image_path}-${indice}`,
+      codigo: resultado.codigo,
+      imagem:
+        IMAGENS_PADRAO_CODIGO[resultado.codigo] || imagem.image_path,
+      descricao: /^recorte individual\b/i.test(imagem.caption?.trim() || "")
+        ? ""
+        : imagem.caption || imagem.source_title || "",
+    }));
+  }
+
+  const linhas = Array.isArray(resultado.resultados) ? resultado.resultados : [];
+  const linhasUnicas = [
+    ...new Map(
+      linhas.map((linha) => [
+        `${linha.code || resultado.codigo}-${linha.description || ""}`,
+        linha,
+      ]),
+    ).values(),
+  ];
+
+  if (linhasUnicas.length === 0) {
+    return [
+      {
+        chave: resultado.codigo,
+        codigo: resultado.codigo,
+        descricao: "Não há imagem cadastrada para este código.",
+      },
+    ];
+  }
+
+  return linhasUnicas.map((linha, indice) => {
+    const codigo = linha.code || resultado.codigo;
+    return {
+      ...linha,
+      chave: `${codigo}-${indice}`,
+      codigo,
+      imagem: IMAGENS_PADRAO_CODIGO[codigo] || linha.image_path,
+      descricao: linha.description || "Não há imagem cadastrada para este código.",
+    };
+  });
+}
+
+function CardImagemResultado({ item }) {
+  const [imagemFalhou, setImagemFalhou] = useState(false);
+
+  return (
+    <article
+      className={`card-imagem-gerado ${!item.imagem || imagemFalhou ? "card-diagnostico-sem-imagem" : ""}`}
+    >
+      {item.imagem && !imagemFalhou ? (
+        <img
+          src={item.imagem}
+          alt={item.descricao || `Card do código ${item.codigo}`}
+          onError={() => setImagemFalhou(true)}
+        />
+      ) : (
+        <div className="card-diagnostico-descricao">
+          <span>CÓDIGO DE ERRO</span>
+          <h3>{item.codigo}</h3>
+          <p>{item.descricao || "Não há imagem cadastrada para este código."}</p>
+          {item.manufacturer && <small>Fabricante: {item.manufacturer}</small>}
+          {item.component_type && <small>Componente: {item.component_type}</small>}
+        </div>
+      )}
+      {item.imagem && item.descricao && !imagemFalhou && (
+        <p className="legenda-card-diagnostico">{item.descricao}</p>
+      )}
+    </article>
+  );
+}
+
+const GUIAS_PDF = [
+  {
+    titulo: "Tabela de códigos de erro",
+    arquivo: "Bonus+1+-+Manual+reparo.pdf",
+    capa: "tabela-codigos-erros.jpg",
+  },
+  {
+    titulo: "Precificação de serviços elétricos",
+    arquivo: "Bonus+2+-+Manual+reparo.pdf",
+    capa: "precificacao-servicos-eletricos.jpg",
+  },
+  {
+    titulo: "Compra de peças de reposição",
+    arquivo: "Bonus+3+-+Manual+reparo.pdf",
+    capa: "compra-pecas-reposicao.jpg",
+  },
+  {
+    titulo: "Sequência do reparo",
+    arquivo: "Bonus+4+-+Manual+reparo.pdf",
+    capa: "sequencia-reparo.jpg",
+  },
+  {
+    titulo: "Dicionário visual de componentes",
+    arquivo: "Dicionario+Viasual+de+Componentes.pdf",
+    capa: "dicionario-componentes.jpg",
+  },
+  {
+    titulo: "Gabarito do multímetro",
+    arquivo: "Gabarito+do+Multimetro.pdf",
+    capa: "gabarito-multimetro.jpg",
+  },
+  {
+    titulo: "Desmontagem por modelo",
+    arquivo: "Guia+de+Desmontagem+por+Modelo.pdf",
+    capa: "desmontagem-por-modelo.jpg",
+  },
+  {
+    titulo: "Manual completo de reparos",
+    arquivo: "Manual+Completo.pdf",
+    capa: "manual-completo-reparos.jpg",
+  },
+];
+
 function App() {
   const [codigo, setCodigo] = useState("");
   const [resultado, setResultado] = useState(null);
@@ -160,7 +611,18 @@ function App() {
   // Mantém os procedimentos carregados para a exibição técnica futura.
   // eslint-disable-next-line no-unused-vars
   const [procedimentos, setProcedimentos] = useState([]);
-  const [telaAtual, setTelaAtual] = useState("diagnostico");
+  const [telaAtual, setTelaAtual] = useState(() => {
+    try {
+      const perfilSalvo = JSON.parse(
+        localStorage.getItem("ediagnostico-usuario"),
+      )?.perfil;
+      if (perfilSalvo === "admin") return "administracao";
+      if (perfilSalvo === "mecanico") return "testes";
+    } catch {
+      // Mantém o diagnóstico como tela inicial se não houver perfil salvo válido.
+    }
+    return "diagnostico";
+  });
   const [filtroStatus, setFiltroStatus] = useState("todos");
   const [atendimentos, setAtendimentos] = useState([]);
   const [menuAberto, setMenuAberto] = useState(false);
@@ -292,7 +754,11 @@ function App() {
       setPerfil(dados.usuario.perfil);
       setSenhaLogin("");
       setTelaAtual(
-        dados.usuario.perfil === "mecanico" ? "testes" : "diagnostico",
+        dados.usuario.perfil === "mecanico"
+          ? "testes"
+          : dados.usuario.perfil === "admin"
+            ? "administracao"
+            : "diagnostico",
       );
     } catch (erro) {
       setErroLogin(erro.message);
@@ -506,6 +972,9 @@ function App() {
     }
   }
 
+  const ehMecanico =
+    perfil === "mecanico" || usuarioLogado?.perfil === "mecanico";
+
   return (
     <main className="pagina">
       <header className="cabecalho">
@@ -536,27 +1005,31 @@ function App() {
           id="menu-principal"
           className={`navegacao ${menuAberto ? "menu-aberto" : ""}`}
         >
-          <button
-            type="button"
-            className={telaAtual === "diagnostico" ? "nav-ativo" : ""}
-            onClick={() => {
-              setTelaAtual("diagnostico");
-              setMenuAberto(false);
-            }}
-          >
-            Diagnóstico
-          </button>
+          {perfil !== "admin" && usuarioLogado?.perfil !== "admin" && (
+            <button
+              type="button"
+              className={telaAtual === "diagnostico" ? "nav-ativo" : ""}
+              onClick={() => {
+                setTelaAtual("diagnostico");
+                setMenuAberto(false);
+              }}
+            >
+              Diagnóstico
+            </button>
+          )}
 
-          <button
-            type="button"
-            className={telaAtual === "precificacao" ? "nav-ativo" : ""}
-            onClick={() => {
-              setTelaAtual("precificacao");
-              setMenuAberto(false);
-            }}
-          >
-            Precificação de Serviços
-          </button>
+          {ehMecanico && (
+            <button
+              type="button"
+              className={telaAtual === "precificacao" ? "nav-ativo" : ""}
+              onClick={() => {
+                setTelaAtual("precificacao");
+                setMenuAberto(false);
+              }}
+            >
+              Precificação de Serviços
+            </button>
+          )}
 
           {(perfil === "mecanico" || usuarioLogado?.perfil === "mecanico") && (
             <>
@@ -573,15 +1046,38 @@ function App() {
 
               <button
                 type="button"
+                className={telaAtual === "cadastros" ? "nav-ativo" : ""}
+                onClick={() => {
+                  setTelaAtual("cadastros");
+                  setMenuAberto(false);
+                }}
+              >
+                Clientes e catálogo
+              </button>
+
+              <button
+                type="button"
                 className={telaAtual === "testes" ? "nav-ativo" : ""}
                 onClick={() => {
                   setTelaAtual("testes");
                   setMenuAberto(false);
                 }}
               >
-                Testes Técnicos
+                Biblioteca Técnica
               </button>
             </>
+          )}
+          {(perfil === "admin" || usuarioLogado?.perfil === "admin") && (
+            <button
+              type="button"
+              className={telaAtual === "administracao" ? "nav-ativo" : ""}
+              onClick={() => {
+                setTelaAtual("administracao");
+                setMenuAberto(false);
+              }}
+            >
+              Administrador
+            </button>
           )}
           {(perfil || perfilEscolhido === "cliente") && (
             <button
@@ -733,7 +1229,8 @@ function App() {
           </section>
         )}
 
-      {(perfil || perfilEscolhido === "cliente") &&
+      {((perfil && perfil !== "admin" && usuarioLogado?.perfil !== "admin") ||
+        perfilEscolhido === "cliente") &&
         telaAtual === "diagnostico" && (
           <section className="principal">
             <span className="etiqueta">CENTRAL DE DIAGNÓSTICO</span>
@@ -762,19 +1259,20 @@ function App() {
             {(perfil === "mecanico" || usuarioLogado?.perfil === "mecanico") &&
               abaTeste === "biblioteca" && (
                 <section className="galeria-mecanico">
-                  <div className="galeria-cabecalho">
+                  <div className="moldura-carrossel">
+                    <div className="galeria-cabecalho">
                     <span className="etiqueta">BIBLIOTECA TÉCNICA</span>
                     <h2>Códigos de diagnóstico</h2>
                     <p>
                       Consulte os cards de referência para identificar códigos
                       de falha.
                     </p>
-                  </div>
+                    </div>
 
-                  <Carrossel
-                    className="galeria-codigos"
-                    label="Códigos de diagnóstico"
-                  >
+                    <Carrossel
+                      className="galeria-codigos"
+                      label="Códigos de diagnóstico"
+                    >
                     {[
                       { codigo: "P001", imagem: "/images/P001.png" },
                       { codigo: "P002", imagem: "/images/P002.png" },
@@ -799,20 +1297,22 @@ function App() {
                         <h3>{item.codigo}</h3>
                       </button>
                     ))}
-                  </Carrossel>
+                    </Carrossel>
+                  </div>
 
-                  <div className="galeria-cabecalho galeria-guias-cabecalho">
+                  <div className="moldura-carrossel">
+                    <div className="galeria-cabecalho galeria-guias-cabecalho">
                     <span className="etiqueta">MATERIAL DE APOIO</span>
                     <h2>Guias para o mecânico</h2>
                     <p>
                       Materiais de consulta para apoiar os serviços da oficina.
                     </p>
-                  </div>
+                    </div>
 
-                  <Carrossel
-                    className="galeria-guias"
-                    label="Guias para o mecânico"
-                  >
+                    <Carrossel
+                      className="galeria-guias"
+                      label="Guias para o mecânico"
+                    >
                     <a
                       className="galeria-guia-card"
                       href="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
@@ -870,11 +1370,31 @@ function App() {
                       <h3>Como usar o guia</h3>
                       <span>Ver material</span>
                     </a>
-                  </Carrossel>
+
+                    {GUIAS_PDF.map(({ titulo, arquivo, capa }) => (
+                      <a
+                        className="galeria-guia-card"
+                        href={`/images/pdf/${arquivo}`}
+                        key={arquivo}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <img
+                          src={`/images/pdf/capas/${capa}`}
+                          alt={`Capa: ${titulo}`}
+                        />
+                        <h3>{titulo}</h3>
+                        <span>Abrir PDF</span>
+                      </a>
+                    ))}
+                    </Carrossel>
+                  </div>
+                  <BibliotecaVideos />
                 </section>
               )}
 
-            <form className="formulario" onSubmit={consultarCodigo}>
+            {!ehMecanico && (
+              <form className="formulario" onSubmit={consultarCodigo}>
               <label htmlFor="fabricante">Fabricante do veículo</label>
 
               <select
@@ -938,7 +1458,8 @@ function App() {
               <small id="ajuda-codigo">
                 Digite o código exibido no painel ou no sistema de diagnóstico.
               </small>
-            </form>
+              </form>
+            )}
             {historico.length > 0 && (
               <section className="historico-consultas">
                 <h2>Consultas recentes</h2>
@@ -1032,7 +1553,7 @@ function App() {
 
                   <p>
                     {(() => {
-                      const quantidadeFontes = resultado.resultados.filter(
+                      const quantidadeFontes = (resultado.resultados || []).filter(
                         (item) => item.source_title || item.source_url,
                       ).length;
 
@@ -1049,30 +1570,9 @@ function App() {
                   </p>
                 </div>
 
-                {resultado.resultados.map((item, indice) => {
-                  return (
-                    <div
-                      className="card-imagem-gerado"
-                      key={`${item.code}-${indice}`}
-                    >
-                      <img
-                        src={
-                          {
-                            P001: "/images/P001.png",
-                            P002: "/images/P002.png",
-                            P003: "/images/P003.png",
-                            P004: "/images/P004.png",
-                            P005: "/images/P005.png",
-                            P006: "/images/P006.png",
-                            P007: "/images/P007.png",
-                            P008: "/images/P008.png",
-                          }[item.code] || `/images/codigos/${item.code}.png`
-                        }
-                        alt={`Diagnóstico ${item.code} — ${item.description}`}
-                      />
-                    </div>
-                  );
-                })}
+                {criarCardsResultado(resultado).map((item) => (
+                  <CardImagemResultado item={item} key={item.chave} />
+                ))}
               </section>
             )}
             <div className="categorias">
@@ -1373,12 +1873,15 @@ function App() {
           )}
         </section>
       )}
-      {telaAtual === "precificacao" && <Precificacao />}
+      {ehMecanico && telaAtual === "cadastros" && <CadastrosOficina />}
+      {(perfil === "admin" || usuarioLogado?.perfil === "admin") &&
+        telaAtual === "administracao" && <Administrador token={token} />}
+      {ehMecanico && telaAtual === "precificacao" && <Precificacao />}
 
       {perfil === "mecanico" && telaAtual === "testes" && (
         <section className="principal">
           <span className="etiqueta">ÁREA DO MECÂNICO</span>
-          <h1>Testes Técnicos</h1>
+          <h1>Biblioteca Técnica</h1>
           <p>
             Registre testes realizados e contribua para a validação técnica dos
             códigos de falha.
@@ -1403,6 +1906,26 @@ function App() {
               <span className="aba-titulo">Novo Teste</span>
               <span className="aba-descricao">Cadastrar teste</span>
             </button>
+
+            <button
+              type="button"
+              className="aba-mecanico precificar"
+              onClick={() => setTelaAtual("precificacao")}
+            >
+              <span className="aba-icone" aria-hidden="true">R$</span>
+              <span className="aba-titulo">Precificar</span>
+              <span className="aba-descricao">MO + materiais</span>
+            </button>
+
+            <button
+              type="button"
+              className={`aba-mecanico orcamento ${abaTeste === "orcamento" ? "ativa" : ""}`}
+              onClick={() => setAbaTeste("orcamento")}
+            >
+              <span className="aba-icone" aria-hidden="true">▤</span>
+              <span className="aba-titulo">Orçamento</span>
+              <span className="aba-descricao">Montar proposta</span>
+            </button>
           </div>
           <div className="orientacao-seguranca">
             <strong>Importante</strong>
@@ -1414,19 +1937,20 @@ function App() {
 
           {abaTeste === "biblioteca" && (
             <section className="galeria-mecanico">
-              <div className="galeria-cabecalho">
+              <div className="moldura-carrossel">
+                <div className="galeria-cabecalho">
                 <span className="etiqueta">BIBLIOTECA TÉCNICA</span>
                 <h2>Códigos de diagnóstico</h2>
                 <p>
                   Consulte os cards de referência para identificar códigos de
                   falha.
                 </p>
-              </div>
+                </div>
 
-              <Carrossel
-                className="galeria-codigos"
-                label="Códigos de diagnóstico"
-              >
+                <Carrossel
+                  className="galeria-codigos"
+                  label="Códigos de diagnóstico"
+                >
                 {[
                   { codigo: "P001", imagem: "/images/P001.png" },
                   { codigo: "P002", imagem: "/images/P002.png" },
@@ -1451,18 +1975,20 @@ function App() {
                     <h3>{item.codigo}</h3>
                   </button>
                 ))}
-              </Carrossel>
+                </Carrossel>
+              </div>
 
-              <div className="galeria-cabecalho galeria-guias-cabecalho">
+              <div className="moldura-carrossel">
+                <div className="galeria-cabecalho galeria-guias-cabecalho">
                 <span className="etiqueta">MATERIAL DE APOIO</span>
                 <h2>Guias para o mecânico</h2>
                 <p>Materiais de consulta para apoiar os serviços da oficina.</p>
-              </div>
+                </div>
 
-              <Carrossel
-                className="galeria-guias"
-                label="Guias para o mecânico"
-              >
+                <Carrossel
+                  className="galeria-guias"
+                  label="Guias para o mecânico"
+                >
                 <a
                   className="galeria-guia-card"
                   href="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
@@ -1520,7 +2046,26 @@ function App() {
                   <h3>Como usar o guia</h3>
                   <span>Ver material</span>
                 </a>
-              </Carrossel>
+
+                {GUIAS_PDF.map(({ titulo, arquivo, capa }) => (
+                  <a
+                    className="galeria-guia-card"
+                    href={`/images/pdf/${arquivo}`}
+                    key={arquivo}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      src={`/images/pdf/capas/${capa}`}
+                      alt={`Capa: ${titulo}`}
+                    />
+                    <h3>{titulo}</h3>
+                    <span>Abrir PDF</span>
+                  </a>
+                ))}
+                </Carrossel>
+              </div>
+              <BibliotecaVideos />
             </section>
           )}
 
@@ -1724,6 +2269,10 @@ function App() {
                 </article>
               ))}
             </section>
+          )}
+
+          {abaTeste === "orcamento" && (
+            <Orcamento onPrecificar={() => setTelaAtual("precificacao")} />
           )}
         </section>
       )}

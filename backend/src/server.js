@@ -58,6 +58,13 @@ function exigirEditor(req, res, next) {
   next();
 }
 
+function exigirAdmin(req, res, next) {
+  if (req.usuario.perfil !== "admin") {
+    return res.status(403).json({ erro: "Acesso restrito ao administrador." });
+  }
+  next();
+}
+
 // Conexão com o PostgreSQL
 const db = new Pool({
   host: process.env.DB_HOST,
@@ -124,6 +131,125 @@ app.post("/api/auth/login", async (req, res) => {
     return res.status(500).json({
       erro: "Não foi possível realizar o login.",
     });
+  }
+});
+
+// Gestão administrativa de contas de mecânicos.
+app.get("/api/admin/mecanicos", autenticarToken, exigirAdmin, async (_req, res) => {
+  try {
+    const resultado = await db.query(
+      `SELECT id, nome, email, ativo, criado_em
+       FROM usuarios WHERE perfil = 'mecanico' ORDER BY nome, id`,
+    );
+    res.json({ mecanicos: resultado.rows });
+  } catch (erro) {
+    console.error("Erro ao listar mecânicos:", erro.message);
+    res.status(500).json({ erro: "Não foi possível listar os mecânicos." });
+  }
+});
+
+app.post("/api/admin/mecanicos", autenticarToken, exigirAdmin, async (req, res) => {
+  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+  const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
+  const senha = typeof req.body?.senha === "string" ? req.body.senha : "";
+  if (!nome || !email || senha.length < 8) {
+    return res.status(400).json({ erro: "Informe nome, e-mail e senha com pelo menos 8 caracteres." });
+  }
+  try {
+    const senhaHash = await bcrypt.hash(senha, 10);
+    const resultado = await db.query(
+      `INSERT INTO usuarios (nome, email, senha_hash, perfil)
+       VALUES ($1, $2, $3, 'mecanico')
+       RETURNING id, nome, email, ativo, criado_em`,
+      [nome, email, senhaHash],
+    );
+    res.status(201).json({ mecanico: resultado.rows[0] });
+  } catch (erro) {
+    if (erro.code === "23505") return res.status(409).json({ erro: "Já existe uma conta com este e-mail." });
+    console.error("Erro ao cadastrar mecânico:", erro.message);
+    res.status(500).json({ erro: "Não foi possível cadastrar o mecânico." });
+  }
+});
+
+app.put("/api/admin/mecanicos/:id", autenticarToken, exigirAdmin, async (req, res) => {
+  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+  const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
+  const ativo = req.body?.ativo;
+  const senha = typeof req.body?.senha === "string" ? req.body.senha : "";
+  if (!nome || !email || typeof ativo !== "boolean" || (senha && senha.length < 8)) {
+    return res.status(400).json({ erro: "Confira nome, e-mail, situação e senha (mínimo de 8 caracteres)." });
+  }
+  try {
+    const valores = [nome, email, ativo, req.params.id];
+    let sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3
+               WHERE id = $4 AND perfil = 'mecanico'`;
+    if (senha) {
+      valores.push(await bcrypt.hash(senha, 10));
+      sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3, senha_hash = $5
+             WHERE id = $4 AND perfil = 'mecanico'`;
+    }
+    const resultado = await db.query(`${sql} RETURNING id, nome, email, ativo, criado_em`, valores);
+    if (!resultado.rowCount) return res.status(404).json({ erro: "Mecânico não encontrado." });
+    res.json({ mecanico: resultado.rows[0] });
+  } catch (erro) {
+    if (erro.code === "23505") return res.status(409).json({ erro: "Já existe uma conta com este e-mail." });
+    console.error("Erro ao atualizar mecânico:", erro.message);
+    res.status(500).json({ erro: "Não foi possível atualizar o mecânico." });
+  }
+});
+
+// Cadastro administrativo de clientes.
+app.get("/api/admin/clientes", autenticarToken, exigirAdmin, async (_req, res) => {
+  try {
+    const resultado = await db.query("SELECT * FROM clientes ORDER BY nome, id");
+    res.json({ clientes: resultado.rows });
+  } catch (erro) {
+    console.error("Erro ao listar clientes:", erro.message);
+    res.status(500).json({ erro: "Não foi possível listar os clientes." });
+  }
+});
+
+app.post("/api/admin/clientes", autenticarToken, exigirAdmin, async (req, res) => {
+  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+  if (!nome) return res.status(400).json({ erro: "Informe o nome do cliente." });
+  try {
+    const resultado = await db.query(
+      `INSERT INTO clientes (nome, telefone, email, veiculo)
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [nome, req.body.telefone?.trim() || null, req.body.email?.trim().toLowerCase() || null, req.body.veiculo?.trim() || null],
+    );
+    res.status(201).json({ cliente: resultado.rows[0] });
+  } catch (erro) {
+    console.error("Erro ao cadastrar cliente:", erro.message);
+    res.status(500).json({ erro: "Não foi possível cadastrar o cliente." });
+  }
+});
+
+app.put("/api/admin/clientes/:id", autenticarToken, exigirAdmin, async (req, res) => {
+  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+  if (!nome) return res.status(400).json({ erro: "Informe o nome do cliente." });
+  try {
+    const resultado = await db.query(
+      `UPDATE clientes SET nome = $1, telefone = $2, email = $3, veiculo = $4
+       WHERE id = $5 RETURNING *`,
+      [nome, req.body.telefone?.trim() || null, req.body.email?.trim().toLowerCase() || null, req.body.veiculo?.trim() || null, req.params.id],
+    );
+    if (!resultado.rowCount) return res.status(404).json({ erro: "Cliente não encontrado." });
+    res.json({ cliente: resultado.rows[0] });
+  } catch (erro) {
+    console.error("Erro ao atualizar cliente:", erro.message);
+    res.status(500).json({ erro: "Não foi possível atualizar o cliente." });
+  }
+});
+
+app.delete("/api/admin/clientes/:id", autenticarToken, exigirAdmin, async (req, res) => {
+  try {
+    const resultado = await db.query("DELETE FROM clientes WHERE id = $1", [req.params.id]);
+    if (!resultado.rowCount) return res.status(404).json({ erro: "Cliente não encontrado." });
+    res.status(204).end();
+  } catch (erro) {
+    console.error("Erro ao excluir cliente:", erro.message);
+    res.status(500).json({ erro: "Não foi possível excluir o cliente." });
   }
 });
 
@@ -343,12 +469,46 @@ app.get("/api/fabricantes/:fabricante/codigos/:codigo", async (req, res) => {
       });
     }
 
+    const imagens = await db.query(
+      `SELECT
+          fi.id,
+          fi.image_path,
+          fi.caption,
+          fi.page_reference,
+          ts.title AS source_title
+       FROM fault_code_images fi
+       JOIN fault_codes fc
+         ON fc.id = fi.fault_code_id
+       JOIN components c
+         ON c.id = fc.component_id
+       JOIN manufacturers m
+         ON m.id = c.manufacturer_id
+       LEFT JOIN technical_sources ts
+         ON ts.id = fi.source_id
+       WHERE UPPER(m.name) = UPPER($1)
+         AND UPPER(fc.code) = UPPER($2)
+         AND (
+           $3::BIGINT IS NULL OR EXISTS (
+             SELECT 1
+             FROM vehicle_model_fault_codes vmfc
+             JOIN vehicle_models vm
+               ON vm.id = vmfc.vehicle_model_id
+             WHERE vmfc.fault_code_id = fc.id
+               AND vm.id = $3
+               AND vm.manufacturer_id = m.id
+           )
+         )
+       ORDER BY fi.id`,
+      [fabricante, codigo, modeloId ? Number(modeloId) : null],
+    );
+
     return res.json({
       fabricante: resultado.rows[0].manufacturer,
       modeloId: modeloId ?? null,
       codigo,
       quantidade: resultado.rows.length,
       resultados: resultado.rows,
+      imagens: imagens.rows,
     });
   } catch (erro) {
     console.error("Erro na pesquisa por fabricante:", erro.message);

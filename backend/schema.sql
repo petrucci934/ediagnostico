@@ -122,6 +122,15 @@ CREATE TABLE usuarios (
 CREATE UNIQUE INDEX idx_usuarios_email_lower
     ON usuarios (LOWER(email));
 
+CREATE TABLE clientes (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nome VARCHAR(160) NOT NULL,
+    telefone VARCHAR(40),
+    email VARCHAR(254),
+    veiculo VARCHAR(180),
+    criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE atendimentos (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     codigo_erro VARCHAR(40) NOT NULL,

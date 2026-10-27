@@ -10,6 +10,7 @@ node_modules/
 frontend/dist/
 coverage/
 *.log
+frontend/public/videos/*.mp4
 
 # Cópias de segurança locais. Mantidas no disco, mas fora do controle de versão.
 *.bak*
