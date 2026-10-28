@@ -1413,28 +1413,6 @@ function App() {
                   <strong>Consultar falhas</strong>
                   <span>Diagnóstico por código</span>
                 </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={abaCliente === "tabela"}
-                  className={`aba-cliente ${abaCliente === "tabela" ? "ativa" : ""}`}
-                  onClick={() => setAbaCliente("tabela")}
-                >
-                  <CircleDollarSign size={22} aria-hidden="true" />
-                  <strong>Tabela de serviços</strong>
-                  <span>Preços de referência</span>
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={abaCliente === "consultas"}
-                  className={`aba-cliente ${abaCliente === "consultas" ? "ativa" : ""}`}
-                  onClick={() => setAbaCliente("consultas")}
-                >
-                  <History size={22} aria-hidden="true" />
-                  <strong>Consultas recentes</strong>
-                  <span>Seu histórico de códigos</span>
-                </button>
               </div>
             )}
 
@@ -1713,69 +1691,7 @@ function App() {
                 </small>
               </form>
             )}
-            {(!ehCliente || abaCliente === "consultas") && (
-              <section className="historico-consultas">
-                <h2>Consultas recentes</h2>
 
-                {historico.length > 0 ? (
-                  <div className="lista-historico">
-                    {historico.map((item, indice) => (
-                      <article
-                        className="item-historico"
-                        key={`${item.codigo}-${item.fabricante}-${item.modelo}-${indice}`}
-                      >
-                        <div>
-                          <strong>{item.codigo}</strong>
-
-                          <p>{item.fabricante}</p>
-
-                          {item.modelo && <p>{item.modelo}</p>}
-
-                          <small>{item.data}</small>
-                        </div>
-                        <button
-                          type="button"
-                          disabled={carregando}
-                          onClick={() => {
-                            const fabricante = fabricantes.find(
-                              (fabricante) =>
-                                fabricante.name === item.fabricante,
-                            );
-
-                            const modelo = item.modelo
-                              ? modelos.find(
-                                  (modelo) =>
-                                    modelo.model_name === item.modelo &&
-                                    String(modelo.manufacturer_id) ===
-                                      String(fabricante?.id),
-                                )
-                              : undefined;
-
-                            const fabricanteId = fabricante
-                              ? String(fabricante.id)
-                              : "";
-                            const modeloId = modelo ? String(modelo.id) : "";
-
-                            setFabricanteSelecionado(fabricanteId);
-                            setModeloSelecionado(modeloId);
-                            setCodigo(item.codigo);
-
-                            consultarCodigo(null, item.codigo, {
-                              fabricanteId,
-                              modeloId,
-                            });
-                          }}
-                        >
-                          Consultar novamente
-                        </button>
-                      </article>
-                    ))}
-                  </div>
-                ) : (
-                  <p>Nenhuma consulta recente por enquanto.</p>
-                )}
-              </section>
-            )}
             {(!ehCliente || abaCliente === "falhas") && erro && (
               <div className="mensagem erro" role="alert">
                 {erro}
@@ -1839,6 +1755,66 @@ function App() {
                   ))}
                 </section>
               )}
+	    
+            {(!ehCliente || abaCliente === "falhas") &&
+              historico.length > 0 && (
+                <section className="historico-consultas">
+                  <h2>Consultas recentes</h2>
+
+                  <div className="lista-historico">
+                    {historico.map((item, indice) => (
+                      <article
+                        className="item-historico"
+                        key={`${item.codigo}-${item.fabricante}-${item.modelo}-${indice}`}
+                      >
+                        <div>
+                          <strong>{item.codigo}</strong>
+                          <p>{item.fabricante}</p>
+                          {item.modelo && <p>{item.modelo}</p>}
+                          <small>{item.data}</small>
+                        </div>
+
+                        <button
+                          type="button"
+                          disabled={carregando}
+                          onClick={() => {
+                            const fabricante = fabricantes.find(
+                              (fabricante) =>
+                                fabricante.name === item.fabricante,
+                            );
+
+                            const modelo = item.modelo
+                              ? modelos.find(
+                                  (modelo) =>
+                                    modelo.model_name === item.modelo &&
+                                    String(modelo.manufacturer_id) ===
+                                      String(fabricante?.id),
+                                )
+                              : undefined;
+
+                            const fabricanteId = fabricante
+                              ? String(fabricante.id)
+                              : "";
+                            const modeloId = modelo ? String(modelo.id) : "";
+
+                            setFabricanteSelecionado(fabricanteId);
+                            setModeloSelecionado(modeloId);
+                            setCodigo(item.codigo);
+
+                            consultarCodigo(null, item.codigo, {
+                              fabricanteId,
+                              modeloId,
+                            });
+                          }}
+                        >
+                          Consultar novamente
+                        </button>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
+
             <div className="categorias">
               <span>Bicicletas elétricas</span>
               <span>Motos elétricas</span>
