@@ -15,6 +15,8 @@ import {
   Search,
   History,
   MessageCircle,
+  CarFront,
+  Bike,
 } from "lucide-react";
 import Precificacao from "./Precificacao";
 import Orcamento from "./Orcamento";
@@ -1413,6 +1415,19 @@ function App() {
                   <strong>Consultar falhas</strong>
                   <span>Diagnóstico por código</span>
                 </button>
+	       
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={abaCliente === "tabela"}
+                  className={`aba-cliente ${abaCliente === "tabela" ? "ativa" : ""}`}
+                  onClick={() => setAbaCliente("tabela")}
+                >
+		  <span className="aba-icone" aria-hidden="true">ⓢ</span>
+                  <strong>Tabela de serviços</strong>
+                  <span>Preços de referência</span>
+                </button>
+
               </div>
             )}
 
@@ -1624,72 +1639,91 @@ function App() {
               )}
 
             {!ehMecanico && (!ehCliente || abaCliente === "falhas") && (
-              <form className="formulario" onSubmit={consultarCodigo}>
-                <label htmlFor="fabricante">Fabricante do veículo</label>
+             
+<form className="formulario" onSubmit={consultarCodigo}>
+  <div className="formulario-campos">
+   
+<div className="formulario-campo">
+  <label htmlFor="fabricante">Fabricante do veículo</label>
 
-                <select
-                  id="fabricante"
-                  value={fabricanteSelecionado}
-                  onChange={(event) => {
-                    setFabricanteSelecionado(event.target.value);
-                    setModeloSelecionado("");
-                  }}
-                >
-                  <option value="">Selecione um fabricante</option>
+  <div className="campo-com-icone">
+    <CarFront size={17} aria-hidden="true" />
 
-                  {fabricantes.map((fabricante) => (
-                    <option key={fabricante.id} value={fabricante.id}>
-                      {fabricante.name}
-                    </option>
-                  ))}
-                </select>
+    <select
+      id="fabricante"
+      value={fabricanteSelecionado}
+      onChange={(event) => {
+        setFabricanteSelecionado(event.target.value);
+        setModeloSelecionado("");
+      }}
+    >
+      <option value="">Selecione um fabricante</option>
 
-                <label htmlFor="modelo">Modelo do veículo</label>
+      {fabricantes.map((fabricante) => (
+        <option key={fabricante.id} value={fabricante.id}>
+          {fabricante.name}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
 
-                <select
-                  id="modelo"
-                  value={modeloSelecionado}
-                  onChange={(event) => setModeloSelecionado(event.target.value)}
-                  disabled={!fabricanteSelecionado}
-                >
-                  <option value="">Selecione um modelo</option>
+    <div className="formulario-campo">
+      <label htmlFor="modelo">Modelo do veículo</label>
 
-                  {modelos
-                    .filter(
-                      (modelo) =>
-                        String(modelo.manufacturer_id) ===
-                        String(fabricanteSelecionado),
-                    )
-                    .map((modelo) => (
-                      <option key={modelo.id} value={modelo.id}>
-                        {modelo.model_name}
-                      </option>
-                    ))}
-                </select>
+      <div className="campo-com-icone">
+        <Bike size={17} aria-hidden="true" />
 
-                <label htmlFor="codigo">Qual é o código de erro?</label>
+        <select
+          id="modelo"
+          value={modeloSelecionado}
+          onChange={(event) => setModeloSelecionado(event.target.value)}
+          disabled={!fabricanteSelecionado}
+        >
+          <option value="">Selecione um modelo</option>
 
-                <div className="campo-pesquisa">
-                  <input
-                    id="codigo"
-                    type="text"
-                    value={codigo}
-                    onChange={(event) => setCodigo(event.target.value)}
-                    placeholder="Ex.: E010"
-                    autoComplete="off"
-                    aria-describedby="ajuda-codigo"
-                  />
+          {modelos
+            .filter(
+              (modelo) =>
+                String(modelo.manufacturer_id) ===
+                String(fabricanteSelecionado),
+            )
+            .map((modelo) => (
+              <option key={modelo.id} value={modelo.id}>
+                {modelo.model_name}
+              </option>
+            ))}
+        </select>
+      </div>
+    </div>
 
-                  <button type="submit" disabled={carregando}>
-                    {carregando ? "Consultando..." : "Consultar código"}
-                  </button>
-                </div>
+    <div className="formulario-campo formulario-campo-codigo">
+      <label htmlFor="codigo">Código de erro</label>
 
-                <small id="ajuda-codigo">
-                  Digite o código exibido no painel ou no sistema de
-                  diagnóstico.
-                </small>
-              </form>
+      <div className="campo-pesquisa">
+        <input
+          id="codigo"
+          type="text"
+          value={codigo}
+          onChange={(event) => setCodigo(event.target.value)}
+          placeholder="Ex.: E010"
+          autoComplete="off"
+          aria-describedby="ajuda-codigo"
+        />
+
+        <button type="submit" disabled={carregando}>
+          <Search size={16} aria-hidden="true" />
+          {carregando ? "Consultando..." : "Consultar código"}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <small id="ajuda-codigo">
+    Digite o código exibido no painel ou no sistema de diagnóstico.
+  </small>
+</form>
+
             )}
 
             {(!ehCliente || abaCliente === "falhas") && erro && (
