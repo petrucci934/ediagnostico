@@ -17,6 +17,8 @@ import {
   MessageCircle,
   CarFront,
   Bike,
+  House,
+  ChevronDown,
 } from "lucide-react";
 import Precificacao from "./Precificacao";
 import Orcamento from "./Orcamento";
@@ -1127,6 +1129,26 @@ function App() {
             <small>Diagnóstico de veículos elétricos</small>
           </span>
         </a>
+	 
+        <button
+          type="button"
+          className="cabecalho-inicio"
+          onClick={() => {
+            setTelaAtual("diagnostico");
+            setMenuAberto(false);
+          }}
+        >
+          <House size={18} aria-hidden="true" />
+          <span>Início</span>
+        </button>
+
+        {ehMecanico && (
+          <div className="perfil-cabecalho">
+            <UserRound size={18} aria-hidden="true" />
+            <span>Mecânico</span>
+            <ChevronDown size={15} aria-hidden="true" />
+          </div>
+        )}
 
         <button
           type="button"

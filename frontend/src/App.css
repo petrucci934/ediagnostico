@@ -218,15 +218,15 @@ h1 span {
 .campo-pesquisa button:hover {
   background: #c9fa8e;
 }
-
 .formulario > small {
   display: block;
   margin-top: 12px;
   color: #8fa0b5;
-  font-size: 12px;
+  min-height: 0;
+  padding: 8px 0 0;
+  text-align: left;
   line-height: 1.5;
 }
-
 .categorias {
   display: flex;
   flex-wrap: wrap;
@@ -7446,7 +7446,7 @@ textarea {
   top: 50%;
   width: 16px;
   height: 16px;
-  color: #b7f36b;
+  color: #b7f36b !important;
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -7536,4 +7536,97 @@ textarea {
   #ajuda-codigo {
     overflow-wrap: anywhere;
   }
+}
+
+/* Cabeçalho: início e identificação do perfil */
+.cabecalho-inicio,
+.perfil-cabecalho {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.cabecalho-inicio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #34445a;
+  border-radius: 9px;
+  background: #111c2c;
+  color: #eaf0f6;
+  font: inherit;
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+  box-shadow: none;
+}
+
+.cabecalho-inicio span {
+  color: inherit;
+}
+
+.cabecalho-inicio:hover,
+.cabecalho-inicio:active {
+  border-color: #b7f36b;
+  background: #172536;
+  color: #eaf0f6;
+}
+
+.cabecalho-inicio:focus-visible {
+  outline: 2px solid #b7f36b;
+  outline-offset: 3px;
+}
+
+.perfil-cabecalho span {
+  color: #eaf0f6;
+  user-select: none;
+}
+.cabecalho-inicio svg,
+.perfil-cabecalho svg {
+  flex-shrink: 0;
+  color: #b7f36b;
+}
+
+.cabecalho-inicio:hover {
+  border-color: #b7f36b;
+}
+
+.perfil-cabecalho {
+  color: #eaf0f6;
+}
+
+@media (max-width: 760px) {
+  .cabecalho-inicio,
+  .perfil-cabecalho {
+    min-height: 40px;
+    gap: 5px;
+    padding: 0 6px;
+    font-size: 12px;
+  }
+
+  .perfil-cabecalho {
+    margin-left: auto;
+  }
+}
+/* Correção definitiva do botão Início no cabeçalho */
+.cabecalho .cabecalho-inicio,
+.cabecalho .cabecalho-inicio:hover,
+.cabecalho .cabecalho-inicio:active {
+  background-color: #111c2c !important;
+  color: #eaf0f6 !important;
+  border: 1px solid #34445a;
+}
+
+.cabecalho .cabecalho-inicio svg {
+  color: #b7f36b !important;
 }
