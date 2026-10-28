@@ -1440,7 +1440,11 @@ function App() {
 
             {ehCliente && abaCliente === "tabela" && (
               <>
-                <div role="tabpanel" aria-label="Tabela de serviços e preços">
+                <div
+                  className="painel-tabela-precos"
+                  role="tabpanel"
+                  aria-label="Tabela de serviços e preços"
+                >
                   <TabelaPrecosNeon />
                 </div>
 
@@ -1800,38 +1804,41 @@ function App() {
                   </div>
                 </div>
               )}
-            {(!ehCliente || abaCliente === "falhas") && resultado && (
-              <section className="resultado" aria-live="polite">
-                <div className="resultado-topo">
-                  <span className="etiqueta">RESULTADO DA CONSULTA</span>
-                  <h2>Código {resultado.codigo}</h2>
+            {(!ehCliente ||
+              abaCliente === "falhas" ||
+              abaCliente === "consultas") &&
+              resultado && (
+                <section className="resultado" aria-live="polite">
+                  <div className="resultado-topo">
+                    <span className="etiqueta">RESULTADO DA CONSULTA</span>
+                    <h2>Código {resultado.codigo}</h2>
 
-                  <p>
-                    {(() => {
-                      const quantidadeFontes = (
-                        resultado.resultados || []
-                      ).filter(
-                        (item) => item.source_title || item.source_url,
-                      ).length;
+                    <p>
+                      {(() => {
+                        const quantidadeFontes = (
+                          resultado.resultados || []
+                        ).filter(
+                          (item) => item.source_title || item.source_url,
+                        ).length;
 
-                      if (quantidadeFontes === 1) {
-                        return "1 fonte técnica relacionada";
-                      }
+                        if (quantidadeFontes === 1) {
+                          return "1 fonte técnica relacionada";
+                        }
 
-                      if (quantidadeFontes > 1) {
-                        return `${quantidadeFontes} fontes técnicas relacionadas`;
-                      }
+                        if (quantidadeFontes > 1) {
+                          return `${quantidadeFontes} fontes técnicas relacionadas`;
+                        }
 
-                      return "Nenhuma fonte técnica relacionada";
-                    })()}
-                  </p>
-                </div>
+                        return "Nenhuma fonte técnica relacionada";
+                      })()}
+                    </p>
+                  </div>
 
-                {criarCardsResultado(resultado).map((item) => (
-                  <CardImagemResultado item={item} key={item.chave} />
-                ))}
-              </section>
-            )}
+                  {criarCardsResultado(resultado).map((item) => (
+                    <CardImagemResultado item={item} key={item.chave} />
+                  ))}
+                </section>
+              )}
             <div className="categorias">
               <span>Bicicletas elétricas</span>
               <span>Motos elétricas</span>
