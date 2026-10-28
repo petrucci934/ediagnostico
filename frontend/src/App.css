@@ -3540,29 +3540,370 @@ select option {
   line-height: 1.35;
 }
 
-.cadastros-oficina { max-width: 1080px; }
-.cadastros-abas, .cadastro-acoes { display: flex; flex-wrap: wrap; gap: 10px; }
-.cadastros-abas { margin: 28px 0 20px; border-bottom: 1px solid #34475d; }
-.cadastros-abas button, .cadastro-acoes button { border: 1px solid #34475d; border-radius: 10px; padding: 11px 16px; color: #d9e5f2; background: #111d2b; cursor: pointer; }
-.cadastros-abas button.ativa { color: #b3f36b; border-color: #b3f36b; }
-.cadastro-formulario, .cadastro-lista { margin: 18px 0; padding: 24px; border: 1px solid #34475d; border-radius: 18px; background: #111d2b; }
-.cadastro-formulario { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.cadastro-formulario h2, .cadastro-formulario > .cadastro-acoes { grid-column: 1 / -1; }
-.cadastro-formulario label { display: grid; gap: 8px; color: #c8d6e5; }
-.cadastro-formulario input, .cadastro-formulario select { width: 100%; min-height: 46px; padding: 10px 12px; color: #e8f0f8; background: #0b1320; border: 1px solid #3a4d64; border-radius: 10px; }
-.cadastro-formulario > .cadastro-acoes button:first-child:not(.secundario):not(.perigo) { color: #10200a; background: #b3f36b; border-color: #b3f36b; font-weight: 700; }
-.cadastro-acoes .perigo { color: #ffc2c2; border-color: #75474d; }
-.cadastro-registro { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 0; border-top: 1px solid #2b3c50; }
-.cadastro-registro h3, .cadastro-registro p { margin: 5px 0; }
-.cadastro-registro p, .cadastro-vazio { color: #aab9ca; }
-.cadastro-tipo { color: #b3f36b; font-size: .75rem; font-weight: 700; letter-spacing: .08em; }
-.admin-erro { padding: 12px 16px; border: 1px solid #75474d; border-radius: 10px; color: #ffc2c2; background: #301b22; }
-.cadastro-formulario .admin-status { display: flex; align-items: center; gap: 10px; }
-.cadastro-formulario .admin-status input { width: 18px; min-height: 18px; accent-color: #b3f36b; }
+.campo-senha {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.campo-senha > input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 48px;
+}
+
+.botao-ver-senha {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 8px;
+  color: #aab9ca;
+  background: transparent;
+  cursor: pointer;
+}
+
+.botao-ver-senha:hover,
+.botao-ver-senha:focus-visible {
+  color: #b3f36b;
+  background: #1c2c3f;
+}
+
+.cadastro-campo-senha {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.referencia-precos-neon {
+  margin: 28px 0;
+  overflow: hidden;
+  border: 1px solid #34475d;
+  border-radius: 16px;
+  background: #111d2b;
+}
+
+.principal > .referencia-precos-neon {
+  margin-top: 0;
+  border-color: #82c84a;
+  box-shadow: 0 12px 32px #0004;
+}
+
+.referencia-precos-neon > summary {
+  padding: 21px 24px;
+  color: #b3f36b;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.referencia-precos-conteudo {
+  display: grid;
+  gap: 14px;
+  padding: 0 22px 22px;
+  color: #d9e5f2;
+  text-align: left;
+}
+
+.referencia-precos-conteudo > p {
+  margin: 0;
+  color: #aab9ca;
+}
+.referencia-precos-conteudo h3 {
+  margin: 8px 0 0;
+}
+.tabela-precos-rolagem {
+  overflow-x: auto;
+}
+.tabela-precos-rolagem table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+.tabela-precos-rolagem th,
+.tabela-precos-rolagem td {
+  padding: 12px;
+  border-bottom: 1px solid #2b3c50;
+  text-align: left;
+  vertical-align: top;
+}
+.tabela-precos-rolagem thead th {
+  color: #b3f36b;
+}
+.tabela-precos-rolagem tbody th {
+  font-weight: 600;
+}
+.tabela-precos-rolagem td:last-child {
+  white-space: nowrap;
+  font-weight: 700;
+}
+.lista-revisoes-neon {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lista-revisoes-neon li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px;
+  border: 1px solid #2b3c50;
+  border-radius: 10px;
+}
+.lista-revisoes-neon strong {
+  white-space: nowrap;
+  color: #b3f36b;
+}
+.nota-precos-neon {
+  padding: 12px;
+  border-left: 3px solid #b3f36b;
+  background: #0c1724;
+}
+.nota-precos-neon {
+  display: grid;
+  gap: 7px;
+  padding: 16px 18px;
+  border: 1px solid #b3f36b;
+  border-left-width: 5px;
+  border-radius: 10px;
+  background: #18291f;
+}
+.nota-precos-neon strong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c6ff82;
+  font-size: 1rem;
+  letter-spacing: 0.025em;
+}
+.nota-precos-neon strong svg {
+  flex: 0 0 auto;
+}
+.nota-precos-neon p {
+  margin: 0;
+  color: #eef7e8;
+  line-height: 1.55;
+}
+
+.abas-cliente {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 26px 0;
+  padding: 10px;
+  border: 1px solid #34475d;
+  border-radius: 18px;
+  background: #0d1724;
+}
+
+.aba-cliente {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 104px;
+  padding: 14px 10px;
+  border: 1px solid #263b51;
+  border-radius: 12px;
+  color: #81b9f8;
+  background: #172b43;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    filter 0.18s ease;
+}
+
+.aba-cliente:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+.aba-cliente.ativa {
+  color: #b3f36b;
+  border-color: #b3f36b;
+  background: #123326;
+}
+.aba-cliente strong {
+  font-size: 15px;
+}
+.aba-cliente span {
+  color: #b3c2d3;
+  font-size: 12px;
+}
+.aba-cliente:focus-visible {
+  outline: 2px solid #b3f36b;
+  outline-offset: 2px;
+}
+
+@media (max-width: 540px) {
+  .abas-cliente {
+    gap: 6px;
+    padding: 6px;
+  }
+  .aba-cliente {
+    min-height: 98px;
+    padding: 10px 5px;
+    gap: 6px;
+  }
+  .aba-cliente strong {
+    font-size: 12px;
+  }
+  .aba-cliente span {
+    font-size: 10px;
+  }
+}
+.referencia-precos-conteudo > a {
+  color: #8dbfff;
+}
+.referencia-precos-conteudo > small {
+  color: #8598ad;
+}
+
+.cadastros-oficina {
+  max-width: 1080px;
+}
+.cadastros-abas,
+.cadastro-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.cadastros-abas {
+  margin: 28px 0 20px;
+  border-bottom: 1px solid #34475d;
+}
+.cadastros-abas button,
+.cadastro-acoes button {
+  border: 1px solid #34475d;
+  border-radius: 10px;
+  padding: 11px 16px;
+  color: #d9e5f2;
+  background: #111d2b;
+  cursor: pointer;
+}
+.cadastros-abas button.ativa {
+  color: #b3f36b;
+  border-color: #b3f36b;
+}
+.cadastro-formulario,
+.cadastro-lista {
+  margin: 18px 0;
+  padding: 24px;
+  border: 1px solid #34475d;
+  border-radius: 18px;
+  background: #111d2b;
+}
+.cadastro-formulario {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.cadastro-formulario h2,
+.cadastro-formulario > .cadastro-acoes {
+  grid-column: 1 / -1;
+}
+.cadastro-formulario label {
+  display: grid;
+  gap: 8px;
+  color: #c8d6e5;
+}
+.cadastro-formulario input,
+.cadastro-formulario select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  color: #e8f0f8;
+  background: #0b1320;
+  border: 1px solid #3a4d64;
+  border-radius: 10px;
+}
+.cadastro-formulario
+  > .cadastro-acoes
+  button:first-child:not(.secundario):not(.perigo) {
+  color: #10200a;
+  background: #b3f36b;
+  border-color: #b3f36b;
+  font-weight: 700;
+}
+.cadastro-acoes .perigo {
+  color: #ffc2c2;
+  border-color: #75474d;
+}
+.cadastro-registro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 0;
+  border-top: 1px solid #2b3c50;
+}
+.cadastro-registro h3,
+.cadastro-registro p {
+  margin: 5px 0;
+}
+.cadastro-registro p,
+.cadastro-vazio {
+  color: #aab9ca;
+}
+.cadastro-tipo {
+  color: #b3f36b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.admin-erro {
+  padding: 12px 16px;
+  border: 1px solid #75474d;
+  border-radius: 10px;
+  color: #ffc2c2;
+  background: #301b22;
+}
+.cadastro-formulario .admin-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cadastro-formulario .admin-status input {
+  width: 18px;
+  min-height: 18px;
+  accent-color: #b3f36b;
+}
+.primeiro-acesso-admin {
+  max-width: 680px;
+  margin-inline: auto;
+}
+.primeiro-acesso-admin .formulario {
+  display: grid;
+  gap: 12px;
+  margin: 24px auto;
+}
+.primeiro-acesso-admin .formulario small {
+  color: #aab9ca;
+  margin-top: -6px;
+}
 @media (max-width: 640px) {
-  .cadastro-formulario { grid-template-columns: 1fr; padding: 18px; }
-  .cadastro-formulario h2, .cadastro-formulario > .cadastro-acoes { grid-column: auto; }
-  .cadastro-registro { align-items: flex-start; flex-direction: column; }
+  .cadastro-formulario {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+  .cadastro-formulario h2,
+  .cadastro-formulario > .cadastro-acoes {
+    grid-column: auto;
+  }
+  .cadastro-registro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .moldura-carrossel {
@@ -3640,7 +3981,10 @@ select option {
   transform: none !important;
 }
 
-.moldura-carrossel .carrossel03-wrapper > .galeria-codigos > .galeria-codigo-card,
+.moldura-carrossel
+  .carrossel03-wrapper
+  > .galeria-codigos
+  > .galeria-codigo-card,
 .moldura-carrossel .carrossel03-wrapper > .galeria-guias > .galeria-guia-card {
   flex: 0 0 calc((100% - 24px) / 3) !important;
   width: calc((100% - 24px) / 3) !important;
@@ -3648,8 +3992,14 @@ select option {
   max-width: none !important;
 }
 
-.moldura-carrossel .carrossel03-wrapper .galeria-codigos > .galeria-codigo-card:not(.card-carrossel-visivel),
-.moldura-carrossel .carrossel03-wrapper .galeria-guias > .galeria-guia-card:not(.card-carrossel-visivel) {
+.moldura-carrossel
+  .carrossel03-wrapper
+  .galeria-codigos
+  > .galeria-codigo-card:not(.card-carrossel-visivel),
+.moldura-carrossel
+  .carrossel03-wrapper
+  .galeria-guias
+  > .galeria-guia-card:not(.card-carrossel-visivel) {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
@@ -3666,13 +4016,19 @@ select option {
     min-width: 32px !important;
   }
 
-  .moldura-carrossel .carrossel03-wrapper > .galeria-codigos > .galeria-codigo-card {
+  .moldura-carrossel
+    .carrossel03-wrapper
+    > .galeria-codigos
+    > .galeria-codigo-card {
     flex-basis: 170px !important;
     width: 170px !important;
     min-width: 170px !important;
   }
 
-  .moldura-carrossel .carrossel03-wrapper > .galeria-guias > .galeria-guia-card {
+  .moldura-carrossel
+    .carrossel03-wrapper
+    > .galeria-guias
+    > .galeria-guia-card {
     flex-basis: 150px !important;
     width: 150px !important;
     min-width: 150px !important;
@@ -3936,7 +4292,9 @@ select option {
   font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .biblioteca-videos-controles button:hover:not(:disabled) {
@@ -4248,7 +4606,9 @@ select option {
   font: inherit;
   font-weight: 800;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .botao-adicionar-servico:hover {
@@ -4702,6 +5062,37 @@ select option {
   .abas-mecanico .aba-titulo {
     font-size: 14px;
   }
+}
+
+/* Cartões de cadastro da oficina */
+.abas-mecanico > .aba-mecanico.cadastrar-cliente {
+  background: #332653;
+  color: #c4b5fd;
+  border: 1px solid #6d50a0;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.abas-mecanico > .aba-mecanico.cadastrar-itens {
+  background: #49301b;
+  color: #fdc98a;
+  border: 1px solid #94602e;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.abas-mecanico > .aba-mecanico.cadastrar-cliente:hover,
+.abas-mecanico > .aba-mecanico.cadastrar-itens:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+
+.abas-mecanico > .aba-mecanico.cadastrar-cliente:focus-visible,
+.abas-mecanico > .aba-mecanico.cadastrar-itens:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
 }
 
 /* Carrossel central em destaque — Biblioteca Técnica */
@@ -5227,7 +5618,11 @@ select option {
 
 .pagina {
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(183, 243, 107, 0.08), transparent 52%),
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(183, 243, 107, 0.08),
+      transparent 52%
+    ),
     #0b1220;
 }
 
@@ -5594,4 +5989,136 @@ textarea {
   min-height: 42px;
   overflow-wrap: anywhere;
   line-height: 1.35;
+}
+
+/* Benefícios da manutenção de motos elétricas */
+.beneficios-moto {
+  width: min(100% - 32px, 1000px);
+  margin: 32px auto 48px;
+  color: #f4f7ff;
+}
+
+.beneficios-cabecalho {
+  margin-bottom: 24px;
+}
+
+.beneficios-cabecalho h2 {
+  margin: 8px 0;
+  color: #ffffff;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.beneficios-cabecalho p {
+  margin: 0;
+  color: #aabbd2;
+  line-height: 1.6;
+}
+
+.beneficios-moto .etiqueta {
+  color: #a7ff5b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.beneficios-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.beneficio-card {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid #2a4058;
+  border-top: 4px solid #20cf70;
+  border-radius: 14px;
+  background: #111e2e;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+}
+
+.beneficio-icone {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 1.5rem;
+}
+
+.beneficio-card h3 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.beneficio-card p {
+  margin: 0;
+  color: #b9c7da;
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 600px) {
+  .beneficios-moto {
+    width: calc(100% - 24px);
+    margin-top: 24px;
+  }
+
+  .beneficios-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .beneficio-card {
+    padding: 20px;
+  }
+}
+
+/* Cabeçalho de preços inspirado na referência visual */
+.referencia-precos-neon > summary.cabecalho-precos-neon {
+  list-style: none;
+  cursor: pointer;
+  padding: 28px 24px;
+  border-radius: 12px;
+  background: linear-gradient(115deg, #111c30, #1d385d);
+  color: #ffffff;
+}
+
+.referencia-precos-neon > summary.cabecalho-precos-neon::-webkit-details-marker {
+  display: none;
+}
+
+.cabecalho-precos-neon h2 {
+  max-width: 700px;
+  margin: 0 0 22px;
+  color: #ffffff;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.destaques-precos-neon {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+
+.destaques-precos-neon span {
+  display: inline-block;
+  padding: 9px 14px;
+  border-radius: 8px;
+  background: #30415a;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .referencia-precos-neon > summary.cabecalho-precos-neon {
+    padding: 22px 16px;
+  }
+
+  .destaques-precos-neon {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

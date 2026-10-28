@@ -72,79 +72,99 @@ function calcularCustoHora(config) {
 }
 
 const servicos = [
+  { nome: "Inspeção de segurança completa", descricao: "Pneus, freios, luzes, buzina, retrovisor e instrumentos", minutos: 60 },
+  { nome: "Ajuste de freios", descricao: "Regulagem de folga, cabo e pastilhas", minutos: 30 },
+  { nome: "Troca de pastilhas de freio", descricao: "Substituição e regulagem; peças à parte", minutos: 30 },
+  { nome: "Inspeção e calibragem de pneus", descricao: "Pressão, desgaste e sulcos", minutos: 15 },
+  { nome: "Troca de pneu", descricao: "Dianteiro ou traseiro; peça à parte", minutos: 30 },
+  { nome: "Inspeção da bateria", descricao: "Carga, tensão e estado geral", minutos: 30 },
+  { nome: "Inspeção do sistema elétrico", descricao: "Controlador, chicote, fusíveis e conexões", minutos: 60 },
+  { nome: "Diagnóstico de falha elétrica", descricao: "Controlador, motor ou circuito", minutos: 60 },
+  { nome: "Inspeção do motor elétrico", descricao: "Fiação, fixação e funcionamento", minutos: 30 },
+  { nome: "Inspeção da suspensão", descricao: "Amortecedores, curso e vazamentos", minutos: 30 },
+  { nome: "Lubrificação e ajuste de cabos", descricao: "Peças rotativas e transmissão", minutos: 30 },
+  { nome: "Inspeção de iluminação", descricao: "Faróis, setas, lanterna e luz de freio", minutos: 15 },
+];
+
+
+const revisoes = [
   {
-    nome: "Inspeção de segurança completa",
-    descricao: "Pneus, freios, luzes, buzina, retrovisor e instrumentos",
-    minutos: 90,
+    nome: "Revisão 1",
+    prazo: "2º mês ou 300 km",
+    descricao:
+      "Inspeção completa de segurança, bateria, motor, controlador e carregador",
+    preco: 350,
   },
   {
-    nome: "Ajuste de freios",
-    descricao: "Regulagem de folga, cabo e pastilhas",
-    minutos: 45,
+    nome: "Revisão 2",
+    prazo: "5º mês",
+    descricao: "Revisão completa trimestral",
+    preco: 350,
   },
   {
-    nome: "Troca de pastilhas de freio",
-    descricao: "Substituição e regulagem; peças à parte",
-    minutos: 45,
+    nome: "Revisão 3",
+    prazo: "8º mês",
+    descricao:
+      "Revisão completa + verificação aprofundada de bateria e elétrica",
+    preco: 450,
   },
   {
-    nome: "Inspeção e calibragem de pneus",
-    descricao: "Pressão, desgaste e sulcos",
-    minutos: 30,
+    nome: "Revisão 4",
+    prazo: "11º mês",
+    descricao: "Revisão completa trimestral",
+    preco: 350,
   },
   {
-    nome: "Troca de pneu",
-    descricao: "Dianteiro ou traseiro; peça à parte",
-    minutos: 45,
+    nome: "Revisão 5",
+    prazo: "14º mês",
+    descricao: "Revisão completa + inspeção de freios e pastilhas",
+    preco: 480,
   },
   {
-    nome: "Inspeção da bateria",
-    descricao: "Carga, tensão e estado geral",
-    minutos: 45,
+    nome: "Revisão 6",
+    prazo: "17º mês",
+    descricao: "Revisão completa trimestral",
+    preco: 350,
   },
   {
-    nome: "Inspeção do sistema elétrico",
-    descricao: "Controlador, chicote, fusíveis e conexões",
-    minutos: 90,
+    nome: "Revisão 7",
+    prazo: "20º mês",
+    descricao:
+      "Revisão completa + verificação aprofundada de bateria e elétrica",
+    preco: 450,
   },
   {
-    nome: "Diagnóstico de falha elétrica",
-    descricao: "Controlador, motor ou circuito",
-    minutos: 90,
+    nome: "Revisão 8",
+    prazo: "23º mês",
+    descricao: "Revisão completa trimestral",
+    preco: 350,
   },
   {
-    nome: "Inspeção do motor elétrico",
-    descricao: "Fiação, fixação e funcionamento",
-    minutos: 60,
+    nome: "Revisão 9",
+    prazo: "26º mês",
+    descricao: "Revisão completa + inspeção de freios",
+    preco: 480,
   },
   {
-    nome: "Inspeção da suspensão",
-    descricao: "Amortecedores, curso e vazamentos",
-    minutos: 45,
+    nome: "Revisão 10",
+    prazo: "29º mês",
+    descricao: "Revisão completa trimestral",
+    preco: 350,
   },
   {
-    nome: "Lubrificação e ajuste de cabos",
-    descricao: "Peças rotativas e transmissão",
-    minutos: 45,
+    nome: "Revisão 11",
+    prazo: "32º mês",
+    descricao: "Revisão completa + verificação de bateria",
+    preco: 450,
   },
   {
-    nome: "Inspeção de iluminação",
-    descricao: "Faróis, setas, lanterna e luz de freio",
-    minutos: 30,
+    nome: "Revisão 12",
+    prazo: "35º mês",
+    descricao: "Revisão completa trimestral",
+    preco: 350,
   },
 ];
 
-const revisoes = [
-  { nome: "Revisão simples / trimestral", minutos: 180 },
-  {
-    nome: "Revisão completa com verificação aprofundada da bateria e elétrica",
-    minutos: 300,
-  },
-  {
-    nome: "Revisão com inspeção de freios e pastilhas",
-    minutos: 240,
-  },
-];
 
 function moeda(valor) {
   return valor.toLocaleString("pt-BR", {
@@ -168,80 +188,86 @@ function TabelaPrecosNeon() {
 
     return custoMaoDeObra / (1 - margem / 100);
   }
+function exibirPreco(minutos) {
+  const preco = calcularPreco(minutos);
 
-  function exibirPreco(minutos) {
-    const preco = calcularPreco(minutos);
+  return preco === null ? "Configure a hora técnica" : moeda(preco);
+}
 
-    return preco === null ? "Configure a hora técnica" : moeda(preco);
-  }
-
-  return (
+return (
     <details className="referencia-precos-neon" open>
-      <summary>
-        Tabela de serviços e preços — motos elétricas
-      </summary>
+	
+      <summary className="cabecalho-precos-neon">
+        <h2>Revisão de Moto Elétrica com Preços Transparentes</h2>
 
+        <div className="destaques-precos-neon">
+          <span>
+            ✅ Hora técnica:{" "}
+            {precificacaoDisponivel
+              ? moeda(custoHora)
+              : "Não configurada"}
+          </span>
+
+          <span>
+            ✅  Revisões a partir de R$ 350,00
+          
+          </span>
+
+          <span>✅ Oficina especializada</span>
+        </div>
+      </summary>
+    
       <div className="referencia-precos-conteudo">
         <p>
           Os valores são calculados automaticamente com base na hora técnica,
-          na duração estimada do serviço e na margem de lucro configurada
-          pela oficina. O orçamento final pode variar conforme o veículo
+          na duração estimada do serviço.O orçamento final pode variar conforme o veículo
           e a complexidade do reparo.
         </p>
 
-        {precificacaoDisponivel ? (
-          <p>
-            <strong>Custo da hora técnica:</strong> {moeda(custoHora)}
-            {" · "}
-            <strong>Margem configurada:</strong> {margem}%
-          </p>
-        ) : (
-          <p>
-            <strong>
-              Configure e salve as despesas, a produtividade e a margem
-              na tela de Precificação para calcular os valores.
-            </strong>
-          </p>
-        )}
+<h3>Planos de revisão</h3>
 
-        <h3>Serviços individuais</h3>
+<ul className="lista-revisoes-neon">
+  {revisoes.map((revisao) => (
+    <li key={revisao.nome}>
+      <span>
+        <strong>{revisao.nome}</strong>
+        <br />
+        {revisao.prazo}
+        <br />
+        <small>{revisao.descricao}</small>
+      </span>
 
-        <div className="tabela-precos-rolagem">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Serviço</th>
-                <th scope="col">Descrição</th>
-                <th scope="col">Tempo estimado</th>
-                <th scope="col">Mão de obra</th>
-              </tr>
-            </thead>
+      <strong>{moeda(revisao.preco)}</strong>
+    </li>
+  ))}
+</ul>
 
-            <tbody>
-              {servicos.map((servico) => (
-                <tr key={servico.nome}>
-                  <th scope="row">{servico.nome}</th>
-                  <td>{servico.descricao}</td>
-                  <td>{servico.minutos} min</td>
-                  <td>{exibirPreco(servico.minutos)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+<h3>Serviços individuais</h3>
 
-        <h3>Planos de revisão</h3>
+<div className="tabela-precos-rolagem">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Serviço</th>
+        <th scope="col">Descrição</th>
+        <th scope="col">Tempo estimado</th>
+        <th scope="col">Mão de obra</th>
+      </tr>
+    </thead>
 
-        <ul className="lista-revisoes-neon">
-          {revisoes.map((revisao) => (
-            <li key={revisao.nome}>
-              <span>
-                {revisao.nome} ({revisao.minutos / 60} h)
-              </span>
-              <strong>{exibirPreco(revisao.minutos)}</strong>
-            </li>
-          ))}
-        </ul>
+    <tbody>
+      {servicos.map((servico) => (
+        <tr key={servico.nome}>
+          <th scope="row">{servico.nome}</th>
+          <td>{servico.descricao}</td>
+          <td>{servico.minutos} min</td>
+          <td>{exibirPreco(servico.minutos)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 
         <aside
           className="nota-precos-neon"

@@ -16,7 +16,8 @@ if (!process.env.JWT_SECRET) {
 }
 
 // Autentica o token enviado pelo cliente
-function autenticarToken(req, res, next) {
+
+async function autenticarToken(req, res, next) {
   const cabecalho = req.headers.authorization;
 
   if (!cabecalho || !cabecalho.startsWith("Bearer ")) {
@@ -26,13 +27,60 @@ function autenticarToken(req, res, next) {
   }
 
   const token = cabecalho.slice(7);
+  let payload;
 
   try {
-    req.usuario = jwt.verify(token, process.env.JWT_SECRET);
-    next();
+    payload = jwt.verify(token, process.env.JWT_SECRET);
   } catch (erro) {
     return res.status(401).json({
       erro: "Token inválido ou expirado.",
+    });
+  }
+
+  try {
+    const resultado = await db.query(
+      `SELECT perfil, ativo, deve_trocar_credenciais
+       FROM usuarios
+       WHERE id = $1`,
+      [payload.sub],
+    );
+
+    if (!resultado.rowCount || !resultado.rows[0].ativo) {
+      return res.status(401).json({
+        erro: "Usuário inexistente ou inativo.",
+      });
+    }
+
+    const usuario = resultado.rows[0];
+
+    req.usuario = {
+      ...payload,
+      perfil: usuario.perfil,
+    };
+
+    const rotaTrocaCredenciais =
+      req.method === "PUT" &&
+      req.path === "/api/auth/credenciais";
+
+    if (
+      usuario.deve_trocar_credenciais &&
+      !rotaTrocaCredenciais
+    ) {
+      return res.status(403).json({
+        erro: "Troque suas credenciais antes de continuar.",
+        deve_trocar_credenciais: true,
+      });
+    }
+
+    return next();
+  } catch (erro) {
+    console.error(
+      "Erro ao validar usuário autenticado:",
+      erro.message,
+    );
+
+    return res.status(500).json({
+      erro: "Não foi possível validar a conta do usuário.",
     });
   }
 }
@@ -75,25 +123,28 @@ const db = new Pool({
 });
 
 app.post("/api/auth/login", async (req, res) => {
-  const { email, senha } = req.body || {};
+  const login = typeof req.body?.login === "string"
+    ? req.body.login.trim().toLowerCase()
+    : typeof req.body?.email === "string"
+      ? req.body.email.trim().toLowerCase()
+      : "";
+  const { senha } = req.body || {};
 
-  if (
-    typeof email !== "string" ||
-    typeof senha !== "string" ||
-    !email.trim() ||
-    !senha
-  ) {
+  if (!login || typeof senha !== "string" || !senha) {
     return res.status(400).json({
-      erro: "Informe o e-mail e a senha.",
+      erro: "Informe o usuário ou e-mail e a senha.",
     });
   }
 
   try {
     const resultado = await db.query(
-      `SELECT id, nome, email, senha_hash, perfil
+      `SELECT id, nome, email, usuario, senha_hash, perfil,
+              deve_trocar_credenciais
        FROM usuarios
-       WHERE email = $1 AND ativo = TRUE`,
-      [email.trim().toLowerCase()],
+       WHERE (LOWER(email) = $1 OR LOWER(usuario) = $1) AND ativo = TRUE
+       ORDER BY id
+       LIMIT 1`,
+      [login],
     );
 
     const usuario = resultado.rows[0];
@@ -122,7 +173,9 @@ app.post("/api/auth/login", async (req, res) => {
         id: usuario.id,
         nome: usuario.nome,
         email: usuario.email,
+        usuario: usuario.usuario,
         perfil: usuario.perfil,
+        deve_trocar_credenciais: usuario.deve_trocar_credenciais,
       },
     });
   } catch (erro) {
@@ -131,6 +184,37 @@ app.post("/api/auth/login", async (req, res) => {
     return res.status(500).json({
       erro: "Não foi possível realizar o login.",
     });
+  }
+});
+
+app.put("/api/auth/credenciais", autenticarToken, async (req, res) => {
+  const usuarioNovo = typeof req.body?.usuario === "string" ? req.body.usuario.trim() : "";
+  const senhaNova = typeof req.body?.senha === "string" ? req.body.senha : "";
+  if (!/^[a-zA-Z0-9._-]{3,80}$/.test(usuarioNovo) || senhaNova.length < 12) {
+    return res.status(400).json({
+      erro: "Escolha um usuário de 3 a 80 caracteres (letras, números, ponto, hífen ou sublinhado) e uma senha com pelo menos 12 caracteres.",
+    });
+  }
+  if (usuarioNovo.toLowerCase() === "admin" || senhaNova.toLowerCase() === "admin") {
+    return res.status(400).json({ erro: "Escolha um usuário e uma senha diferentes das credenciais temporárias." });
+  }
+  try {
+    const senhaHash = await bcrypt.hash(senhaNova, 12);
+    const resultado = await db.query(
+      `UPDATE usuarios SET usuario = $1, senha_hash = $2,
+                           deve_trocar_credenciais = FALSE
+       WHERE id = $3 AND perfil = 'admin' AND deve_trocar_credenciais = TRUE
+       RETURNING id, nome, email, usuario, perfil, deve_trocar_credenciais`,
+      [usuarioNovo, senhaHash, req.usuario.sub],
+    );
+    if (!resultado.rowCount) {
+      return res.status(409).json({ erro: "A troca inicial de credenciais não está pendente para esta conta." });
+    }
+    res.json({ usuario: resultado.rows[0] });
+  } catch (erro) {
+    if (erro.code === "23505") return res.status(409).json({ erro: "Esse usuário já está em uso." });
+    console.error("Erro ao trocar credenciais iniciais:", erro.message);
+    res.status(500).json({ erro: "Não foi possível atualizar as credenciais." });
   }
 });
 
@@ -195,6 +279,50 @@ app.put("/api/admin/mecanicos/:id", autenticarToken, exigirAdmin, async (req, re
     if (erro.code === "23505") return res.status(409).json({ erro: "Já existe uma conta com este e-mail." });
     console.error("Erro ao atualizar mecânico:", erro.message);
     res.status(500).json({ erro: "Não foi possível atualizar o mecânico." });
+  }
+});
+
+// Clientes compartilhados entre mecânicos e administrador.
+app.get("/api/clientes", autenticarToken, exigirEditor, async (_req, res) => {
+  try {
+    const resultado = await db.query(
+      "SELECT * FROM clientes ORDER BY nome, id"
+    );
+    res.json({ clientes: resultado.rows });
+  } catch (erro) {
+    console.error("Erro ao listar clientes:", erro.message);
+    res.status(500).json({ erro: "Não foi possível listar os clientes." });
+  }
+});
+
+app.post("/api/clientes", autenticarToken, exigirEditor, async (req, res) => {
+  const nome =
+    typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+
+  if (!nome) {
+    return res.status(400).json({ erro: "Informe o nome do cliente." });
+  }
+
+  const texto = (valor) =>
+    typeof valor === "string" ? valor.trim() : "";
+
+  try {
+    const resultado = await db.query(
+      `INSERT INTO clientes (nome, telefone, email, veiculo)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [
+        nome,
+        texto(req.body.telefone) || null,
+        texto(req.body.email).toLowerCase() || null,
+        texto(req.body.veiculo) || null,
+      ],
+    );
+
+    res.status(201).json({ cliente: resultado.rows[0] });
+  } catch (erro) {
+    console.error("Erro ao cadastrar cliente:", erro.message);
+    res.status(500).json({ erro: "Não foi possível cadastrar o cliente." });
   }
 });
 

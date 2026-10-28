@@ -112,15 +112,20 @@ CREATE TABLE usuarios (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(160) NOT NULL,
     email VARCHAR(254) NOT NULL,
+    usuario VARCHAR(80),
     senha_hash TEXT NOT NULL,
     perfil VARCHAR(20) NOT NULL
         CHECK (perfil IN ('mecanico', 'revisor', 'admin')),
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    deve_trocar_credenciais BOOLEAN NOT NULL DEFAULT FALSE,
     criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE UNIQUE INDEX idx_usuarios_email_lower
     ON usuarios (LOWER(email));
+
+CREATE UNIQUE INDEX idx_usuarios_usuario_lower
+    ON usuarios (LOWER(usuario)) WHERE usuario IS NOT NULL;
 
 CREATE TABLE clientes (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

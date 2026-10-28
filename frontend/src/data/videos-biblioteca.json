@@ -1,6 +1,10 @@
 [
   { "modelo": "AG11 Tank", "arquivo": "Aula_1_cb0b3efa_h264.mp4" },
-  { "modelo": "Agmax", "arquivo": "Aula_1_d24c4a1c_h264.mp4", "disponivel": false },
+  {
+    "modelo": "Agmax",
+    "arquivo": "Aula_1_d24c4a1c_h264.mp4",
+    "disponivel": false
+  },
   { "modelo": "Bolin E30", "arquivo": "Aula_1_8b7b178e_h264.mp4" },
   { "modelo": "Bonmad EV", "arquivo": "Aula_1_9bb5d0f4_h264.mp4" },
   { "modelo": "Boonmad Vespa", "arquivo": "Aula_1_f588b5f5_h264.mp4" },
@@ -9,7 +13,10 @@
   { "modelo": "Drop 650", "arquivo": "Aula_1_e125d565_h264.mp4" },
   { "modelo": "Duos Eko 5", "arquivo": "Duos_Eko_5.mp4" },
   { "modelo": "Ecospeed Way", "arquivo": "Aula_1_78e1a206_h264.mp4" },
-  { "modelo": "Destravar Painel (Geral)", "arquivo": "Destravar_Painel_06419c70_h264.mp4" },
+  {
+    "modelo": "Destravar Painel (Geral)",
+    "arquivo": "Destravar_Painel_06419c70_h264.mp4"
+  },
   { "modelo": "Destravar (Geral)", "arquivo": "Destravar_2348aba2_h264.mp4" },
   { "modelo": "Evoo 1000", "arquivo": "Aula_1_aab5069f_h264.mp4" },
   { "modelo": "Foston X13 Max", "arquivo": "Video_1_f9fd5920_h264.mp4" },
@@ -27,11 +34,26 @@
   { "modelo": "Motochefe DOT (Aula 1)", "arquivo": "Aula_1_069d63b2_h264.mp4" },
   { "modelo": "Motochefe DOT (Aula 2)", "arquivo": "Aula_2_b929c4fd_h264.mp4" },
   { "modelo": "Motochefe Giga", "arquivo": "Aula_1_7b888684_h264.mp4" },
-  { "modelo": "Moto Chefe MC Super Joy", "arquivo": "Aula_1_f71ae1ce_h264.mp4" },
-  { "modelo": "Moto Chefe X11 (Aula 1)", "arquivo": "Aula_1_17d421ab_h264.mp4" },
-  { "modelo": "Moto Chefe X11 (Aula 2)", "arquivo": "Aula_2_7f5c5a90_h264.mp4" },
-  { "modelo": "Moto Chefe X11 (Aula 3)", "arquivo": "Aula_3_e8ce8440_h264.mp4" },
-  { "modelo": "Moto Chefe X11 (Aula 4)", "arquivo": "Aula_4_fee143aa_h264.mp4" },
+  {
+    "modelo": "Moto Chefe MC Super Joy",
+    "arquivo": "Aula_1_f71ae1ce_h264.mp4"
+  },
+  {
+    "modelo": "Moto Chefe X11 (Aula 1)",
+    "arquivo": "Aula_1_17d421ab_h264.mp4"
+  },
+  {
+    "modelo": "Moto Chefe X11 (Aula 2)",
+    "arquivo": "Aula_2_7f5c5a90_h264.mp4"
+  },
+  {
+    "modelo": "Moto Chefe X11 (Aula 3)",
+    "arquivo": "Aula_3_e8ce8440_h264.mp4"
+  },
+  {
+    "modelo": "Moto Chefe X11 (Aula 4)",
+    "arquivo": "Aula_4_fee143aa_h264.mp4"
+  },
   { "modelo": "Motochefe X12 (Aula 1)", "arquivo": "Aula_1_c864459e_h264.mp4" },
   { "modelo": "Motochefe X12 (Aula 2)", "arquivo": "Aula_2_3aaa99dc_h264.mp4" },
   { "modelo": "Motochefe X12 (Aula 3)", "arquivo": "Aula_3_fa9f9ddb_h264.mp4" },

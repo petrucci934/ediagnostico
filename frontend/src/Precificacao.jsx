@@ -25,7 +25,7 @@ const configuracaoInicial = {
   },
 
   produtividade: 70,
-  horasServico: "2",
+  horasServico: "120",
   pecas: "50",
   margem: 30,
 };
@@ -68,17 +68,17 @@ function Precificacao() {
   const [configuracao, setConfiguracao] = useState(carregarConfiguracao);
   const [servicosOficina, setServicosOficina] = useState(() => {
     try {
-      return JSON.parse(
-        localStorage.getItem("ediagnostico-servicos-oficina"),
-      ) || [
-        {
-          id: "exemplo-manete",
-          nome: "Troca de manete acelerador",
-          categoria: "Bicicleta elétrica",
-          maoDeObra: 120,
-          materiais: 300,
-        },
-      ];
+      return (
+        JSON.parse(localStorage.getItem("ediagnostico-servicos-oficina")) || [
+          {
+            id: "exemplo-manete",
+            nome: "Troca de manete acelerador",
+            categoria: "Bicicleta elétrica",
+            maoDeObra: 120,
+            materiais: 300,
+          },
+        ]
+      );
     } catch {
       return [];
     }
@@ -157,7 +157,7 @@ function Precificacao() {
   const horasProdutivas = horasMensais * (Number(produtividade) / 100);
   const custoHora = horasProdutivas > 0 ? Number(custos) / horasProdutivas : 0;
 
-  const custoServico = custoHora * Number(horasServico) + Number(pecas);
+  const custoServico = custoHora * Number(horasServico / 60) + Number(pecas);
 
   const precoServico =
     margem >= 0 && margem < 100 ? custoServico / (1 - Number(margem) / 100) : 0;
@@ -187,12 +187,11 @@ function Precificacao() {
   }
 
   const totalNovoServico =
-    (Number(novoServico.maoDeObra) || 0) +
-    (Number(novoServico.materiais) || 0);
+    (Number(novoServico.maoDeObra) || 0) + (Number(novoServico.materiais) || 0);
 
   return (
     <section className="principal">
-      <span className="etiqueta">GESTÃO DA OFICINA</span>
+      <span className="etiqueta">ÁREA DO MECÂNICO</span>
 
       <h1>
         Precifique seu serviço.
@@ -329,14 +328,22 @@ function Precificacao() {
 
         <h2>3. Calcular preço do serviço</h2>
 
-        <label>Duração do serviço (horas)</label>
-        <input
-          type="number"
-          min="0"
-          step="0.25"
+        <label htmlFor="duracaoServico">Duração do serviço (minutos)</label>
+        <select
+          id="duracaoServico"
+          style={{ font: "inherit" }}
           value={horasServico}
           onChange={(e) => atualizarCampo("horasServico", e.target.value)}
-        />
+        >
+          {Array.from({ length: 288 }, (_, i) => (i + 1) * 5).map((minutos) => (
+            <option key={minutos} value={minutos}>
+              {minutos} min
+              {minutos >= 60
+                ? ` (${Math.floor(minutos / 60)}h${minutos % 60 ? ` ${minutos % 60}min` : ""})`
+                : ""}
+            </option>
+          ))}
+        </select>
 
         <label>Custo das peças (R$)</label>
         <input
@@ -369,7 +376,10 @@ function Precificacao() {
           despesas antes de definir o preço final.
         </p>
 
-        <section className="catalogo-servicos-oficina" aria-labelledby="titulo-catalogo-servicos">
+        <section
+          className="catalogo-servicos-oficina"
+          aria-labelledby="titulo-catalogo-servicos"
+        >
           <span className="etiqueta">CATÁLOGO DA OFICINA</span>
           <h2 id="titulo-catalogo-servicos">Preço de cada serviço</h2>
           <p className="catalogo-servicos-descricao">
@@ -394,7 +404,10 @@ function Precificacao() {
               <select
                 value={novoServico.categoria}
                 onChange={(evento) =>
-                  setNovoServico({ ...novoServico, categoria: evento.target.value })
+                  setNovoServico({
+                    ...novoServico,
+                    categoria: evento.target.value,
+                  })
                 }
               >
                 <option>Bicicleta elétrica</option>
@@ -412,7 +425,10 @@ function Precificacao() {
                   step="0.01"
                   value={novoServico.maoDeObra}
                   onChange={(evento) =>
-                    setNovoServico({ ...novoServico, maoDeObra: evento.target.value })
+                    setNovoServico({
+                      ...novoServico,
+                      maoDeObra: evento.target.value,
+                    })
                   }
                   placeholder="0,00"
                 />
@@ -428,7 +444,10 @@ function Precificacao() {
                   step="0.01"
                   value={novoServico.materiais}
                   onChange={(evento) =>
-                    setNovoServico({ ...novoServico, materiais: evento.target.value })
+                    setNovoServico({
+                      ...novoServico,
+                      materiais: evento.target.value,
+                    })
                   }
                   placeholder="0,00"
                 />
@@ -438,7 +457,10 @@ function Precificacao() {
             <div className="resumo-preco-servico" aria-live="polite">
               <span>Preço final</span>
               <strong>{moeda(totalNovoServico)}</strong>
-              <small>MO {moeda(Number(novoServico.maoDeObra) || 0)} + MA {moeda(Number(novoServico.materiais) || 0)}</small>
+              <small>
+                MO {moeda(Number(novoServico.maoDeObra) || 0)} + MA{" "}
+                {moeda(Number(novoServico.materiais) || 0)}
+              </small>
             </div>
             <button className="botao-adicionar-servico" type="submit">
               Adicionar à lista
@@ -479,7 +501,9 @@ function Precificacao() {
                 </article>
               ))
             ) : (
-              <p className="lista-servicos-vazia">Adicione o primeiro serviço da oficina.</p>
+              <p className="lista-servicos-vazia">
+                Adicione o primeiro serviço da oficina.
+              </p>
             )}
           </div>
         </section>

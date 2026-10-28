@@ -2,7 +2,9 @@ import { useState } from "react";
 
 function carregarServicos() {
   try {
-    return JSON.parse(localStorage.getItem("ediagnostico-servicos-oficina")) || [];
+    return (
+      JSON.parse(localStorage.getItem("ediagnostico-servicos-oficina")) || []
+    );
   } catch {
     return [];
   }
@@ -25,7 +27,9 @@ function Orcamento({ onPrecificar }) {
   );
   const total = itensSelecionados.reduce(
     (soma, servico) =>
-      soma + (Number(servico.maoDeObra) || 0) + (Number(servico.materiais) || 0),
+      soma +
+      (Number(servico.maoDeObra) || 0) +
+      (Number(servico.materiais) || 0),
     0,
   );
 
@@ -42,7 +46,8 @@ function Orcamento({ onPrecificar }) {
       <span className="etiqueta">ATENDIMENTO AO CLIENTE</span>
       <h2 id="titulo-orcamento">Montar orçamento</h2>
       <p className="orcamento-descricao">
-        Selecione os serviços cadastrados para gerar uma proposta clara para o cliente.
+        Selecione os serviços cadastrados para gerar uma proposta clara para o
+        cliente.
       </p>
 
       <div className="orcamento-identificacao">
@@ -83,15 +88,22 @@ function Orcamento({ onPrecificar }) {
                   <strong>{servico.nome}</strong>
                   <small>{servico.categoria}</small>
                 </span>
-                <span className="orcamento-servico-preco">{moeda(subtotal)}</span>
+                <span className="orcamento-servico-preco">
+                  {moeda(subtotal)}
+                </span>
               </label>
             );
           })}
         </div>
       ) : (
         <div className="orcamento-sem-servicos">
-          <p>Cadastre serviços com valores de mão de obra e materiais antes de montar o orçamento.</p>
-          <button type="button" onClick={onPrecificar}>Ir para Precificar</button>
+          <p>
+            Cadastre serviços com valores de mão de obra e materiais antes de
+            montar o orçamento.
+          </p>
+          <button type="button" onClick={onPrecificar}>
+            Ir para Precificar
+          </button>
         </div>
       )}
 

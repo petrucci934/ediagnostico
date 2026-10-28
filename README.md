@@ -62,7 +62,7 @@ psql -d ediagnostico -f backend/migrations/20261027_criar_clientes.sql
 psql -d ediagnostico -f backend/migrations/20261027_email_usuarios_case_insensitive.sql
 ```
 
-Para criar a primeira conta de administrador, com o banco configurado no `backend/.env`, execute `npm run criar-admin` dentro da pasta `backend/`. O script solicita nome, e-mail e uma senha de pelo menos 12 caracteres; a senha não é exibida no terminal.
+Para criar a conta inicial solicitada, com o banco configurado no `backend/.env`, execute `npm run criar-admin-padrao` dentro da pasta `backend/`. O primeiro acesso usa usuário `Admin` e senha `admin`; o sistema exige que ambos sejam trocados antes de abrir a área administrativa. Para criar outras contas de administrador com senha forte, use `npm run criar-admin`.
 
 ## Comandos úteis
 

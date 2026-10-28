@@ -11,11 +11,17 @@ import {
   Wrench,
   ShieldCheck,
   ClipboardList,
+  CircleDollarSign,
+  Search,
+  History,
 } from "lucide-react";
 import Precificacao from "./Precificacao";
 import Orcamento from "./Orcamento";
 import CadastrosOficina from "./CadastrosOficina";
 import Administrador from "./Administrador";
+import PrimeiroAcessoAdmin from "./PrimeiroAcessoAdmin";
+import CampoSenha from "./CampoSenha";
+import TabelaPrecosNeon from "./TabelaPrecosNeon";
 import videosBiblioteca from "./data/videos-biblioteca.json";
 import "./App.css";
 
@@ -34,7 +40,8 @@ function Carrossel({ className, children, label }) {
     const limitesGaleria = galeria.getBoundingClientRect();
     const limitesCard = card.getBoundingClientRect();
     const deslocamentoHorizontal =
-      limitesCard.left + limitesCard.width / 2 -
+      limitesCard.left +
+      limitesCard.width / 2 -
       (limitesGaleria.left + galeria.clientWidth / 2);
 
     galeria.scrollTo({
@@ -110,15 +117,15 @@ function Carrossel({ className, children, label }) {
         type="button"
         className="carrossel03-seta carrossel03-proximo"
         aria-label={`${label}: próximo item`}
-          onClick={() =>
-            setIndiceAtivo((indice) =>
-              quantidade > 2
-                ? indice >= quantidade - 2
-                  ? 1
-                  : indice + 1
-                : (indice + 1) % quantidade,
-            )
-          }
+        onClick={() =>
+          setIndiceAtivo((indice) =>
+            quantidade > 2
+              ? indice >= quantidade - 2
+                ? 1
+                : indice + 1
+              : (indice + 1) % quantidade,
+          )
+        }
       >
         ›
       </button>
@@ -236,7 +243,9 @@ function VisualizadorVideo({ video, onFechar }) {
           }}
         />
       )}
-      <p>Esc fecha este painel. A reprodução abre somente quando você escolher.</p>
+      <p>
+        Esc fecha este painel. A reprodução abre somente quando você escolher.
+      </p>
     </dialog>
   );
 }
@@ -265,8 +274,8 @@ function BibliotecaVideos() {
     local: `/videos/${video.arquivo}`,
     origem: `https://pub-c4a1e03d410a4b8a86df09223cab2563.r2.dev/${video.arquivo}`,
   }));
-  const marcas = [...new Set(videos.map((video) => video.marca))].sort(
-    (a, b) => a.localeCompare(b, "pt-BR"),
+  const marcas = [...new Set(videos.map((video) => video.marca))].sort((a, b) =>
+    a.localeCompare(b, "pt-BR"),
   );
   const termo = busca
     .normalize("NFD")
@@ -280,8 +289,7 @@ function BibliotecaVideos() {
       .toLocaleLowerCase("pt-BR")
       .includes(termo);
     const correspondeFiltro =
-      filtro === "todos" ||
-      (filtro === "gerais" ? video.geral : !video.geral);
+      filtro === "todos" || (filtro === "gerais" ? video.geral : !video.geral);
     const correspondeMarca =
       marcaSelecionada === "todas" || video.marca === marcaSelecionada;
     return correspondeBusca && correspondeFiltro && correspondeMarca;
@@ -297,9 +305,7 @@ function BibliotecaVideos() {
     setPaginaCarrossel(0);
     const passo = trilho.clientWidth * 0.85;
     const maximo = Math.max(0, trilho.scrollWidth - trilho.clientWidth);
-    setTotalPaginasCarrossel(
-      Math.max(1, Math.ceil(maximo / passo) + 1),
-    );
+    setTotalPaginasCarrossel(Math.max(1, Math.ceil(maximo / passo) + 1));
   }, [busca, filtro, marcaSelecionada]);
 
   function atualizarPaginaCarrossel() {
@@ -328,9 +334,7 @@ function BibliotecaVideos() {
       <div className="galeria-cabecalho">
         <span className="etiqueta">VÍDEOS DE REFERÊNCIA</span>
         <h2 id="titulo-videos">Biblioteca por modelo</h2>
-        <p>
-          Busque um modelo ou navegue pelos procedimentos disponíveis.
-        </p>
+        <p>Busque um modelo ou navegue pelos procedimentos disponíveis.</p>
       </div>
       <div className="biblioteca-videos-filtros">
         <label>
@@ -358,14 +362,18 @@ function BibliotecaVideos() {
         </label>
         <label>
           <span>Tipo de material</span>
-          <select value={filtro} onChange={(evento) => setFiltro(evento.target.value)}>
+          <select
+            value={filtro}
+            onChange={(evento) => setFiltro(evento.target.value)}
+          >
             <option value="todos">Todos os vídeos</option>
             <option value="modelos">Por modelo</option>
             <option value="gerais">Instruções gerais</option>
           </select>
         </label>
         <p className="biblioteca-videos-contagem">
-          {disponiveis} {disponiveis === 1 ? "vídeo disponível" : "vídeos disponíveis"}
+          {disponiveis}{" "}
+          {disponiveis === 1 ? "vídeo disponível" : "vídeos disponíveis"}
           {filtrados.length > disponiveis &&
             ` · ${filtrados.length - disponiveis} indisponível`}
         </p>
@@ -486,15 +494,16 @@ function criarCardsResultado(resultado) {
       ...imagem,
       chave: imagem.id || `${imagem.image_path}-${indice}`,
       codigo: resultado.codigo,
-      imagem:
-        IMAGENS_PADRAO_CODIGO[resultado.codigo] || imagem.image_path,
+      imagem: IMAGENS_PADRAO_CODIGO[resultado.codigo] || imagem.image_path,
       descricao: /^recorte individual\b/i.test(imagem.caption?.trim() || "")
         ? ""
         : imagem.caption || imagem.source_title || "",
     }));
   }
 
-  const linhas = Array.isArray(resultado.resultados) ? resultado.resultados : [];
+  const linhas = Array.isArray(resultado.resultados)
+    ? resultado.resultados
+    : [];
   const linhasUnicas = [
     ...new Map(
       linhas.map((linha) => [
@@ -521,7 +530,8 @@ function criarCardsResultado(resultado) {
       chave: `${codigo}-${indice}`,
       codigo,
       imagem: IMAGENS_PADRAO_CODIGO[codigo] || linha.image_path,
-      descricao: linha.description || "Não há imagem cadastrada para este código.",
+      descricao:
+        linha.description || "Não há imagem cadastrada para este código.",
     };
   });
 }
@@ -543,9 +553,13 @@ function CardImagemResultado({ item }) {
         <div className="card-diagnostico-descricao">
           <span>CÓDIGO DE ERRO</span>
           <h3>{item.codigo}</h3>
-          <p>{item.descricao || "Não há imagem cadastrada para este código."}</p>
+          <p>
+            {item.descricao || "Não há imagem cadastrada para este código."}
+          </p>
           {item.manufacturer && <small>Fabricante: {item.manufacturer}</small>}
-          {item.component_type && <small>Componente: {item.component_type}</small>}
+          {item.component_type && (
+            <small>Componente: {item.component_type}</small>
+          )}
         </div>
       )}
       {item.imagem && item.descricao && !imagemFalhou && (
@@ -629,6 +643,9 @@ function App() {
   const [carregandoAtendimentos, setCarregandoAtendimentos] = useState(false);
   const [erroAtendimentos, setErroAtendimentos] = useState("");
   const [abaTeste, setAbaTeste] = useState("biblioteca");
+  const [abaCadastroInicial, setAbaCadastroInicial] = useState("clientes");
+  const [mostrarCadastroInline, setMostrarCadastroInline] = useState(false);
+  const [abaCliente, setAbaCliente] = useState("falhas");
   const [codigoAmpliado, setCodigoAmpliado] = useState(null);
 
   const [testesTecnicos, setTestesTecnicos] = useState([]);
@@ -732,7 +749,7 @@ function App() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          email: emailLogin,
+          login: emailLogin,
           senha: senhaLogin,
         }),
       });
@@ -974,6 +991,7 @@ function App() {
 
   const ehMecanico =
     perfil === "mecanico" || usuarioLogado?.perfil === "mecanico";
+  const ehCliente = perfil === "cliente" || perfilEscolhido === "cliente";
 
   return (
     <main className="pagina">
@@ -1067,18 +1085,19 @@ function App() {
               </button>
             </>
           )}
-          {(perfil === "admin" || usuarioLogado?.perfil === "admin") && (
-            <button
-              type="button"
-              className={telaAtual === "administracao" ? "nav-ativo" : ""}
-              onClick={() => {
-                setTelaAtual("administracao");
-                setMenuAberto(false);
-              }}
-            >
-              Administrador
-            </button>
-          )}
+          {(perfil === "admin" || usuarioLogado?.perfil === "admin") &&
+            !usuarioLogado?.deve_trocar_credenciais && (
+              <button
+                type="button"
+                className={telaAtual === "administracao" ? "nav-ativo" : ""}
+                onClick={() => {
+                  setTelaAtual("administracao");
+                  setMenuAberto(false);
+                }}
+              >
+                Administrador
+              </button>
+            )}
           {(perfil || perfilEscolhido === "cliente") && (
             <button
               type="button"
@@ -1186,21 +1205,20 @@ function App() {
                   Perfil selecionado: <strong>{perfilEscolhido}</strong>
                 </p>
 
-                <label htmlFor="emailLogin">E-mail</label>
+                <label htmlFor="emailLogin">Usuário ou e-mail</label>
                 <input
                   id="emailLogin"
-                  type="email"
+                  type="text"
                   autoComplete="username"
                   value={emailLogin}
                   onChange={(event) => setEmailLogin(event.target.value)}
-                  placeholder="seu@email.com"
+                  placeholder="Usuário ou e-mail"
                   required
                 />
 
                 <label htmlFor="senhaLogin">Senha</label>
-                <input
+                <CampoSenha
                   id="senhaLogin"
-                  type="password"
                   autoComplete="current-password"
                   value={senhaLogin}
                   onChange={(event) => setSenhaLogin(event.target.value)}
@@ -1256,296 +1274,411 @@ function App() {
               Consulte códigos de erro de bicicletas, motos e scooters elétricas
               em um só lugar.
             </p>
+            {ehCliente && (
+              <div
+                className="abas-cliente"
+                role="tablist"
+                aria-label="Área do cliente"
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={abaCliente === "falhas"}
+                  className={`aba-cliente ${abaCliente === "falhas" ? "ativa" : ""}`}
+                  onClick={() => setAbaCliente("falhas")}
+                >
+                  <Search size={22} aria-hidden="true" />
+                  <strong>Consultar falhas</strong>
+                  <span>Diagnóstico por código</span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={abaCliente === "tabela"}
+                  className={`aba-cliente ${abaCliente === "tabela" ? "ativa" : ""}`}
+                  onClick={() => setAbaCliente("tabela")}
+                >
+                  <CircleDollarSign size={22} aria-hidden="true" />
+                  <strong>Tabela de serviços</strong>
+                  <span>Preços de referência</span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={abaCliente === "consultas"}
+                  className={`aba-cliente ${abaCliente === "consultas" ? "ativa" : ""}`}
+                  onClick={() => setAbaCliente("consultas")}
+                >
+                  <History size={22} aria-hidden="true" />
+                  <strong>Consultas recentes</strong>
+                  <span>Seu histórico de códigos</span>
+                </button>
+              </div>
+            )}
+
+            {ehCliente && abaCliente === "tabela" && (
+              <>
+                <div role="tabpanel" aria-label="Tabela de serviços e preços">
+                  <TabelaPrecosNeon />
+                </div>
+
+                <section className="beneficios-moto">
+                  <header className="beneficios-cabecalho">
+                    <span className="etiqueta">MANUTENÇÃO PREVENTIVA</span>
+                    <h2>Por que revisar sua moto elétrica?</h2>
+                    <p>
+                      A manutenção periódica protege você, sua moto e sua
+                      garantia.
+                    </p>
+                  </header>
+
+                  <div className="beneficios-grid">
+                    <article className="beneficio-card">
+                      <span className="beneficio-icone" aria-hidden="true">
+                        🛡️
+                      </span>
+                      <h3>Protege sua garantia</h3>
+                      <p>
+                        A manutenção periódica conforme as orientações do
+                        fabricante ajuda a preservar a garantia do veículo.
+                      </p>
+                    </article>
+
+                    <article className="beneficio-card">
+                      <span className="beneficio-icone" aria-hidden="true">
+                        🔋
+                      </span>
+                      <h3>Prolonga a vida da bateria</h3>
+                      <p>
+                        Verificações regulares ajudam a identificar problemas
+                        que podem comprometer a bateria.
+                      </p>
+                    </article>
+
+                    <article className="beneficio-card">
+                      <span className="beneficio-icone" aria-hidden="true">
+                        🚦
+                      </span>
+                      <h3>Garante sua segurança</h3>
+                      <p>
+                        Mantenha freios, pneus, luzes e suspensão em boas
+                        condições para uma pilotagem mais segura.
+                      </p>
+                    </article>
+
+                    <article className="beneficio-card">
+                      <span className="beneficio-icone" aria-hidden="true">
+                        💰
+                      </span>
+                      <h3>Evita gastos maiores</h3>
+                      <p>
+                        Pequenos ajustes preventivos podem evitar falhas e
+                        reparos mais caros no futuro.
+                      </p>
+                    </article>
+                  </div>
+                </section>
+              </>
+            )}
+
             {(perfil === "mecanico" || usuarioLogado?.perfil === "mecanico") &&
               abaTeste === "biblioteca" && (
                 <section className="galeria-mecanico">
                   <div className="moldura-carrossel">
                     <div className="galeria-cabecalho">
-                    <span className="etiqueta">BIBLIOTECA TÉCNICA</span>
-                    <h2>Códigos de diagnóstico</h2>
-                    <p>
-                      Consulte os cards de referência para identificar códigos
-                      de falha.
-                    </p>
+                      <span className="etiqueta">BIBLIOTECA TÉCNICA</span>
+                      <h2>Códigos de diagnóstico</h2>
+                      <p>
+                        Consulte os cards de referência para identificar códigos
+                        de falha.
+                      </p>
                     </div>
 
                     <Carrossel
                       className="galeria-codigos"
                       label="Códigos de diagnóstico"
                     >
-                    {[
-                      { codigo: "P001", imagem: "/images/P001.png" },
-                      { codigo: "P002", imagem: "/images/P002.png" },
-                      { codigo: "P003", imagem: "/images/P003.png" },
-                      { codigo: "P004", imagem: "/images/P004.png" },
-                      { codigo: "P005", imagem: "/images/P005.png" },
-                      { codigo: "P006", imagem: "/images/P006.png" },
-                      { codigo: "P007", imagem: "/images/P007.png" },
-                      { codigo: "P008", imagem: "/images/P008.png" },
-                    ].map((item) => (
-                      <button
-                        type="button"
-                        className="galeria-codigo-card"
-                        key={item.codigo}
-                        aria-label={`Ampliar slide do código ${item.codigo}`}
-                        onClick={() => setCodigoAmpliado(item)}
-                      >
-                        <img
-                          src={item.imagem}
-                          alt={`Card de diagnóstico ${item.codigo}`}
-                        />
-                        <h3>{item.codigo}</h3>
-                      </button>
-                    ))}
+                      {[
+                        { codigo: "P001", imagem: "/images/P001.png" },
+                        { codigo: "P002", imagem: "/images/P002.png" },
+                        { codigo: "P003", imagem: "/images/P003.png" },
+                        { codigo: "P004", imagem: "/images/P004.png" },
+                        { codigo: "P005", imagem: "/images/P005.png" },
+                        { codigo: "P006", imagem: "/images/P006.png" },
+                        { codigo: "P007", imagem: "/images/P007.png" },
+                        { codigo: "P008", imagem: "/images/P008.png" },
+                      ].map((item) => (
+                        <button
+                          type="button"
+                          className="galeria-codigo-card"
+                          key={item.codigo}
+                          aria-label={`Ampliar slide do código ${item.codigo}`}
+                          onClick={() => setCodigoAmpliado(item)}
+                        >
+                          <img
+                            src={item.imagem}
+                            alt={`Card de diagnóstico ${item.codigo}`}
+                          />
+                          <h3>{item.codigo}</h3>
+                        </button>
+                      ))}
                     </Carrossel>
                   </div>
 
                   <div className="moldura-carrossel">
                     <div className="galeria-cabecalho galeria-guias-cabecalho">
-                    <span className="etiqueta">MATERIAL DE APOIO</span>
-                    <h2>Guias para o mecânico</h2>
-                    <p>
-                      Materiais de consulta para apoiar os serviços da oficina.
-                    </p>
+                      <span className="etiqueta">MATERIAL DE APOIO</span>
+                      <h2>Guias para o mecânico</h2>
+                      <p>
+                        Materiais de consulta para apoiar os serviços da
+                        oficina.
+                      </p>
                     </div>
 
                     <Carrossel
                       className="galeria-guias"
                       label="Guias para o mecânico"
                     >
-                    <a
-                      className="galeria-guia-card"
-                      href="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        src="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
-                        alt="Guia de Precificação de Serviços Elétricos"
-                      />
-                      <h3>Guia de precificação</h3>
-                      <span>Ver material</span>
-                    </a>
-
-                    <a
-                      className="galeria-guia-card"
-                      href="/images/mecanico/Guia%20para%20me%C3%A2nicos.pdf"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        className="capa-guia-mecanicos"
-                        src="/images/mecanico/Guia%20para%20Mec%C3%A2nicos%20de%20Scooters%20El%C3%A9tricas.png"
-                        alt="Guia para Mecânicos de Scooters Elétricas"
-                      />
-                      <h3>Guia para mecânicos</h3>
-                      <span>Abrir catálogo</span>
-                    </a>
-
-                    <a
-                      className="galeria-guia-card"
-                      href="/images/mecanico/codigo-erros.pdf"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        className="capa-codigos-erros"
-                        src="/images/mecanico/capa-codigos-erros.png"
-                        alt="Capa do catálogo Códigos e erros"
-                      />
-                      <h3>Códigos e erros</h3>
-                      <span>Abrir catálogo</span>
-                    </a>
-
-                    <a
-                      className="galeria-guia-card"
-                      href="/images/mecanico/How%20to%20Use%20This%20Guide.png"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <img
-                        src="/images/mecanico/How%20to%20Use%20This%20Guide.png"
-                        alt="Orientações de uso do guia"
-                      />
-                      <h3>Como usar o guia</h3>
-                      <span>Ver material</span>
-                    </a>
-
-                    {GUIAS_PDF.map(({ titulo, arquivo, capa }) => (
                       <a
                         className="galeria-guia-card"
-                        href={`/images/pdf/${arquivo}`}
-                        key={arquivo}
+                        href="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
                         target="_blank"
                         rel="noreferrer"
                       >
                         <img
-                          src={`/images/pdf/capas/${capa}`}
-                          alt={`Capa: ${titulo}`}
+                          src="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
+                          alt="Guia de Precificação de Serviços Elétricos"
                         />
-                        <h3>{titulo}</h3>
-                        <span>Abrir PDF</span>
+                        <h3>Guia de precificação</h3>
+                        <span>Ver material</span>
                       </a>
-                    ))}
+
+                      <a
+                        className="galeria-guia-card"
+                        href="/images/mecanico/Guia%20para%20me%C3%A2nicos.pdf"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <img
+                          className="capa-guia-mecanicos"
+                          src="/images/mecanico/Guia%20para%20Mec%C3%A2nicos%20de%20Scooters%20El%C3%A9tricas.png"
+                          alt="Guia para Mecânicos de Scooters Elétricas"
+                        />
+                        <h3>Guia para mecânicos</h3>
+                        <span>Abrir catálogo</span>
+                      </a>
+
+                      <a
+                        className="galeria-guia-card"
+                        href="/images/mecanico/codigo-erros.pdf"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <img
+                          className="capa-codigos-erros"
+                          src="/images/mecanico/capa-codigos-erros.png"
+                          alt="Capa do catálogo Códigos e erros"
+                        />
+                        <h3>Códigos e erros</h3>
+                        <span>Abrir catálogo</span>
+                      </a>
+
+                      <a
+                        className="galeria-guia-card"
+                        href="/images/mecanico/How%20to%20Use%20This%20Guide.png"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <img
+                          src="/images/mecanico/How%20to%20Use%20This%20Guide.png"
+                          alt="Orientações de uso do guia"
+                        />
+                        <h3>Como usar o guia</h3>
+                        <span>Ver material</span>
+                      </a>
+
+                      {GUIAS_PDF.map(({ titulo, arquivo, capa }) => (
+                        <a
+                          className="galeria-guia-card"
+                          href={`/images/pdf/${arquivo}`}
+                          key={arquivo}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <img
+                            src={`/images/pdf/capas/${capa}`}
+                            alt={`Capa: ${titulo}`}
+                          />
+                          <h3>{titulo}</h3>
+                          <span>Abrir PDF</span>
+                        </a>
+                      ))}
                     </Carrossel>
                   </div>
                   <BibliotecaVideos />
                 </section>
               )}
 
-            {!ehMecanico && (
+            {!ehMecanico && (!ehCliente || abaCliente === "falhas") && (
               <form className="formulario" onSubmit={consultarCodigo}>
-              <label htmlFor="fabricante">Fabricante do veículo</label>
+                <label htmlFor="fabricante">Fabricante do veículo</label>
 
-              <select
-                id="fabricante"
-                value={fabricanteSelecionado}
-                onChange={(event) => {
-                  setFabricanteSelecionado(event.target.value);
-                  setModeloSelecionado("");
-                }}
-              >
-                <option value="">Selecione um fabricante</option>
+                <select
+                  id="fabricante"
+                  value={fabricanteSelecionado}
+                  onChange={(event) => {
+                    setFabricanteSelecionado(event.target.value);
+                    setModeloSelecionado("");
+                  }}
+                >
+                  <option value="">Selecione um fabricante</option>
 
-                {fabricantes.map((fabricante) => (
-                  <option key={fabricante.id} value={fabricante.id}>
-                    {fabricante.name}
-                  </option>
-                ))}
-              </select>
-
-              <label htmlFor="modelo">Modelo do veículo</label>
-
-              <select
-                id="modelo"
-                value={modeloSelecionado}
-                onChange={(event) => setModeloSelecionado(event.target.value)}
-                disabled={!fabricanteSelecionado}
-              >
-                <option value="">Selecione um modelo</option>
-
-                {modelos
-                  .filter(
-                    (modelo) =>
-                      String(modelo.manufacturer_id) ===
-                      String(fabricanteSelecionado),
-                  )
-                  .map((modelo) => (
-                    <option key={modelo.id} value={modelo.id}>
-                      {modelo.model_name}
+                  {fabricantes.map((fabricante) => (
+                    <option key={fabricante.id} value={fabricante.id}>
+                      {fabricante.name}
                     </option>
                   ))}
-              </select>
+                </select>
 
-              <label htmlFor="codigo">Qual é o código de erro?</label>
+                <label htmlFor="modelo">Modelo do veículo</label>
 
-              <div className="campo-pesquisa">
-                <input
-                  id="codigo"
-                  type="text"
-                  value={codigo}
-                  onChange={(event) => setCodigo(event.target.value)}
-                  placeholder="Ex.: E010"
-                  autoComplete="off"
-                  aria-describedby="ajuda-codigo"
-                />
+                <select
+                  id="modelo"
+                  value={modeloSelecionado}
+                  onChange={(event) => setModeloSelecionado(event.target.value)}
+                  disabled={!fabricanteSelecionado}
+                >
+                  <option value="">Selecione um modelo</option>
 
-                <button type="submit" disabled={carregando}>
-                  {carregando ? "Consultando..." : "Consultar código"}
-                </button>
-              </div>
+                  {modelos
+                    .filter(
+                      (modelo) =>
+                        String(modelo.manufacturer_id) ===
+                        String(fabricanteSelecionado),
+                    )
+                    .map((modelo) => (
+                      <option key={modelo.id} value={modelo.id}>
+                        {modelo.model_name}
+                      </option>
+                    ))}
+                </select>
 
-              <small id="ajuda-codigo">
-                Digite o código exibido no painel ou no sistema de diagnóstico.
-              </small>
+                <label htmlFor="codigo">Qual é o código de erro?</label>
+
+                <div className="campo-pesquisa">
+                  <input
+                    id="codigo"
+                    type="text"
+                    value={codigo}
+                    onChange={(event) => setCodigo(event.target.value)}
+                    placeholder="Ex.: E010"
+                    autoComplete="off"
+                    aria-describedby="ajuda-codigo"
+                  />
+
+                  <button type="submit" disabled={carregando}>
+                    {carregando ? "Consultando..." : "Consultar código"}
+                  </button>
+                </div>
+
+                <small id="ajuda-codigo">
+                  Digite o código exibido no painel ou no sistema de
+                  diagnóstico.
+                </small>
               </form>
             )}
-            {historico.length > 0 && (
+            {(!ehCliente || abaCliente === "consultas") && (
               <section className="historico-consultas">
                 <h2>Consultas recentes</h2>
 
-                <div className="lista-historico">
-                  {historico.map((item, indice) => (
-                    <article
-                      className="item-historico"
-                      key={`${item.codigo}-${item.fabricante}-${item.modelo}-${indice}`}
-                    >
-                      <div>
-                        <strong>{item.codigo}</strong>
-
-                        <p>{item.fabricante}</p>
-
-                        {item.modelo && <p>{item.modelo}</p>}
-
-                        <small>{item.data}</small>
-                      </div>
-                      <button
-                        type="button"
-                        disabled={carregando}
-                        onClick={() => {
-                          const fabricante = fabricantes.find(
-                            (fabricante) => fabricante.name === item.fabricante,
-                          );
-
-                          const modelo = item.modelo
-                            ? modelos.find(
-                                (modelo) =>
-                                  modelo.model_name === item.modelo &&
-                                  String(modelo.manufacturer_id) ===
-                                    String(fabricante?.id),
-                              )
-                            : undefined;
-
-                          const fabricanteId = fabricante
-                            ? String(fabricante.id)
-                            : "";
-                          const modeloId = modelo ? String(modelo.id) : "";
-
-                          setFabricanteSelecionado(fabricanteId);
-                          setModeloSelecionado(modeloId);
-                          setCodigo(item.codigo);
-
-                          consultarCodigo(null, item.codigo, {
-                            fabricanteId,
-                            modeloId,
-                          });
-                        }}
+                {historico.length > 0 ? (
+                  <div className="lista-historico">
+                    {historico.map((item, indice) => (
+                      <article
+                        className="item-historico"
+                        key={`${item.codigo}-${item.fabricante}-${item.modelo}-${indice}`}
                       >
-                        Consultar novamente
-                      </button>
-                    </article>
-                  ))}
-                </div>
+                        <div>
+                          <strong>{item.codigo}</strong>
+
+                          <p>{item.fabricante}</p>
+
+                          {item.modelo && <p>{item.modelo}</p>}
+
+                          <small>{item.data}</small>
+                        </div>
+                        <button
+                          type="button"
+                          disabled={carregando}
+                          onClick={() => {
+                            const fabricante = fabricantes.find(
+                              (fabricante) =>
+                                fabricante.name === item.fabricante,
+                            );
+
+                            const modelo = item.modelo
+                              ? modelos.find(
+                                  (modelo) =>
+                                    modelo.model_name === item.modelo &&
+                                    String(modelo.manufacturer_id) ===
+                                      String(fabricante?.id),
+                                )
+                              : undefined;
+
+                            const fabricanteId = fabricante
+                              ? String(fabricante.id)
+                              : "";
+                            const modeloId = modelo ? String(modelo.id) : "";
+
+                            setFabricanteSelecionado(fabricanteId);
+                            setModeloSelecionado(modeloId);
+                            setCodigo(item.codigo);
+
+                            consultarCodigo(null, item.codigo, {
+                              fabricanteId,
+                              modeloId,
+                            });
+                          }}
+                        >
+                          Consultar novamente
+                        </button>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p>Nenhuma consulta recente por enquanto.</p>
+                )}
               </section>
             )}
-            {erro && (
+            {(!ehCliente || abaCliente === "falhas") && erro && (
               <div className="mensagem erro" role="alert">
                 {erro}
               </div>
             )}
-            {sugestoes.length > 0 && (
-              <div className="sugestoes-codigos">
-                <p>Você quis dizer um destes códigos?</p>
+            {(!ehCliente || abaCliente === "falhas") &&
+              sugestoes.length > 0 && (
+                <div className="sugestoes-codigos">
+                  <p>Você quis dizer um destes códigos?</p>
 
-                <div className="lista-sugestoes">
-                  {sugestoes.map((sugestao) => (
-                    <button
-                      key={sugestao}
-                      type="button"
-                      onClick={() => {
-                        setCodigo(sugestao);
-                        setErro("");
-                        setSugestoes([]);
-                        consultarCodigo(null, sugestao);
-                      }}
-                    >
-                      {sugestao}
-                    </button>
-                  ))}
+                  <div className="lista-sugestoes">
+                    {sugestoes.map((sugestao) => (
+                      <button
+                        key={sugestao}
+                        type="button"
+                        onClick={() => {
+                          setCodigo(sugestao);
+                          setErro("");
+                          setSugestoes([]);
+                          consultarCodigo(null, sugestao);
+                        }}
+                      >
+                        {sugestao}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-            {resultado && (
+              )}
+            {(!ehCliente || abaCliente === "falhas") && resultado && (
               <section className="resultado" aria-live="polite">
                 <div className="resultado-topo">
                   <span className="etiqueta">RESULTADO DA CONSULTA</span>
@@ -1553,7 +1686,9 @@ function App() {
 
                   <p>
                     {(() => {
-                      const quantidadeFontes = (resultado.resultados || []).filter(
+                      const quantidadeFontes = (
+                        resultado.resultados || []
+                      ).filter(
                         (item) => item.source_title || item.source_url,
                       ).length;
 
@@ -1873,8 +2008,29 @@ function App() {
           )}
         </section>
       )}
-      {ehMecanico && telaAtual === "cadastros" && <CadastrosOficina />}
+      {ehMecanico && telaAtual === "cadastros" && (
+        <CadastrosOficina
+          key={abaCadastroInicial}
+          abaInicial={abaCadastroInicial}
+	  token={token}
+        />
+      )}
+      {usuarioLogado?.perfil === "admin" &&
+        usuarioLogado.deve_trocar_credenciais && (
+          <PrimeiroAcessoAdmin
+            token={token}
+            onFinalizado={(usuarioAtualizado) => {
+              localStorage.setItem(
+                "ediagnostico-usuario",
+                JSON.stringify(usuarioAtualizado),
+              );
+              setUsuarioLogado(usuarioAtualizado);
+              setTelaAtual("administracao");
+            }}
+          />
+        )}
       {(perfil === "admin" || usuarioLogado?.perfil === "admin") &&
+        !usuarioLogado?.deve_trocar_credenciais &&
         telaAtual === "administracao" && <Administrador token={token} />}
       {ehMecanico && telaAtual === "precificacao" && <Precificacao />}
 
@@ -1912,7 +2068,9 @@ function App() {
               className="aba-mecanico precificar"
               onClick={() => setTelaAtual("precificacao")}
             >
-              <span className="aba-icone" aria-hidden="true">R$</span>
+              <span className="aba-icone" aria-hidden="true">
+                R$
+              </span>
               <span className="aba-titulo">Precificar</span>
               <span className="aba-descricao">MO + materiais</span>
             </button>
@@ -1922,11 +2080,64 @@ function App() {
               className={`aba-mecanico orcamento ${abaTeste === "orcamento" ? "ativa" : ""}`}
               onClick={() => setAbaTeste("orcamento")}
             >
-              <span className="aba-icone" aria-hidden="true">▤</span>
+              <span className="aba-icone" aria-hidden="true">
+                ▤
+              </span>
               <span className="aba-titulo">Orçamento</span>
               <span className="aba-descricao">Montar proposta</span>
             </button>
+
+            <button
+              type="button"
+              className="aba-mecanico cadastrar-cliente"
+              onClick={() => {
+                setAbaCadastroInicial("clientes");
+                setMostrarCadastroInline(true);
+              }}
+            >
+              <span className="aba-icone" aria-hidden="true">
+                ♙
+              </span>
+              <span className="aba-titulo">Cadastrar cliente</span>
+              <span className="aba-descricao">
+                Registrar cliente da oficina
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className="aba-mecanico cadastrar-itens"
+              onClick={() => {
+                setAbaCadastroInicial("itens");
+                setMostrarCadastroInline(true);
+              }}
+            >
+              <span className="aba-icone" aria-hidden="true">
+                ⚙
+              </span>
+              <span className="aba-titulo">Cadastrar serviço/peças</span>
+              <span className="aba-descricao">Gerenciar serviços e peças</span>
+            </button>
           </div>
+
+          {mostrarCadastroInline && (
+            <section className="cadastro-inline">
+              <button
+                type="button"
+                className="fechar-cadastro"
+                onClick={() => setMostrarCadastroInline(false)}
+              >
+                Fechar cadastro ✕
+              </button>
+
+              <CadastrosOficina
+                key={abaCadastroInicial}
+                abaInicial={abaCadastroInicial}
+	        token={token}
+              />
+            </section>
+          )}
+
           <div className="orientacao-seguranca">
             <strong>Importante</strong>
             <p>
@@ -1939,130 +2150,132 @@ function App() {
             <section className="galeria-mecanico">
               <div className="moldura-carrossel">
                 <div className="galeria-cabecalho">
-                <span className="etiqueta">BIBLIOTECA TÉCNICA</span>
-                <h2>Códigos de diagnóstico</h2>
-                <p>
-                  Consulte os cards de referência para identificar códigos de
-                  falha.
-                </p>
+                  <span className="etiqueta">BIBLIOTECA TÉCNICA</span>
+                  <h2>Códigos de diagnóstico</h2>
+                  <p>
+                    Consulte os cards de referência para identificar códigos de
+                    falha.
+                  </p>
                 </div>
 
                 <Carrossel
                   className="galeria-codigos"
                   label="Códigos de diagnóstico"
                 >
-                {[
-                  { codigo: "P001", imagem: "/images/P001.png" },
-                  { codigo: "P002", imagem: "/images/P002.png" },
-                  { codigo: "P003", imagem: "/images/P003.png" },
-                  { codigo: "P004", imagem: "/images/P004.png" },
-                  { codigo: "P005", imagem: "/images/P005.png" },
-                  { codigo: "P006", imagem: "/images/P006.png" },
-                  { codigo: "P007", imagem: "/images/P007.png" },
-                  { codigo: "P008", imagem: "/images/P008.png" },
-                ].map((item) => (
-                  <button
-                    type="button"
-                    className="galeria-codigo-card"
-                    key={item.codigo}
-                    aria-label={`Ampliar slide do código ${item.codigo}`}
-                    onClick={() => setCodigoAmpliado(item)}
-                  >
-                    <img
-                      src={item.imagem}
-                      alt={`Card de diagnóstico ${item.codigo}`}
-                    />
-                    <h3>{item.codigo}</h3>
-                  </button>
-                ))}
+                  {[
+                    { codigo: "P001", imagem: "/images/P001.png" },
+                    { codigo: "P002", imagem: "/images/P002.png" },
+                    { codigo: "P003", imagem: "/images/P003.png" },
+                    { codigo: "P004", imagem: "/images/P004.png" },
+                    { codigo: "P005", imagem: "/images/P005.png" },
+                    { codigo: "P006", imagem: "/images/P006.png" },
+                    { codigo: "P007", imagem: "/images/P007.png" },
+                    { codigo: "P008", imagem: "/images/P008.png" },
+                  ].map((item) => (
+                    <button
+                      type="button"
+                      className="galeria-codigo-card"
+                      key={item.codigo}
+                      aria-label={`Ampliar slide do código ${item.codigo}`}
+                      onClick={() => setCodigoAmpliado(item)}
+                    >
+                      <img
+                        src={item.imagem}
+                        alt={`Card de diagnóstico ${item.codigo}`}
+                      />
+                      <h3>{item.codigo}</h3>
+                    </button>
+                  ))}
                 </Carrossel>
               </div>
 
               <div className="moldura-carrossel">
                 <div className="galeria-cabecalho galeria-guias-cabecalho">
-                <span className="etiqueta">MATERIAL DE APOIO</span>
-                <h2>Guias para o mecânico</h2>
-                <p>Materiais de consulta para apoiar os serviços da oficina.</p>
+                  <span className="etiqueta">MATERIAL DE APOIO</span>
+                  <h2>Guias para o mecânico</h2>
+                  <p>
+                    Materiais de consulta para apoiar os serviços da oficina.
+                  </p>
                 </div>
 
                 <Carrossel
                   className="galeria-guias"
                   label="Guias para o mecânico"
                 >
-                <a
-                  className="galeria-guia-card"
-                  href="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img
-                    src="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
-                    alt="Guia de Precificação de Serviços Elétricos"
-                  />
-                  <h3>Guia de precificação</h3>
-                  <span>Ver material</span>
-                </a>
-
-                <a
-                  className="galeria-guia-card"
-                  href="/images/mecanico/Guia%20para%20me%C3%A2nicos.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img
-                    className="capa-guia-mecanicos"
-                    src="/images/mecanico/Guia%20para%20Mec%C3%A2nicos%20de%20Scooters%20El%C3%A9tricas.png"
-                    alt="Capa do Guia para Mecânicos de Scooters Elétricas"
-                  />
-                  <h3>Guia para mecânicos</h3>
-                  <span>Abrir guia</span>
-                </a>
-
-                <a
-                  className="galeria-guia-card"
-                  href="/images/mecanico/codigo-erros.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img
-                    className="capa-codigos-erros"
-                    src="/images/mecanico/capa-codigos-erros.png"
-                    alt="Capa do catálogo Códigos e erros"
-                  />
-                  <h3>Códigos e erros</h3>
-                  <span>Abrir catálogo</span>
-                </a>
-
-                <a
-                  className="galeria-guia-card"
-                  href="/images/mecanico/How%20to%20Use%20This%20Guide.png"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img
-                    src="/images/mecanico/How%20to%20Use%20This%20Guide.png"
-                    alt="Orientações de uso do guia"
-                  />
-                  <h3>Como usar o guia</h3>
-                  <span>Ver material</span>
-                </a>
-
-                {GUIAS_PDF.map(({ titulo, arquivo, capa }) => (
                   <a
                     className="galeria-guia-card"
-                    href={`/images/pdf/${arquivo}`}
-                    key={arquivo}
+                    href="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
                     target="_blank"
                     rel="noreferrer"
                   >
                     <img
-                      src={`/images/pdf/capas/${capa}`}
-                      alt={`Capa: ${titulo}`}
+                      src="/images/mecanico/Guia%20de%20Precifica%C3%A7%C3%A3o%20de%20Servi%C3%A7os%20El%C3%A9tricos.png"
+                      alt="Guia de Precificação de Serviços Elétricos"
                     />
-                    <h3>{titulo}</h3>
-                    <span>Abrir PDF</span>
+                    <h3>Guia de precificação</h3>
+                    <span>Ver material</span>
                   </a>
-                ))}
+
+                  <a
+                    className="galeria-guia-card"
+                    href="/images/mecanico/Guia%20para%20me%C3%A2nicos.pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      className="capa-guia-mecanicos"
+                      src="/images/mecanico/Guia%20para%20Mec%C3%A2nicos%20de%20Scooters%20El%C3%A9tricas.png"
+                      alt="Capa do Guia para Mecânicos de Scooters Elétricas"
+                    />
+                    <h3>Guia para mecânicos</h3>
+                    <span>Abrir guia</span>
+                  </a>
+
+                  <a
+                    className="galeria-guia-card"
+                    href="/images/mecanico/codigo-erros.pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      className="capa-codigos-erros"
+                      src="/images/mecanico/capa-codigos-erros.png"
+                      alt="Capa do catálogo Códigos e erros"
+                    />
+                    <h3>Códigos e erros</h3>
+                    <span>Abrir catálogo</span>
+                  </a>
+
+                  <a
+                    className="galeria-guia-card"
+                    href="/images/mecanico/How%20to%20Use%20This%20Guide.png"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img
+                      src="/images/mecanico/How%20to%20Use%20This%20Guide.png"
+                      alt="Orientações de uso do guia"
+                    />
+                    <h3>Como usar o guia</h3>
+                    <span>Ver material</span>
+                  </a>
+
+                  {GUIAS_PDF.map(({ titulo, arquivo, capa }) => (
+                    <a
+                      className="galeria-guia-card"
+                      href={`/images/pdf/${arquivo}`}
+                      key={arquivo}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img
+                        src={`/images/pdf/capas/${capa}`}
+                        alt={`Capa: ${titulo}`}
+                      />
+                      <h3>{titulo}</h3>
+                      <span>Abrir PDF</span>
+                    </a>
+                  ))}
                 </Carrossel>
               </div>
               <BibliotecaVideos />
@@ -2269,10 +2482,6 @@ function App() {
                 </article>
               ))}
             </section>
-          )}
-
-          {abaTeste === "orcamento" && (
-            <Orcamento onPrecificar={() => setTelaAtual("precificacao")} />
           )}
         </section>
       )}
