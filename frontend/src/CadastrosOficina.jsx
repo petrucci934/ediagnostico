@@ -20,9 +20,11 @@ function moeda(valor) {
   });
 }
 
-function CadastrosOficina({ abaInicial = "clientes" }) {
+function CadastrosOficina({ abaInicial = "clientes", token }) {
   const [aba, setAba] = useState(abaInicial);
-  const [clientes, setClientes] = useState(() => lerLista(CHAVES.clientes));
+  const [clientes, setClientes] = useState([]);
+  const [carregandoClientes, setCarregandoClientes] = useState(true);
+  const [erroClientes, setErroClientes] = useState("");
   const [itens, setItens] = useState(() => lerLista(CHAVES.itens));
   const [clienteEditando, setClienteEditando] = useState("");
   const [itemEditando, setItemEditando] = useState("");
@@ -39,33 +41,105 @@ function CadastrosOficina({ abaInicial = "clientes" }) {
     preco: "",
   });
 
-  useEffect(
-    () => localStorage.setItem(CHAVES.clientes, JSON.stringify(clientes)),
-    [clientes],
-  );
+  useEffect(() => {
+    let ativo = true;
+
+    async function carregarClientes() {
+      setCarregandoClientes(true);
+      setErroClientes("");
+
+      try {
+        console.log("[Clientes] Iniciando carregamento", {
+          tokenPresente: Boolean(token),
+        });
+
+        const resposta = await fetch("/api/clientes", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.erro || "Não foi possível carregar os clientes.",
+          );
+        }
+
+        if (ativo) {
+          setClientes(dados.clientes || []);
+        }
+      } catch (erro) {
+        if (ativo) {
+          setErroClientes(erro.message);
+        }
+      } finally {
+        if (ativo) {
+          setCarregandoClientes(false);
+        }
+      }
+    }
+
+    carregarClientes();
+
+    return () => {
+      ativo = false;
+    };
+  }, [token]);
   useEffect(
     () => localStorage.setItem(CHAVES.itens, JSON.stringify(itens)),
     [itens],
   );
 
-  function salvarCliente(evento) {
+  async function salvarCliente(evento) {
     evento.preventDefault();
-    const registro = { ...formCliente, nome: formCliente.nome.trim() };
+
+    const registro = {
+      ...formCliente,
+      nome: formCliente.nome.trim(),
+    };
+
     if (!registro.nome) return;
-    if (clienteEditando) {
-      setClientes((lista) =>
-        lista.map((item) =>
-          item.id === clienteEditando ? { ...item, ...registro } : item,
-        ),
-      );
-    } else {
-      setClientes((lista) => [
-        { id: crypto.randomUUID(), ...registro },
-        ...lista,
-      ]);
+
+    try {
+      setErroClientes("");
+
+      if (clienteEditando) {
+        setErroClientes(
+          "A edição de clientes precisa ser conectada à rota de atualização da API.",
+        );
+        return;
+      }
+
+      const resposta = await fetch("/api/clientes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(registro),
+      });
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(dados.erro || "Não foi possível cadastrar o cliente.");
+      }
+
+      setClientes((lista) => [dados.cliente, ...lista]);
+
+      setFormCliente({
+        nome: "",
+        telefone: "",
+        email: "",
+        veiculo: "",
+      });
+
+      setClienteEditando("");
+    } catch (erro) {
+      setErroClientes(erro.message);
     }
-    setFormCliente({ nome: "", telefone: "", email: "", veiculo: "" });
-    setClienteEditando("");
   }
 
   function salvarItem(evento) {
@@ -119,6 +193,18 @@ function CadastrosOficina({ abaInicial = "clientes" }) {
           Serviços e peças ({itens.length})
         </button>
       </div>
+
+      {aba === "clientes" && (
+        <>
+          {carregandoClientes && <p>Carregando clientes...</p>}
+
+          {erroClientes && (
+            <p role="alert" className="mensagem-erro">
+              {erroClientes}
+            </p>
+          )}
+        </>
+      )}
 
       {aba === "clientes" ? (
         <>

@@ -3,11 +3,14 @@ import CampoSenha from "./CampoSenha";
 
 const clienteVazio = { nome: "", telefone: "", email: "", veiculo: "" };
 const mecanicoVazio = { nome: "", email: "", senha: "", ativo: true };
+const contatoWhatsAppVazio = { nome: "", telefone: "" };
 
 function Administrador({ token }) {
   const [aba, setAba] = useState("mecanicos");
   const [mecanicos, setMecanicos] = useState([]);
   const [clientes, setClientes] = useState([]);
+  const [contatosWhatsApp, setContatosWhatsApp] = useState([]);
+  const [formWhatsApp, setFormWhatsApp] = useState(contatoWhatsAppVazio);
   const [formMecanico, setFormMecanico] = useState(mecanicoVazio);
   const [formCliente, setFormCliente] = useState(clienteVazio);
   const [mecanicoEditando, setMecanicoEditando] = useState(null);
@@ -38,12 +41,15 @@ function Administrador({ token }) {
     setCarregando(true);
     setErro("");
     try {
-      const [dadosMecanicos, dadosClientes] = await Promise.all([
+      const [dadosMecanicos, dadosClientes, dadosWhatsApp] = await Promise.all([
         requisicao("/api/admin/mecanicos"),
         requisicao("/api/admin/clientes"),
+        requisicao("/api/admin/whatsapp-contatos"),
       ]);
+
       setMecanicos(dadosMecanicos.mecanicos || []);
       setClientes(dadosClientes.clientes || []);
+      setContatosWhatsApp(dadosWhatsApp.contatos || []);
     } catch (falha) {
       setErro(falha.message);
     } finally {
@@ -97,6 +103,23 @@ function Administrador({ token }) {
     }
   }
 
+  async function salvarContatoWhatsApp(evento) {
+    evento.preventDefault();
+    setErro("");
+
+    try {
+      await requisicao("/api/admin/whatsapp-contatos", {
+        method: "POST",
+        body: JSON.stringify(formWhatsApp),
+      });
+
+      setFormWhatsApp(contatoWhatsAppVazio);
+      await carregar();
+    } catch (falha) {
+      setErro(falha.message);
+    }
+  }
+
   async function alternarAtivo(mecanico) {
     setErro("");
     try {
@@ -123,6 +146,27 @@ function Administrador({ token }) {
         method: "DELETE",
       });
       setClientes((lista) => lista.filter((item) => item.id !== cliente.id));
+    } catch (falha) {
+      setErro(falha.message);
+    }
+  }
+  async function excluirContatoWhatsApp(contato) {
+    if (
+      !window.confirm(`Deseja excluir o contato de WhatsApp ${contato.nome}?`)
+    ) {
+      return;
+    }
+
+    setErro("");
+
+    try {
+      await requisicao(`/api/admin/whatsapp-contatos/${contato.id}`, {
+        method: "DELETE",
+      });
+
+      setContatosWhatsApp((lista) =>
+        lista.filter((item) => item.id !== contato.id),
+      );
     } catch (falha) {
       setErro(falha.message);
     }
@@ -155,6 +199,15 @@ function Administrador({ token }) {
           onClick={() => setAba("clientes")}
         >
           Clientes ({clientes.length})
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={aba === "whatsapp"}
+          className={aba === "whatsapp" ? "ativa" : ""}
+          onClick={() => setAba("whatsapp")}
+        >
+          WhatsApp ({contatosWhatsApp.length})
         </button>
       </div>
       {erro && (
@@ -290,7 +343,7 @@ function Administrador({ token }) {
             )}
           </div>
         </>
-      ) : (
+      ) : aba === "clientes" ? (
         <>
           <form className="cadastro-formulario" onSubmit={salvarCliente}>
             <h2>{clienteEditando ? "Editar cliente" : "Cadastrar cliente"}</h2>
@@ -394,6 +447,82 @@ function Administrador({ token }) {
               ))
             ) : (
               <p className="cadastro-vazio">Nenhum cliente cadastrado.</p>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
+          <form
+            className="cadastro-formulario"
+            onSubmit={salvarContatoWhatsApp}
+          >
+            <h2>Cadastrar contato de WhatsApp</h2>
+
+            <label>
+              Nome
+              <input
+                required
+                maxLength={100}
+                value={formWhatsApp.nome}
+                onChange={(e) =>
+                  setFormWhatsApp({
+                    ...formWhatsApp,
+                    nome: e.target.value,
+                  })
+                }
+                placeholder="Nome do contato"
+              />
+            </label>
+
+            <label>
+              Telefone com DDD
+              <input
+                required
+                type="tel"
+                inputMode="numeric"
+                maxLength={20}
+                value={formWhatsApp.telefone}
+                onChange={(e) =>
+                  setFormWhatsApp({
+                    ...formWhatsApp,
+                    telefone: e.target.value,
+                  })
+                }
+                placeholder="(11) 99999-9999"
+              />
+            </label>
+
+            <div className="cadastro-acoes">
+              <button type="submit">Adicionar contato</button>
+            </div>
+          </form>
+
+          <div className="cadastro-lista">
+            <h2>Contatos de WhatsApp</h2>
+
+            {contatosWhatsApp.length ? (
+              contatosWhatsApp.map((contato) => (
+                <article className="cadastro-registro" key={contato.id}>
+                  <div>
+                    <h3>{contato.nome}</h3>
+                    <p>{contato.telefone}</p>
+                  </div>
+
+                  <div className="cadastro-acoes">
+                    <button
+                      type="button"
+                      className="perigo"
+                      onClick={() => excluirContatoWhatsApp(contato)}
+                    >
+                      Excluir
+                    </button>
+                  </div>
+                </article>
+              ))
+            ) : (
+              <p className="cadastro-vazio">
+                Nenhum contato de WhatsApp cadastrado.
+              </p>
             )}
           </div>
         </>

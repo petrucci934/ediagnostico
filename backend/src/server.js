@@ -381,6 +381,205 @@ app.delete("/api/admin/clientes/:id", autenticarToken, exigirAdmin, async (req, 
   }
 });
 
+
+app.put("/api/clientes/:id", autenticarToken, exigirEditor, async (req, res) => {
+  const nome =
+    typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+
+  if (!nome) {
+    return res.status(400).json({ erro: "Informe o nome do cliente." });
+  }
+
+  const texto = (valor) =>
+    typeof valor === "string" ? valor.trim() : "";
+
+  try {
+    const resultado = await db.query(
+      `UPDATE clientes
+       SET nome = $1, telefone = $2, email = $3, veiculo = $4
+       WHERE id = $5
+       RETURNING *`,
+      [
+        nome,
+        texto(req.body.telefone) || null,
+        texto(req.body.email).toLowerCase() || null,
+        texto(req.body.veiculo) || null,
+        req.params.id,
+      ],
+    );
+
+    if (!resultado.rowCount) {
+      return res.status(404).json({ erro: "Cliente não encontrado." });
+    }
+
+    res.json({ cliente: resultado.rows[0] });
+  } catch (erro) {
+    console.error("Erro ao atualizar cliente:", erro.message);
+    res.status(500).json({ erro: "Não foi possível atualizar o cliente." });
+  }
+});
+
+app.delete("/api/clientes/:id", autenticarToken, exigirEditor, async (req, res) => {
+  try {
+    const resultado = await db.query(
+      "DELETE FROM clientes WHERE id = $1",
+      [req.params.id],
+    );
+
+    if (!resultado.rowCount) {
+      return res.status(404).json({ erro: "Cliente não encontrado." });
+    }
+
+    res.status(204).end();
+  } catch (erro) {
+    console.error("Erro ao excluir cliente:", erro.message);
+    res.status(500).json({ erro: "Não foi possível excluir o cliente." });
+  }
+});
+
+
+/* Gestão dos contatos de WhatsApp */
+
+// Listar contatos no painel administrativo.
+app.get(
+  "/api/admin/whatsapp-contatos",
+  autenticarToken,
+  exigirAdmin,
+  async (_req, res) => {
+    try {
+      const resultado = await db.query(
+        `SELECT id, nome, telefone, ativo, criado_em
+         FROM whatsapp_contatos
+         ORDER BY nome, id`
+      );
+
+      return res.json({ contatos: resultado.rows });
+    } catch (erro) {
+      console.error("Erro ao listar contatos de WhatsApp:", erro.message);
+      return res.status(500).json({
+        erro: "Não foi possível listar os contatos de WhatsApp.",
+      });
+    }
+  }
+);
+
+// Cadastrar um contato.
+app.post(
+  "/api/admin/whatsapp-contatos",
+  autenticarToken,
+  exigirAdmin,
+  async (req, res) => {
+    const nome =
+      typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+
+    const telefoneInformado =
+      typeof req.body?.telefone === "string"
+        ? req.body.telefone.trim()
+        : "";
+
+    if (!nome || nome.length > 100 || !telefoneInformado) {
+      return res.status(400).json({
+        erro: "Informe um nome de até 100 caracteres e um telefone.",
+      });
+    }
+
+    // Aceita telefone com máscara, DDD e código do Brasil opcional.
+    let telefone = telefoneInformado.replace(/\D/g, "");
+
+    if (telefone.length === 10 || telefone.length === 11) {
+      telefone = `55${telefone}`;
+    } else if (
+      !telefone.startsWith("55") ||
+      ![12, 13].includes(telefone.length)
+    ) {
+      return res.status(400).json({
+        erro: "Informe um telefone brasileiro válido, com DDD.",
+      });
+    }
+
+    try {
+      const resultado = await db.query(
+        `INSERT INTO whatsapp_contatos (nome, telefone)
+         VALUES ($1, $2)
+         RETURNING id, nome, telefone, ativo, criado_em`,
+        [nome, telefone]
+      );
+
+      return res.status(201).json({
+        mensagem: "Contato de WhatsApp cadastrado com sucesso.",
+        contato: resultado.rows[0],
+      });
+    } catch (erro) {
+      if (erro.code === "23505") {
+        return res.status(409).json({
+          erro: "Este telefone já está cadastrado.",
+        });
+      }
+
+      console.error("Erro ao cadastrar contato de WhatsApp:", erro.message);
+      return res.status(500).json({
+        erro: "Não foi possível cadastrar o contato de WhatsApp.",
+      });
+    }
+  }
+);
+
+// Excluir um contato.
+app.delete(
+  "/api/admin/whatsapp-contatos/:id",
+  autenticarToken,
+  exigirAdmin,
+  async (req, res) => {
+    const id = Number(req.params.id);
+
+    if (!Number.isSafeInteger(id) || id <= 0) {
+      return res.status(400).json({
+        erro: "ID do contato inválido.",
+      });
+    }
+
+    try {
+      const resultado = await db.query(
+        "DELETE FROM whatsapp_contatos WHERE id = $1 RETURNING id",
+        [id]
+      );
+
+      if (!resultado.rowCount) {
+        return res.status(404).json({
+          erro: "Contato de WhatsApp não encontrado.",
+        });
+      }
+
+      return res.status(204).end();
+    } catch (erro) {
+      console.error("Erro ao excluir contato de WhatsApp:", erro.message);
+      return res.status(500).json({
+        erro: "Não foi possível excluir o contato de WhatsApp.",
+      });
+    }
+  }
+);
+
+// Listar somente os contatos ativos para o botão público.
+app.get("/api/whatsapp-contatos", async (_req, res) => {
+  try {
+    const resultado = await db.query(
+      `SELECT nome, telefone
+       FROM whatsapp_contatos
+       WHERE ativo = TRUE
+       ORDER BY nome, id`
+    );
+
+    return res.json({ contatos: resultado.rows });
+  } catch (erro) {
+    console.error("Erro ao consultar contatos públicos:", erro.message);
+    return res.status(500).json({
+      erro: "Não foi possível consultar os contatos de WhatsApp.",
+    });
+  }
+});
+
+
 // Teste da API
 app.get("/", (req, res) => {
   res.json({
