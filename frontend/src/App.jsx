@@ -14,6 +14,7 @@ import {
   CircleDollarSign,
   Search,
   History,
+  MessageCircle,
 } from "lucide-react";
 import Precificacao from "./Precificacao";
 import Orcamento from "./Orcamento";
@@ -611,6 +612,127 @@ const GUIAS_PDF = [
     capa: "manual-completo-reparos.jpg",
   },
 ];
+
+function BotaoWhatsApp() {
+  const [contatos, setContatos] = useState([]);
+  const [aberto, setAberto] = useState(false);
+  const [carregado, setCarregado] = useState(false);
+
+  useEffect(() => {
+    let cancelado = false;
+
+    async function carregarContatos() {
+      try {
+        const resposta = await fetch("/api/whatsapp-contatos");
+
+        if (!resposta.ok) {
+          throw new Error("Não foi possível carregar os contatos.");
+        }
+
+        const dados = await resposta.json();
+
+        if (!cancelado) {
+          setContatos(Array.isArray(dados.contatos) ? dados.contatos : []);
+        }
+      } catch (erro) {
+        console.error("Erro ao carregar contatos do WhatsApp:", erro);
+      } finally {
+        if (!cancelado) setCarregado(true);
+      }
+    }
+
+    carregarContatos();
+
+    return () => {
+      cancelado = true;
+    };
+  }, []);
+
+  function abrirConversa(contato) {
+    const telefone = String(contato.telefone || "").replace(/\D/g, "");
+
+    if (!telefone) return;
+
+    const mensagem = encodeURIComponent(
+      "Olá! Gostaria de informações sobre o E-Diagnóstico.",
+    );
+
+    window.open(
+      `https://wa.me/${telefone}?text=${mensagem}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+
+    setAberto(false);
+  }
+
+  if (!carregado || contatos.length === 0) return null;
+
+  return (
+    <div className="whatsapp-flutuante">
+      {aberto && (
+        <section className="whatsapp-painel" aria-label="Contatos de WhatsApp">
+          <div className="whatsapp-painel-cabecalho">
+            <strong>Fale conosco</strong>
+            <button
+              type="button"
+              aria-label="Fechar contatos"
+              onClick={() => setAberto(false)}
+            >
+              ×
+            </button>
+          </div>
+
+          <p>Escolha um contato para iniciar a conversa:</p>
+
+          <ul>
+            {contatos.map((contato) => (
+              <li key={contato.id ?? contato.telefone}>
+                <button
+                  type="button"
+                  className="whatsapp-contato"
+                  onClick={() => abrirConversa(contato)}
+                >
+                  <span className="whatsapp-contato-icone">◉</span>
+                  <span>{contato.nome}</span>
+                  <span aria-hidden="true">›</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <button
+        type="button"
+        className="whatsapp-botao"
+        aria-label={
+          aberto ? "Fechar contatos do WhatsApp" : "Fale conosco pelo WhatsApp"
+        }
+        aria-expanded={aberto}
+        onClick={() => setAberto((valor) => !valor)}
+      >
+        {aberto ? (
+          <span className="whatsapp-fechar">×</span>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 32"
+            width="32"
+            height="32"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              fill="currentColor"
+              d="M16 2.7a13.1 13.1 0 0 0-11.2 20L3 29.3l6.8-1.8A13.1 13.1 0 1 0 16 2.7Zm0 23.8a10.7 10.7 0 0 1-5.4-1.5l-.4-.2-4 1.1 1.1-3.9-.3-.4A10.7 10.7 0 1 1 16 26.5Zm5.9-8c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.2-.3.2-.6.1a8.8 8.8 0 0 1-2.6-1.6 9.8 9.8 0 0 1-1.8-2.2c-.2-.3 0-.5.2-.7l.5-.6c.2-.2.2-.4.3-.6s0-.4 0-.6-.7-1.7-1-2.3-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.2-1.2 2.9 1.2 3.3 1.4 3.5 2.4 3.8 5.9 5.2c.8.3 1.4.5 2 .6.8.2 1.5.2 2 .1.6-.1 1.9-.8 2.1-1.5s.3-1.3.2-1.5-.3-.2-.6-.4Z"
+            />
+          </svg>
+        )}
+      </button>
+    </div>
+  );
+}
 
 function App() {
   const [codigo, setCodigo] = useState("");
@@ -1800,7 +1922,11 @@ function App() {
               required
             />
 
-            <button type="submit">Cadastrar atendimento</button>
+            <button type="submit" className="btn-cadastrar-atendimento">
+              <span className="icone-cadastro">✓</span>
+              Cadastrar atendimento
+              <span className="seta-cadastro">→</span>
+            </button>
           </form>
 
           {erroAtendimentos && <p role="alert">{erroAtendimentos}</p>}
@@ -2012,7 +2138,7 @@ function App() {
         <CadastrosOficina
           key={abaCadastroInicial}
           abaInicial={abaCadastroInicial}
-	  token={token}
+          token={token}
         />
       )}
       {usuarioLogado?.perfil === "admin" &&
@@ -2069,7 +2195,21 @@ function App() {
               onClick={() => setTelaAtual("precificacao")}
             >
               <span className="aba-icone" aria-hidden="true">
-                R$
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8" />
+                  <path d="M12 6v12" />
+                </svg>
               </span>
               <span className="aba-titulo">Precificar</span>
               <span className="aba-descricao">MO + materiais</span>
@@ -2089,18 +2229,15 @@ function App() {
 
             <button
               type="button"
-              className="aba-mecanico cadastrar-cliente"
-              onClick={() => {
-                setAbaCadastroInicial("clientes");
-                setMostrarCadastroInline(true);
-              }}
+              className="aba-mecanico historico-atendimentos"
+              onClick={() => setTelaAtual("atendimentos")}
             >
               <span className="aba-icone" aria-hidden="true">
-                ♙
+                ▤
               </span>
-              <span className="aba-titulo">Cadastrar cliente</span>
+              <span className="aba-titulo">Histórico de atendimentos</span>
               <span className="aba-descricao">
-                Registrar cliente da oficina
+                Consultar atendimentos registrados
               </span>
             </button>
 
@@ -2127,13 +2264,14 @@ function App() {
                 className="fechar-cadastro"
                 onClick={() => setMostrarCadastroInline(false)}
               >
-                Fechar cadastro ✕
+                <span aria-hidden="true">←</span>
+                Voltar ao menu
               </button>
 
               <CadastrosOficina
                 key={abaCadastroInicial}
                 abaInicial={abaCadastroInicial}
-	        token={token}
+                token={token}
               />
             </section>
           )}
@@ -2506,6 +2644,7 @@ function App() {
           Desenvolvido por Petrucci Carvalho
         </p>
       </footer>
+      <BotaoWhatsApp />
     </main>
   );
 }

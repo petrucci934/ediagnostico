@@ -6083,7 +6083,8 @@ textarea {
   color: #ffffff;
 }
 
-.referencia-precos-neon > summary.cabecalho-precos-neon::-webkit-details-marker {
+.referencia-precos-neon
+  > summary.cabecalho-precos-neon::-webkit-details-marker {
   display: none;
 }
 
@@ -6121,4 +6122,288 @@ textarea {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* Botão flutuante de contato pelo WhatsApp */
+.whatsapp-flutuante {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.whatsapp-botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #20c967;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 25%);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.whatsapp-botao:hover {
+  background: #16ad55;
+  transform: translateY(-2px);
+}
+
+.whatsapp-botao:focus-visible,
+.whatsapp-contato:focus-visible {
+  outline: 3px solid #155eef;
+  outline-offset: 3px;
+}
+
+.whatsapp-painel {
+  width: min(340px, calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid #dce5e8;
+  border-radius: 16px;
+  background: #fff;
+  color: #172b25;
+  box-shadow: 0 10px 35px rgb(0 0 0 / 22%);
+}
+
+.whatsapp-painel-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #128c50;
+  color: #fff;
+}
+
+.whatsapp-painel-cabecalho strong {
+  font-size: 1.05rem;
+}
+
+.whatsapp-painel-cabecalho button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.whatsapp-painel > p {
+  margin: 16px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.whatsapp-painel ul {
+  margin: 0;
+  padding: 0 12px 12px;
+  list-style: none;
+}
+
+.whatsapp-painel li + li {
+  border-top: 1px solid #e7ece9;
+}
+
+.whatsapp-contato {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 8px;
+  border: 0;
+  background: transparent;
+  color: #172b25;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.whatsapp-contato:hover {
+  background: #effaf3;
+}
+
+.whatsapp-contato span:nth-child(2) {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.whatsapp-contato-icone {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: #dcf8e6;
+  color: #128c50;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 600px) {
+  .whatsapp-flutuante {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .whatsapp-botao {
+    min-height: 52px;
+    padding: 0 16px;
+  }
+}
+.whatsapp-botao {
+  width: 60px;
+  height: 60px;
+  min-height: 60px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 25%);
+  cursor: pointer;
+}
+
+.whatsapp-botao:hover {
+  background: #20bd5a;
+  transform: scale(1.05);
+}
+
+.whatsapp-botao svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.whatsapp-fechar {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.fechar-cadastro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  margin: 22px auto;
+  padding: 0 22px;
+  border: 1px solid #3b82f6;
+  border-radius: 10px;
+  background: #17263b;
+  color: #e5edf8;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.fechar-cadastro:hover {
+  background: #203a5c;
+  border-color: #60a5fa;
+  transform: translateY(-2px);
+}
+
+.fechar-cadastro:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+.fechar-cadastro span {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* Botão principal: cadastrar atendimento */
+.principal form .btn-cadastrar-atendimento {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 18px;
+
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: #ffffff;
+  border: 1px solid #22c55e;
+  border-radius: 10px;
+
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgb(22 163 74 / 20%);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.principal form .btn-cadastrar-atendimento:hover {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 6px 16px rgb(22 163 74 / 30%);
+  transform: translateY(-2px);
+}
+
+.principal form .btn-cadastrar-atendimento:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgb(22 163 74 / 20%);
+}
+
+.principal form .btn-cadastrar-atendimento:focus-visible {
+  outline: 3px solid #86efac;
+  outline-offset: 3px;
+}
+
+.principal form .btn-cadastrar-atendimento:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.principal form .btn-cadastrar-atendimento .icone-cadastro,
+.principal form .btn-cadastrar-atendimento .seta-cadastro {
+  font-size: 18px;
+  line-height: 1;
+}
+/* Card Histórico de atendimentos */
+.aba-mecanico.historico-atendimentos {
+  background: #163746;
+  color: #67e8f9;
+  border: 1px solid #28718a;
+}
+
+.aba-mecanico.historico-atendimentos .aba-titulo {
+  color: #67e8f9;
+}
+
+.aba-mecanico.historico-atendimentos .aba-descricao {
+  color: #a5f3fc;
+}
+
+.aba-mecanico.historico-atendimentos:hover {
+  background: #1b4658;
+  border-color: #38bdf8;
 }
