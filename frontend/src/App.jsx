@@ -1142,13 +1142,19 @@ function App() {
           <span>Início</span>
         </button>
 
-        {ehMecanico && (
-          <div className="perfil-cabecalho">
-            <UserRound size={18} aria-hidden="true" />
-            <span>Mecânico</span>
-            <ChevronDown size={15} aria-hidden="true" />
-          </div>
-        )}
+        <div className="perfil-cabecalho">
+          <UserRound size={18} aria-hidden="true" />
+          <span>
+            {ehMecanico
+              ? "Mecânico"
+              : ehCliente
+                ? "Cliente"
+                : perfil === "admin" || usuarioLogado?.perfil === "admin"
+                  ? "Administrador"
+                  : "Usuário"}
+          </span>
+          <ChevronDown size={15} aria-hidden="true" />
+        </div>
 
         <button
           type="button"
