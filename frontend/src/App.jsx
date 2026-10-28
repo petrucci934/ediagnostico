@@ -766,6 +766,7 @@ function App() {
   const [filtroStatus, setFiltroStatus] = useState("todos");
   const [atendimentos, setAtendimentos] = useState([]);
   const [menuAberto, setMenuAberto] = useState(false);
+  const [menuPerfilAberto, setMenuPerfilAberto] = useState(false);
   const [carregandoAtendimentos, setCarregandoAtendimentos] = useState(false);
   const [erroAtendimentos, setErroAtendimentos] = useState("");
   const [abaTeste, setAbaTeste] = useState("biblioteca");
@@ -1142,18 +1143,74 @@ function App() {
           <span>Início</span>
         </button>
 
-        <div className="perfil-cabecalho">
-          <UserRound size={18} aria-hidden="true" />
-          <span>
-            {ehMecanico
-              ? "Mecânico"
-              : ehCliente
-                ? "Cliente"
-                : perfil === "admin" || usuarioLogado?.perfil === "admin"
-                  ? "Administrador"
-                  : "Usuário"}
-          </span>
-          <ChevronDown size={15} aria-hidden="true" />
+        <div className="seletor-perfil-cabecalho">
+          <button
+            type="button"
+            className="perfil-cabecalho"
+            aria-label="Trocar perfil"
+            aria-expanded={menuPerfilAberto}
+            aria-controls="menu-troca-perfil"
+            onClick={() => setMenuPerfilAberto(!menuPerfilAberto)}
+          >
+            <UserRound size={18} aria-hidden="true" />
+            <span>
+              {{
+                mecanico: "Mecânico",
+                cliente: "Cliente",
+                admin: "Administrador",
+                revisor: "Supervisor",
+                supervisor: "Supervisor",
+              }[
+                usuarioLogado?.perfil ||
+                perfil ||
+                perfilEscolhido
+              ] || "Usuário"}
+            </span>
+            <ChevronDown size={15} aria-hidden="true" />
+          </button>
+
+          {menuPerfilAberto && (
+            <div
+              id="menu-troca-perfil"
+              className="menu-troca-perfil"
+            >
+              {[
+                { valor: "admin", texto: "Administrador" },
+                { valor: "cliente", texto: "Cliente" },
+                { valor: "mecanico", texto: "Mecânico" },
+                { valor: "revisor", texto: "Supervisor" },
+              ].map((opcao) => (
+                <button
+                  key={opcao.valor}
+                  type="button"
+                  onClick={() => {
+                    localStorage.removeItem("ediagnostico-token");
+                    localStorage.removeItem("ediagnostico-usuario");
+
+                    setToken("");
+                    setUsuarioLogado(null);
+                    setPerfil("");
+                    setPerfilEscolhido(opcao.valor);
+                    setEmailLogin("");
+                    setSenhaLogin("");
+                    setErroLogin("");
+                    setTelaAtual("diagnostico");
+                    setResultado(null);
+                    setErro("");
+                    setSugestoes([]);
+                    setProcedimentos([]);
+                    setAtendimentos([]);
+                    setErroAtendimentos("");
+                    setTestesTecnicos([]);
+                    setMenuAberto(false);
+                    setMenuPerfilAberto(false);
+                  }}
+                >
+                  {opcao.texto}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <button
@@ -1250,34 +1307,6 @@ function App() {
                 Administrador
               </button>
             )}
-          {(perfil || perfilEscolhido === "cliente") && (
-            <button
-              type="button"
-              onClick={() => {
-                localStorage.removeItem("ediagnostico-token");
-                localStorage.removeItem("ediagnostico-usuario");
-
-                setToken("");
-                setUsuarioLogado(null);
-                setPerfil("");
-                setPerfilEscolhido("");
-                setEmailLogin("");
-                setSenhaLogin("");
-                setErroLogin("");
-                setTelaAtual("diagnostico");
-                setResultado(null);
-                setErro("");
-                setSugestoes([]);
-                setProcedimentos([]);
-                setAtendimentos([]);
-                setErroAtendimentos("");
-                setTestesTecnicos([]);
-                setMenuAberto(false);
-              }}
-            >
-              Trocar perfil
-            </button>
-          )}
         </nav>
       </header>
 
