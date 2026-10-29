@@ -1176,10 +1176,6 @@ h1 span {
   min-height: 110px;
   resize: vertical;
 }
-.principal form textarea {
-  min-height: 110px;
-  resize: vertical;
-}
 
 .lista-atendimentos {
   display: grid;
@@ -1287,14 +1283,6 @@ button.botao-atualizar:disabled {
 
 /* Melhor adaptação para celulares */
 @media (max-width: 600px) {
-  .lista-atendimentos .filtros-atendimentos {
-    gap: 5px;
-  }
-
-  .lista-atendimentos button {
-    padding: 9px 11px;
-    font-size: 0.85rem;
-  }
 }
 
 /* Filtro de atendimento selecionado */
@@ -1344,11 +1332,6 @@ button.botao-atualizar:disabled {
   border-color: #3b82f6;
   font-weight: 600;
   box-shadow: 0 3px 10px rgb(59 130 246 / 25%);
-}
-
-.filtros-atendimentos button.filtro-ativo:hover {
-  background: #2563eb;
-  border-color: #2563eb;
 }
 
 @media (max-width: 600px) {
@@ -1560,19 +1543,10 @@ select option {
   }
 }
 
-.campo-status label {
-  color: #cbd5e1;
-  font-size: 13px;
-}
-
 @media (max-width: 600px) {
   .lista-atendimentos article.card-atendimento {
     padding: 15px;
     border-radius: 12px;
-  }
-
-  .lista-atendimentos article.card-atendimento h3 {
-    font-size: 16px;
   }
 
   .campo-status {
@@ -2479,14 +2453,6 @@ select option {
   border-color: var(--border);
 }
 
-:root[data-tema="light"] input,
-:root[data-tema="light"] select,
-:root[data-tema="light"] textarea {
-  background: #ffffff;
-  color: #172033;
-  border-color: #cbd5e1;
-}
-
 :root[data-tema="light"] input::placeholder,
 :root[data-tema="light"] textarea::placeholder {
   color: #64748b;
@@ -2942,10 +2908,6 @@ select option {
   margin: 0;
 }
 
-.informacoes div {
-  min-width: 0;
-}
-
 .informacoes dt {
   margin-bottom: 5px;
   color: #748176;
@@ -3126,14 +3088,6 @@ select option {
   border-radius: 12px;
 }
 
-.imagem-manual img {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
 .card-titulo h2 {
   color: #14251b;
   overflow-wrap: anywhere;
@@ -3197,11 +3151,6 @@ select option {
   .card-diagnostico-corpo {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .painel-status {
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 650px) {
@@ -3217,11 +3166,6 @@ select option {
   .card-diagnostico-corpo {
     grid-template-columns: minmax(0, 1fr);
     padding: 12px;
-  }
-
-  .painel-status {
-    grid-column: auto;
-    grid-template-columns: minmax(0, 1fr);
   }
 
   .informacoes {
@@ -4097,33 +4041,7 @@ select option {
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
-.abas-mecanico > .aba-mecanico.precificar {
-  background: #29351e;
-  color: #b7f36b;
-}
-
-.abas-mecanico > .aba-mecanico.precificar:hover {
-  background: #354628;
-}
-
-.abas-mecanico > .aba-mecanico.precificar .aba-icone {
-  font-size: 18px;
-  font-weight: 800;
-}
-
 @media (max-width: 480px) {
-  .abas-mecanico > .aba-mecanico {
-    min-height: 88px;
-    padding-inline: 4px;
-  }
-
-  .abas-mecanico .aba-titulo {
-    font-size: 13px;
-  }
-
-  .abas-mecanico .aba-descricao {
-    font-size: 10px;
-  }
 }
 
 .carrossel03-wrapper .galeria-codigo-card {
@@ -5053,24 +4971,10 @@ select option {
   font-size: 22px;
 }
 
-.abas-mecanico .aba-titulo {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.abas-mecanico .aba-descricao {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
 @media (max-width: 480px) {
   .abas-mecanico > .aba-mecanico {
     min-height: 88px;
     padding: 10px 4px;
-  }
-
-  .abas-mecanico .aba-titulo {
-    font-size: 14px;
   }
 }
 
@@ -5938,72 +5842,6 @@ textarea {
 }
 
 /* Mantém os nomes dos materiais visíveis nos dois carrosséis. */
-.carrossel03-wrapper .galeria-guia-card {
-  height: 286px !important;
-  min-height: 286px !important;
-  max-height: 286px !important;
-  opacity: 0.96 !important;
-  filter: brightness(1) !important;
-}
-
-.carrossel03-wrapper .galeria-guia-card.card-autoplay-ativo {
-  opacity: 1 !important;
-  filter: brightness(1) !important;
-}
-
-.carrossel03-wrapper .galeria-guia-card > img,
-.carrossel03-wrapper .galeria-guia-card > .galeria-guia-pdf {
-  height: 190px !important;
-  min-height: 190px !important;
-  max-height: 190px !important;
-  flex: 0 0 190px !important;
-}
-
-.carrossel03-wrapper .galeria-guia-card > img {
-  object-fit: contain !important;
-  object-position: center top !important;
-  background: #0b1220;
-}
-
-.carrossel03-wrapper .galeria-guia-card > h3 {
-  display: -webkit-box;
-  min-height: 34px;
-  max-height: 34px;
-  flex: 0 0 34px;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.carrossel03-wrapper .galeria-guia-card > span {
-  flex-shrink: 0;
-  white-space: normal;
-}
-
-.carrossel03-wrapper .galeria-codigo-card {
-  height: 280px !important;
-  min-height: 280px !important;
-  max-height: 280px !important;
-  opacity: 0.96;
-  filter: brightness(1);
-}
-
-.carrossel03-wrapper .galeria-codigo-card.card-autoplay-ativo {
-  opacity: 1;
-  filter: brightness(1);
-}
-
-.carrossel03-wrapper .galeria-codigo-card > img {
-  height: 194px;
-  flex: 0 0 194px;
-}
-
-.carrossel03-wrapper .galeria-codigo-card > h3 {
-  min-height: 42px;
-  overflow-wrap: anywhere;
-  line-height: 1.35;
-}
 
 /* Benefícios da manutenção de motos elétricas */
 .beneficios-moto {
@@ -7430,7 +7268,6 @@ textarea {
   }
 }
 
-
 /* Alinhamento dos ícones dentro dos campos de consulta */
 .formulario-campo .campo-com-icone {
   position: relative;
@@ -7901,50 +7738,6 @@ textarea {
 }
 
 /* MENU SANDUICHE E-DIAGNOSTICO */
-
-/* Desktop: navegação recolhida até clicar no botão */
-.cabecalho .navegacao {
-  display: none;
-}
-
-.cabecalho .navegacao.menu-aberto {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-/* O botão sanduíche permanece acessível */
-.cabecalho .botao-menu {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-/* Menu aberto em telas pequenas */
-@media (max-width: 760px) {
-  .cabecalho .navegacao {
-    display: none;
-  }
-
-  .cabecalho .navegacao.menu-aberto {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    gap: 8px;
-    padding-top: 10px;
-  }
-
-  .cabecalho .navegacao.menu-aberto button {
-    width: 100%;
-    text-align: left;
-  }
-}
-
-/* CORRECAO PAINEL SUSPENSO DO MENU */
-
 .cabecalho {
   position: relative;
   z-index: 100;
@@ -7963,8 +7756,13 @@ textarea {
   flex-direction: column;
   align-items: stretch;
   gap: 8px;
-  width: min(320px, calc(100vw - 30px));
+  width: min(320px, calc(100vw - 32px));
   min-width: 0;
+  max-height: calc(100vh - 120px);
+  max-height: calc(100dvh - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
   padding: 12px;
   background: #101b2b;
   border: 1px solid #34445a;
@@ -8009,7 +7807,102 @@ textarea {
   .cabecalho .navegacao.menu-aberto {
     top: calc(100% + 6px);
     right: 0;
-    grid-column: auto;
+    left: 0;
+    width: auto;
+    max-width: none;
+    max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
+    grid-column: 1 / -1;
     grid-row: auto;
+  }
+}
+
+/* Ajuste do menu de perfis no cabeçalho */
+.seletor-perfil-cabecalho {
+  position: relative;
+  z-index: 1002;
+}
+
+.menu-troca-perfil {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1003;
+  max-width: calc(100vw - 24px);
+  max-height: min(60vh, 320px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* Ajuste do seletor de perfil no cabeçalho responsivo */
+@media (max-width: 760px) {
+  .cabecalho .seletor-perfil-cabecalho {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: center;
+    min-width: 0;
+  }
+
+  .cabecalho .seletor-perfil-cabecalho .perfil-cabecalho {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .cabecalho .seletor-perfil-cabecalho {
+    justify-self: end;
+  }
+}
+
+/* Ajuste do WhatsApp em telas pequenas */
+@media (max-width: 600px) {
+  .whatsapp-flutuante {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 10000;
+    max-width: calc(100vw - 32px);
+  }
+
+  .whatsapp-botao {
+    flex-shrink: 0;
+  }
+
+  .whatsapp-painel {
+    width: min(340px, calc(100vw - 32px));
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Ajustes do WhatsApp em telas pequenas */
+@media (max-width: 600px) {
+  .whatsapp-flutuante {
+    position: fixed !important;
+    right: 16px !important;
+    bottom: 16px !important;
+    left: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    align-items: flex-end;
+    transform: none !important;
+    box-sizing: border-box;
+  }
+
+  .whatsapp-painel {
+    width: min(340px, calc(100vw - 48px)) !important;
+    min-width: 0;
+    max-width: calc(100vw - 48px) !important;
+    box-sizing: border-box;
+  }
+
+  .whatsapp-botao {
+    width: 56px !important;
+    min-width: 56px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    padding: 0 !important;
+    flex-shrink: 0;
+    box-sizing: border-box;
   }
 }
