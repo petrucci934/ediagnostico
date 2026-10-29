@@ -1,0 +1,67 @@
+RELATÓRIO DE AUDITORIA CSS
+Modo: APLICAÇÃO
+Declarações repetidas encontradas: 0
+Blocos idênticos encontrados: 30
+
+Seletores possivelmente não utilizados (revisar manualmente):
+- #ajuda-codigo
+- #root
+- .aviso-procedimento
+- .aviso-validacao
+- .bloco-diagnostico
+- .botao-tema
+- .cabecalho-precos-neon
+- .card-diagnostico-cabecalho
+- .card-diagnostico-corpo
+- .card-diagnostico-fonte
+- .card-diagnostico-validacao
+- .card-titulo
+- .cartao-resumo-revisao
+- .categoria-destaque
+- .codigo-categoria
+- .codigo-destaque
+- .descricao-falha
+- .destaques-precos-neon
+- .detalhe-falha
+- .escolha-perfil
+- .fonte-tecnica
+- .formulario-acesso-cliente
+- .galeria-guia-pdf
+- .icone-bateria
+- .imagem-manual
+- .item-revisao-neon
+- .lista-revisoes-neon
+- .lista-verificacoes
+- .observacao-fonte
+- .painel-imagem
+- .painel-informacoes
+- .painel-status
+- .perfil-card
+- .prioridade-diagnostico
+- .procedimento-item
+- .procedimentos-tecnicos
+- .referencia-precos-conteudo
+- .referencia-precos-neon
+- .resumo-revisoes-neon
+- .revisao-descricao
+- .revisao-identificacao
+- .revisao-indicador
+- .revisao-nome
+- .revisao-prazo
+- .revisao-preco
+- .rodape-diagnostico
+- .rodape-icone
+- .rodape-item
+- .secao
+- .significado-destaque
+- .status-aberto
+- .status-card
+- .status-concluido
+- .status-em_andamento
+- .status-pendente
+- .status-validado
+- .tema-icone
+- .tema-indicador
+- .verificacao-check
+
+Atenção: candidatos não são prova de que um seletor está sem uso.

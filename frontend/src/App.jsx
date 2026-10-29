@@ -767,6 +767,41 @@ function App() {
   const [atendimentos, setAtendimentos] = useState([]);
   const [menuAberto, setMenuAberto] = useState(false);
   const [menuPerfilAberto, setMenuPerfilAberto] = useState(false);
+  const menuRef = useRef(null);
+  const menuPerfilRef = useRef(null);
+  useEffect(() => {
+    function fecharMenusAoClicarFora(evento) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(evento.target) &&
+        !evento.target.closest(".botao-menu")
+      ) {
+        setMenuAberto(false);
+      }
+
+      if (
+        menuPerfilRef.current &&
+        !menuPerfilRef.current.contains(evento.target)
+      ) {
+        setMenuPerfilAberto(false);
+      }
+    }
+
+    function fecharMenusComEscape(evento) {
+      if (evento.key === "Escape") {
+        setMenuAberto(false);
+        setMenuPerfilAberto(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", fecharMenusAoClicarFora);
+    document.addEventListener("keydown", fecharMenusComEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", fecharMenusAoClicarFora);
+      document.removeEventListener("keydown", fecharMenusComEscape);
+    };
+  }, []);
   const [carregandoAtendimentos, setCarregandoAtendimentos] = useState(false);
   const [erroAtendimentos, setErroAtendimentos] = useState("");
   const [abaTeste, setAbaTeste] = useState("biblioteca");
@@ -1121,6 +1156,7 @@ function App() {
   const ehCliente = perfil === "cliente" || perfilEscolhido === "cliente";
 
   return (
+	 <>
     <main className="pagina">
       <header className="cabecalho">
         <a className="marca" href="/" aria-label="E-Diagnóstico, início">
@@ -1130,7 +1166,7 @@ function App() {
             <small>Diagnóstico de veículos elétricos</small>
           </span>
         </a>
-	 
+
         <button
           type="button"
           className="cabecalho-inicio"
@@ -1143,7 +1179,7 @@ function App() {
           <span>Início</span>
         </button>
 
-        <div className="seletor-perfil-cabecalho">
+        <div className="seletor-perfil-cabecalho" ref={menuPerfilRef}>
           <button
             type="button"
             className="perfil-cabecalho"
@@ -1160,20 +1196,14 @@ function App() {
                 admin: "Administrador",
                 revisor: "Supervisor",
                 supervisor: "Supervisor",
-              }[
-                usuarioLogado?.perfil ||
-                perfil ||
-                perfilEscolhido
-              ] || "Usuário"}
+              }[usuarioLogado?.perfil || perfil || perfilEscolhido] ||
+                "Usuário"}
             </span>
             <ChevronDown size={15} aria-hidden="true" />
           </button>
 
           {menuPerfilAberto && (
-            <div
-              id="menu-troca-perfil"
-              className="menu-troca-perfil"
-            >
+            <div id="menu-troca-perfil" className="menu-troca-perfil">
               {[
                 { valor: "admin", texto: "Administrador" },
                 { valor: "cliente", texto: "Cliente" },
@@ -1230,6 +1260,7 @@ function App() {
 
         <nav
           id="menu-principal"
+          ref={menuRef}
           className={`navegacao ${menuAberto ? "menu-aberto" : ""}`}
         >
           {perfil !== "admin" && usuarioLogado?.perfil !== "admin" && (
@@ -1472,7 +1503,7 @@ function App() {
                   <strong>Consultar falhas</strong>
                   <span>Diagnóstico por código</span>
                 </button>
-	       
+
                 <button
                   type="button"
                   role="tab"
@@ -1480,11 +1511,12 @@ function App() {
                   className={`aba-cliente ${abaCliente === "tabela" ? "ativa" : ""}`}
                   onClick={() => setAbaCliente("tabela")}
                 >
-		  <span className="aba-icone" aria-hidden="true">ⓢ</span>
+                  <span className="aba-icone" aria-hidden="true">
+                    ⓢ
+                  </span>
                   <strong>Tabela de serviços</strong>
                   <span>Preços de referência</span>
                 </button>
-
               </div>
             )}
 
@@ -1696,91 +1728,91 @@ function App() {
               )}
 
             {!ehMecanico && (!ehCliente || abaCliente === "falhas") && (
-             
-<form className="formulario" onSubmit={consultarCodigo}>
-  <div className="formulario-campos">
-   
-<div className="formulario-campo">
-  <label htmlFor="fabricante">Fabricante do veículo</label>
+              <form className="formulario" onSubmit={consultarCodigo}>
+                <div className="formulario-campos">
+                  <div className="formulario-campo">
+                    <label htmlFor="fabricante">Fabricante do veículo</label>
 
-  <div className="campo-com-icone">
-    <CarFront size={17} aria-hidden="true" />
+                    <div className="campo-com-icone">
+                      <CarFront size={17} aria-hidden="true" />
 
-    <select
-      id="fabricante"
-      value={fabricanteSelecionado}
-      onChange={(event) => {
-        setFabricanteSelecionado(event.target.value);
-        setModeloSelecionado("");
-      }}
-    >
-      <option value="">Selecione um fabricante</option>
+                      <select
+                        id="fabricante"
+                        value={fabricanteSelecionado}
+                        onChange={(event) => {
+                          setFabricanteSelecionado(event.target.value);
+                          setModeloSelecionado("");
+                        }}
+                      >
+                        <option value="">Selecione um fabricante</option>
 
-      {fabricantes.map((fabricante) => (
-        <option key={fabricante.id} value={fabricante.id}>
-          {fabricante.name}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
+                        {fabricantes.map((fabricante) => (
+                          <option key={fabricante.id} value={fabricante.id}>
+                            {fabricante.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
 
-    <div className="formulario-campo">
-      <label htmlFor="modelo">Modelo do veículo</label>
+                  <div className="formulario-campo">
+                    <label htmlFor="modelo">Modelo do veículo</label>
 
-      <div className="campo-com-icone">
-        <Bike size={17} aria-hidden="true" />
+                    <div className="campo-com-icone">
+                      <Bike size={17} aria-hidden="true" />
 
-        <select
-          id="modelo"
-          value={modeloSelecionado}
-          onChange={(event) => setModeloSelecionado(event.target.value)}
-          disabled={!fabricanteSelecionado}
-        >
-          <option value="">Selecione um modelo</option>
+                      <select
+                        id="modelo"
+                        value={modeloSelecionado}
+                        onChange={(event) =>
+                          setModeloSelecionado(event.target.value)
+                        }
+                        disabled={!fabricanteSelecionado}
+                      >
+                        <option value="">Selecione um modelo</option>
 
-          {modelos
-            .filter(
-              (modelo) =>
-                String(modelo.manufacturer_id) ===
-                String(fabricanteSelecionado),
-            )
-            .map((modelo) => (
-              <option key={modelo.id} value={modelo.id}>
-                {modelo.model_name}
-              </option>
-            ))}
-        </select>
-      </div>
-    </div>
+                        {modelos
+                          .filter(
+                            (modelo) =>
+                              String(modelo.manufacturer_id) ===
+                              String(fabricanteSelecionado),
+                          )
+                          .map((modelo) => (
+                            <option key={modelo.id} value={modelo.id}>
+                              {modelo.model_name}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                  </div>
 
-    <div className="formulario-campo formulario-campo-codigo">
-      <label htmlFor="codigo">Código de erro</label>
+                  <div className="formulario-campo formulario-campo-codigo">
+                    <label htmlFor="codigo">Código de erro</label>
 
-      <div className="campo-pesquisa">
-        <input
-          id="codigo"
-          type="text"
-          value={codigo}
-          onChange={(event) => setCodigo(event.target.value)}
-          placeholder="Ex.: E010"
-          autoComplete="off"
-          aria-describedby="ajuda-codigo"
-        />
+                    <div className="campo-pesquisa">
+                      <input
+                        id="codigo"
+                        type="text"
+                        value={codigo}
+                        onChange={(event) => setCodigo(event.target.value)}
+                        placeholder="Ex.: E010"
+                        autoComplete="off"
+                        aria-describedby="ajuda-codigo"
+                      />
 
-        <button type="submit" disabled={carregando}>
-          <Search size={16} aria-hidden="true" />
-          {carregando ? "Consultando..." : "Consultar código"}
-        </button>
-      </div>
-    </div>
-  </div>
+                      <button type="submit" disabled={carregando}>
+                        <Search size={16} aria-hidden="true" />
+                        {carregando ? "Consultando..." : "Consultar código"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-  <small id="ajuda-codigo">
-    Digite o código exibido no painel ou no sistema de diagnóstico.
-  </small>
-</form>
-
+                <small id="ajuda-codigo">
+                  Digite o código exibido no painel ou no sistema de
+                  diagnóstico.
+                </small>
+              </form>
             )}
 
             {(!ehCliente || abaCliente === "falhas") && erro && (
@@ -1846,7 +1878,7 @@ function App() {
                   ))}
                 </section>
               )}
-	    
+
             {(!ehCliente || abaCliente === "falhas") &&
               historico.length > 0 && (
                 <section className="historico-consultas">
@@ -2704,22 +2736,13 @@ function App() {
           onFechar={() => setCodigoAmpliado(null)}
         />
       )}
-
       <footer className="rodape">
-        <p>
-          E-Diagnóstico © {new Date().getFullYear()} — Informação técnica com
-          responsabilidade.
-        </p>
-        <p>
-          Os resultados devem ser conferidos conforme o fabricante e o modelo do
-          veículo.
-        </p>
-        <p className="credito-desenvolvedor">
-          Desenvolvido por Petrucci Carvalho
-        </p>
+        {/* Mantenha aqui o conteúdo atual do seu rodapé */}
       </footer>
-      <BotaoWhatsApp />
     </main>
+
+    <BotaoWhatsApp />
+  </>
   );
 }
 
