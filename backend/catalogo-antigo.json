@@ -1,0 +1,7 @@
+[
+  {"id":"ca1b6c8e-434b-4e85-9438-27e3e396e1e6","nome":"Troca de Bateria","tipo":"servico","categoria":"Serviço","preco":450},
+  {"id":"6d7557bc-9881-4eab-be20-fd058b791eaf","nome":"Troca de Rolamento Traseiro","tipo":"servico","categoria":"Serviços","preco":90},
+  {"id":"26986221-5b19-42b5-8d51-4eea48a184df","nome":"Manete Acelerador","tipo":"peca","categoria":"Peças","preco":130},
+  {"id":"5ffc6a5b-df67-4581-9813-d5d461da28eb","nome":"Mosfet e87766","tipo":"peca","categoria":"Eletrônica","preco":270},
+  {"id":"98337264-0f14-410e-ac0d-1725262daf82","nome":"Connserto em controladora","tipo":"servico","categoria":"Eletrônica","preco":450}
+]

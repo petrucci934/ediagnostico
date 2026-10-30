@@ -10,6 +10,7 @@ app.use(express.json());
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const registrarRotasRecuperacao = require("./passwordResetRoutes");
 
 if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET não configurada no arquivo .env");
@@ -120,6 +121,14 @@ const db = new Pool({
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
+});
+
+registrarRotasRecuperacao({
+  app,
+  db,
+  autenticarToken,
+  exigirAdmin,
+  bcrypt,
 });
 
 app.post("/api/auth/login", async (req, res) => {
@@ -439,6 +448,93 @@ app.delete("/api/clientes/:id", autenticarToken, exigirEditor, async (req, res) 
 
 
 /* Gestão dos contatos de WhatsApp */
+
+// Catálogo de serviços e peças da oficina.
+app.get("/api/catalogo-oficina", autenticarToken, exigirEditor, async (_req, res) => {
+  try {
+    const resultado = await db.query(
+      "SELECT * FROM catalogo_oficina ORDER BY nome, id"
+    );
+    res.json({ itens: resultado.rows });
+  } catch (erro) {
+    console.error("Erro ao listar catálogo:", erro.message);
+    res.status(500).json({ erro: "Não foi possível listar o catálogo." });
+  }
+});
+
+app.post("/api/catalogo-oficina", autenticarToken, exigirEditor, async (req, res) => {
+  const { nome, tipo, categoria, preco } = req.body;
+  const valor = Number(preco ?? 0);
+
+  if (!nome?.trim() || !["servico", "peca"].includes(tipo) ||
+      !Number.isFinite(valor) || valor < 0) {
+    return res.status(400).json({ erro: "Dados do item inválidos." });
+  }
+
+  try {
+    const resultado = await db.query(
+      `INSERT INTO catalogo_oficina (nome, tipo, categoria, preco)
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [nome.trim(), tipo, categoria?.trim() || null, valor]
+    );
+    res.status(201).json({ item: resultado.rows[0] });
+  } catch (erro) {
+    console.error("Erro ao cadastrar item:", erro.message);
+    res.status(500).json({ erro: "Não foi possível cadastrar o item." });
+  }
+});
+
+app.put("/api/catalogo-oficina/:id", autenticarToken, exigirEditor, async (req, res) => {
+  const { nome, tipo, categoria, preco } = req.body;
+  const valor = Number(preco ?? 0);
+
+  if (!/^[1-9]\d*$/.test(req.params.id) ||
+      !nome?.trim() || !["servico", "peca"].includes(tipo) ||
+      !Number.isFinite(valor) || valor < 0) {
+    return res.status(400).json({ erro: "Dados do item inválidos." });
+  }
+
+  try {
+    const resultado = await db.query(
+      `UPDATE catalogo_oficina
+       SET nome = $1, tipo = $2, categoria = $3,
+           preco = $4, atualizado_em = CURRENT_TIMESTAMP
+       WHERE id = $5 RETURNING *`,
+      [nome.trim(), tipo, categoria?.trim() || null, valor, req.params.id]
+    );
+
+    if (!resultado.rowCount) {
+      return res.status(404).json({ erro: "Item não encontrado." });
+    }
+
+    res.json({ item: resultado.rows[0] });
+  } catch (erro) {
+    console.error("Erro ao atualizar item:", erro.message);
+    res.status(500).json({ erro: "Não foi possível atualizar o item." });
+  }
+});
+
+app.delete("/api/catalogo-oficina/:id", autenticarToken, exigirEditor, async (req, res) => {
+  if (!/^[1-9]\d*$/.test(req.params.id)) {
+    return res.status(400).json({ erro: "Identificador inválido." });
+  }
+
+  try {
+    const resultado = await db.query(
+      "DELETE FROM catalogo_oficina WHERE id = $1",
+      [req.params.id]
+    );
+
+    if (!resultado.rowCount) {
+      return res.status(404).json({ erro: "Item não encontrado." });
+    }
+
+    res.status(204).end();
+  } catch (erro) {
+    console.error("Erro ao excluir item:", erro.message);
+    res.status(500).json({ erro: "Não foi possível excluir o item." });
+  }
+});
 
 // Listar contatos no painel administrativo.
 app.get(
