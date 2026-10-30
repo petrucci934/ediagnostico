@@ -1,18 +1,5 @@
 import { useEffect, useState } from "react";
 
-const CHAVES = {
-  clientes: "ediagnostico-clientes-oficina",
-  itens: "ediagnostico-catalogo-oficina",
-};
-
-function lerLista(chave) {
-  try {
-    return JSON.parse(localStorage.getItem(chave)) || [];
-  } catch {
-    return [];
-  }
-}
-
 function moeda(valor) {
   return Number(valor || 0).toLocaleString("pt-BR", {
     style: "currency",
@@ -25,7 +12,9 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
   const [clientes, setClientes] = useState([]);
   const [carregandoClientes, setCarregandoClientes] = useState(true);
   const [erroClientes, setErroClientes] = useState("");
-  const [itens, setItens] = useState(() => lerLista(CHAVES.itens));
+  const [itens, setItens] = useState([]);
+  const [carregandoItens, setCarregandoItens] = useState(true);
+  const [erroItens, setErroItens] = useState("");
   const [clienteEditando, setClienteEditando] = useState("");
   const [itemEditando, setItemEditando] = useState("");
   const [formCliente, setFormCliente] = useState({
@@ -87,10 +76,41 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
       ativo = false;
     };
   }, [token]);
-  useEffect(
-    () => localStorage.setItem(CHAVES.itens, JSON.stringify(itens)),
-    [itens],
-  );
+
+  useEffect(() => {
+    let ativo = true;
+
+    async function carregarItens() {
+      setCarregandoItens(true);
+      setErroItens("");
+
+      try {
+        const resposta = await fetch("/api/catalogo-oficina", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(dados.erro || "Erro ao carregar catálogo.");
+        }
+
+        if (ativo) setItens(dados.itens || []);
+      } catch (erro) {
+        if (ativo) setErroItens(erro.message);
+      } finally {
+        if (ativo) setCarregandoItens(false);
+      }
+    }
+
+    carregarItens();
+
+    return () => {
+      ativo = false;
+    };
+  }, [token]);
 
   async function salvarCliente(evento) {
     evento.preventDefault();
@@ -142,25 +162,61 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
     }
   }
 
-  function salvarItem(evento) {
+  async function salvarItem(evento) {
     evento.preventDefault();
+
     const registro = {
       ...formItem,
       nome: formItem.nome.trim(),
       preco: Number(formItem.preco) || 0,
     };
+
     if (!registro.nome) return;
-    if (itemEditando) {
-      setItens((lista) =>
-        lista.map((item) =>
-          item.id === itemEditando ? { ...item, ...registro } : item,
-        ),
+
+    try {
+      setErroItens("");
+
+      const resposta = await fetch(
+        itemEditando
+          ? `/api/catalogo-oficina/${itemEditando}`
+          : "/api/catalogo-oficina",
+        {
+          method: itemEditando ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(registro),
+        },
       );
-    } else {
-      setItens((lista) => [{ id: crypto.randomUUID(), ...registro }, ...lista]);
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(dados.erro || "Não foi possível salvar o item.");
+      }
+
+      if (itemEditando) {
+        setItens((lista) =>
+          lista.map((item) =>
+            item.id === itemEditando ? dados.item : item,
+          ),
+        );
+      } else {
+        setItens((lista) => [dados.item, ...lista]);
+      }
+
+      setFormItem({
+        nome: "",
+        tipo: "servico",
+        categoria: "",
+        preco: "",
+      });
+
+      setItemEditando("");
+    } catch (erro) {
+      setErroItens(erro.message);
     }
-    setFormItem({ nome: "", tipo: "servico", categoria: "", preco: "" });
-    setItemEditando("");
   }
 
   return (
@@ -409,6 +465,8 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
           </form>
           <div className="cadastro-lista">
             <h2>Catálogo cadastrado</h2>
+            {erroItens && <p className="cadastro-erro">{erroItens}</p>}
+            {carregandoItens && <p>Carregando catálogo...</p>}
             {itens.length ? (
               itens.map((item) => (
                 <article className="cadastro-registro" key={item.id}>
@@ -441,11 +499,34 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
                     <button
                       type="button"
                       className="perigo"
-                      onClick={() =>
-                        setItens((lista) =>
-                          lista.filter((registro) => registro.id !== item.id),
-                        )
-                      }
+                      onClick={async () => {
+                        if (!window.confirm(`Excluir "${item.nome}"?`)) return;
+
+                        try {
+                          setErroItens("");
+
+                          const resposta = await fetch(
+                            `/api/catalogo-oficina/${item.id}`,
+                            {
+                              method: "DELETE",
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                              },
+                            },
+                          );
+
+                          if (!resposta.ok) {
+                            const dados = await resposta.json();
+                            throw new Error(dados.erro || "Não foi possível excluir.");
+                          }
+
+                          setItens((lista) =>
+                            lista.filter((registro) => registro.id !== item.id),
+                          );
+                        } catch (erro) {
+                          setErroItens(erro.message);
+                        }
+                      }}
                     >
                       Excluir
                     </button>

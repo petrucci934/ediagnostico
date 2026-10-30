@@ -138,6 +138,31 @@ function Administrador({ token }) {
     }
   }
 
+  async function enviarLinkRecuperacao(mecanico) {
+    if (
+      !window.confirm(
+        `Enviar um link para redefinir a senha de ${mecanico.nome} (${mecanico.email})?`,
+      )
+    ) {
+      return;
+    }
+
+    setErro("");
+
+    try {
+      const resultado = await requisicao(
+        `/api/admin/usuarios/${mecanico.id}/recuperacao-senha`,
+        { method: "POST" },
+      );
+
+      window.alert(
+        resultado.mensagem || "Link de redefinição enviado com sucesso.",
+      );
+    } catch (falha) {
+      setErro(falha.message);
+    }
+  }
+
   async function excluirCliente(cliente) {
     if (!window.confirm(`Excluir o cadastro de ${cliente.nome}?`)) return;
     setErro("");
@@ -310,6 +335,13 @@ function Administrador({ token }) {
                     </p>
                   </div>
                   <div className="cadastro-acoes">
+                    <button
+                      type="button"
+                      className="secundario"
+                      onClick={() => enviarLinkRecuperacao(mecanico)}
+                    >
+                      Enviar link para redefinir senha
+                    </button>
                     <button
                       type="button"
                       className="secundario"

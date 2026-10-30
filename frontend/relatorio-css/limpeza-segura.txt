@@ -1,0 +1,645 @@
+LIMPEZA CSS SEGURA
+Modo: APLICAÇÃO
+Arquivo: /home/petrucci/ediagnostico/frontend/src/App.css
+Declarações duplicadas removidas: 0
+Regras vazias removidas: 0
+Blocos vazios removidos: 2
+Arquivo modificado: sim
+
+SELETORES REPETIDOS PARA REVISÃO MANUAL
+As ocorrências abaixo não foram apagadas automaticamente.
+
+.aba-cliente
+  Ocorrências: 3660, 3707
+
+.aba-cliente span
+  Ocorrências: 3693, 3715
+
+.aba-cliente strong
+  Ocorrências: 3690, 3712
+
+.aba-descricao
+  Ocorrências: 4844, 4864
+
+.aba-mecanico
+  Ocorrências: 4794, 4855
+
+.aba-titulo
+  Ocorrências: 4839, 4860
+
+.abas-cliente
+  Ocorrências: 3649, 3703
+
+.abas-mecanico
+  Ocorrências: 301, 329, 4040, 4781, 4850, 4870, 4935
+
+.abas-mecanico .aba-descricao
+  Ocorrências: 342, 4918
+
+.abas-mecanico .aba-icone
+  Ocorrências: 4908, 4970
+
+.abas-mecanico .aba-mecanico
+  Ocorrências: 4882, 4924
+
+.abas-mecanico .aba-titulo
+  Ocorrências: 338, 4913, 4929
+
+.abas-mecanico > .aba-mecanico
+  Ocorrências: 333, 4946, 4975
+
+.beneficio-card
+  Ocorrências: 5882, 5923
+
+.beneficios-grid
+  Ocorrências: 5876, 5918
+
+.beneficios-moto
+  Ocorrências: 5847, 5913
+
+.biblioteca-videos-contagem
+  Ocorrências: 4182, 4701
+
+.biblioteca-videos-filtros
+  Ocorrências: 4154, 4697, 4710
+
+.bloco-diagnostico,
+.status-card
+  Ocorrências: 2850, 3076
+
+.botao-imprimir-plano
+  Ocorrências: 6501, 6797
+
+.botao-menu
+  Ocorrências: 1685, 1731, 5745
+
+.botao-tema
+  Ocorrências: 2219, 2336, 2405
+
+.botao-tema:hover
+  Ocorrências: 2237, 2357
+
+.cabecalho
+  Ocorrências: 42, 260, 1679, 1709, 5545, 5741, 7472, 7502, 7559, 7583, 7661, 7741
+
+.cabecalho .botao-menu
+  Ocorrências: 7526, 7643, 7680, 7784
+
+.cabecalho .cabecalho-inicio
+  Ocorrências: 7516, 7567, 7624, 7670
+
+.cabecalho .marca
+  Ocorrências: 7480, 7511, 7563, 7591
+
+.cabecalho .marca small
+  Ocorrências: 7551, 7620
+
+.cabecalho .marca strong
+  Ocorrências: 7546, 7612, 7665
+
+.cabecalho .marca-icone
+  Ocorrências: 7485, 7540, 7601
+
+.cabecalho .navegacao
+  Ocorrências: 7534, 7652, 7746
+
+.cabecalho .navegacao.menu-aberto
+  Ocorrências: 7750, 7807
+
+.cabecalho .perfil-cabecalho
+  Ocorrências: 7520, 7573, 7633, 7675
+
+.cabecalho .seletor-perfil-cabecalho
+  Ocorrências: 7838, 7852
+
+.cabecalho > button
+  Ocorrências: 1059, 1089
+
+.cabecalho-atendimento
+  Ocorrências: 1410, 1519, 1536, 1599
+
+.cabecalho-precos-neon h2
+  Ocorrências: 5943, 5982
+
+.cadastro-formulario
+  Ocorrências: 3760, 3849
+
+.cadastro-registro
+  Ocorrências: 3796, 3857
+
+.campo-pesquisa
+  Ocorrências: 188, 291
+
+.campo-pesquisa button
+  Ocorrências: 208, 295
+
+.campo-status
+  Ocorrências: 1488, 1528, 1540, 1552
+
+.card-diagnostico .informacoes
+  Ocorrências: 2643, 2680
+
+.card-diagnostico-cabecalho
+  Ocorrências: 2568, 2701, 2974, 3033, 3157
+
+.card-diagnostico-corpo
+  Ocorrências: 2590, 2675, 2801, 2963, 2989, 3043, 3151, 3166
+
+.card-diagnostico-corpo h3
+  Ocorrências: 2810, 3063
+
+.card-imagem-gerado
+  Ocorrências: 3239, 3263
+
+.card-imagem-gerado img
+  Ocorrências: 3250, 3272
+
+.card-titulo h2
+  Ocorrências: 2762, 3091
+
+.carrossel03-anterior
+  Ocorrências: 5391, 5446
+
+.carrossel03-proximo
+  Ocorrências: 5395, 5450
+
+.carrossel03-seta
+  Ocorrências: 5364, 5441
+
+.carrossel03-wrapper
+  Ocorrências: 5287, 5464
+
+.carrossel03-wrapper .galeria-codigo-card
+  Ocorrências: 3472, 4047, 5791, 5836
+
+.carrossel03-wrapper .galeria-codigo-card > h3
+  Ocorrências: 3490, 5825
+
+.carrossel03-wrapper .galeria-codigo-card > img
+  Ocorrências: 3485, 5818
+
+.carrossel03-wrapper .galeria-codigo-card.card-autoplay-ativo
+  Ocorrências: 3480, 5809
+
+.carrossel03-wrapper .galeria-guia-card
+  Ocorrências: 3429, 5316, 5434
+
+.carrossel03-wrapper .galeria-guia-card > h3
+  Ocorrências: 3456, 5353
+
+.carrossel03-wrapper .galeria-guia-card > img,
+.carrossel03-wrapper .galeria-guia-card > .galeria-guia-pdf
+  Ocorrências: 3442, 5344
+
+.carrossel03-wrapper .galeria-guia-card > span
+  Ocorrências: 3467, 5359
+
+.carrossel03-wrapper .galeria-guia-card.card-autoplay-ativo
+  Ocorrências: 3437, 5335
+
+.carrossel03-wrapper > .carrossel03-anterior
+  Ocorrências: 5506, 5517
+
+.carrossel03-wrapper > .carrossel03-proximo
+  Ocorrências: 5511, 5521
+
+.carrossel03-wrapper > .galeria-codigos
+  Ocorrências: 5770, 5831
+
+.carrossel03-wrapper > .galeria-guias
+  Ocorrências: 5295, 5429, 5470
+
+.carrossel03-wrapper > .galeria-guias::-webkit-scrollbar
+  Ocorrências: 5312, 5477
+
+.cartao-perfil
+  Ocorrências: 2086, 2155, 5609, 5764
+
+.cartao-perfil > span
+  Ocorrências: 2118, 5632
+
+.cartao-perfil strong
+  Ocorrências: 2114, 5628
+
+.cartao-perfil:hover
+  Ocorrências: 2108, 5621
+
+.cartao-resumo-revisao
+  Ocorrências: 6414, 6448
+
+.cartao-video-biblioteca
+  Ocorrências: 4257, 4693, 4714
+
+.categoria-destaque
+  Ocorrências: 2755, 3108
+
+.codigo-destaque
+  Ocorrências: 2749, 3104
+
+.descricao-curta-neon
+  Ocorrências: 6670, 6856
+
+.destaques-precos-neon
+  Ocorrências: 5952, 5991, 6013, 6023
+
+.destaques-precos-neon span
+  Ocorrências: 5958, 5997, 6018
+
+.detalhe-falha
+  Ocorrências: 595, 2689, 3021
+
+.detalhes-atendimento
+  Ocorrências: 1610, 1663
+
+.detalhes-revisao-neon
+  Ocorrências: 6693, 6777, 6871
+
+.detalhes-revisao-neon section + section
+  Ocorrências: 6706, 6877
+
+.escolha-perfil
+  Ocorrências: 1026, 1080
+
+.escolha-perfil button
+  Ocorrências: 1035, 1085
+
+.etiqueta
+  Ocorrências: 110, 5586
+
+.etiqueta-acesso
+  Ocorrências: 2137, 5637
+
+.etiqueta-acesso.publico
+  Ocorrências: 2145, 5642
+
+.filtros-ano-neon
+  Ocorrências: 6581, 6818
+
+.filtros-ano-neon button
+  Ocorrências: 6587, 6824
+
+.filtros-atendimentos
+  Ocorrências: 1303, 1338
+
+.filtros-atendimentos button
+  Ocorrências: 1310, 1342
+
+.filtros-atendimentos button.filtro-ativo
+  Ocorrências: 1289, 1329
+
+.form-servico-oficina
+  Ocorrências: 4417, 4620
+
+.form-servico-oficina .campo-servico-nome
+  Ocorrências: 4476, 4625
+
+.formulario
+  Ocorrências: 136, 287, 7204, 7326
+
+.formulario-acesso-cliente
+  Ocorrências: 2160, 2214
+
+.formulario-campo
+  Ocorrências: 7144, 7340
+
+.formulario-campo .campo-com-icone select
+  Ocorrências: 7291, 7352
+
+.formulario-campo label
+  Ocorrências: 7150, 7199, 7217, 7246, 7345
+
+.formulario-campo-codigo .campo-pesquisa
+  Ocorrências: 7170, 7251, 7302, 7358
+
+.formulario-campo-codigo .campo-pesquisa button
+  Ocorrências: 7185, 7231, 7265, 7313
+
+.formulario-campo-codigo .campo-pesquisa input
+  Ocorrências: 7178, 7306
+
+.formulario-campo-codigo .campo-pesquisa input,
+  .formulario-campo-codigo .campo-pesquisa button
+  Ocorrências: 7257, 7365
+
+.formulario-campos
+  Ocorrências: 7136, 7194, 7212, 7237, 7333
+
+.formulario:has(> button)
+  Ocorrências: 146, 176
+
+.galeria-codigo-card,
+  .galeria-guia-card
+  Ocorrências: 4759, 4766, 5075, 5089, 5097
+
+.galeria-codigo-card,
+.galeria-guia-card
+  Ocorrências: 4745, 5031
+
+.galeria-codigos,
+  .galeria-guias
+  Ocorrências: 3410, 3418, 5082
+
+.galeria-codigos,
+.galeria-guias
+  Ocorrências: 4731, 5013
+
+.galeria-guia-card
+  Ocorrências: 3357, 5065
+
+.galeria-guia-card h3
+  Ocorrências: 3385, 5070
+
+.galeria-guias
+  Ocorrências: 3351, 5104, 5229
+
+.galeria-guias > .galeria-guia-card
+  Ocorrências: 5111, 5183, 5208, 5236
+
+.galeria-guias > .galeria-guia-card > h3
+  Ocorrências: 5159, 5217
+
+.galeria-mecanico
+  Ocorrências: 3286, 3423
+
+.grade-detalhes
+  Ocorrências: 1632, 1673
+
+.grupo-precificacao
+  Ocorrências: 891, 966
+
+.grupo-precificacao h3
+  Ocorrências: 901, 970
+
+.historico-consultas
+  Ocorrências: 1762, 1854
+
+.icone-bateria
+  Ocorrências: 2711, 2979, 3112
+
+.icone-veiculo
+  Ocorrências: 1617, 1668
+
+.imagem-manual
+  Ocorrências: 2411, 2826, 3084
+
+.imagem-manual figcaption
+  Ocorrências: 2428, 2842
+
+.imagem-manual img
+  Ocorrências: 2419, 2834
+
+.indicador-icone
+  Ocorrências: 6530, 6812
+
+.indicador-plano
+  Ocorrências: 6521, 6805, 6922, 6949
+
+.indicador-plano .valor-verde
+  Ocorrências: 6943, 6954
+
+.indicador-plano > div
+  Ocorrências: 6552, 6928
+
+.indicador-plano > div > span
+  Ocorrências: 6558, 6933
+
+.indicador-plano strong
+  Ocorrências: 6563, 6937
+
+.indicador-status
+  Ocorrências: 1436, 1523, 1560, 1603
+
+.indicadores-plano-neon
+  Ocorrências: 6514, 6768, 6801
+
+.informacoes
+  Ocorrências: 605, 679, 2904, 3126, 3171
+
+.informacoes dd
+  Ocorrências: 622, 2917, 3134
+
+.informacoes dt
+  Ocorrências: 616, 2911, 3130
+
+.introducao
+  Ocorrências: 128, 283, 5598
+
+.item-historico
+  Ocorrências: 1780, 1863
+
+.item-revisao-neon > summary
+  Ocorrências: 6327, 6390
+
+.item-servico-oficina
+  Ocorrências: 4559, 4629
+
+.item-servico-valores
+  Ocorrências: 4586, 4633
+
+.linha-plano-neon > summary
+  Ocorrências: 6633, 6772, 6834, 6906
+
+.lista-atendimentos .filtros-atendimentos
+  Ocorrências: 1234, 1274
+
+.lista-atendimentos article.card-atendimento
+  Ocorrências: 1387, 1510, 1547
+
+.lista-atendimentos article.card-atendimento h3
+  Ocorrências: 1429, 1515
+
+.lista-atendimentos article.card-atendimento:hover
+  Ocorrências: 1398, 1402, 1406
+
+.lista-atendimentos button
+  Ocorrências: 1205, 1278
+
+.lista-historico
+  Ocorrências: 1774, 1858
+
+.lista-revisoes-neon
+  Ocorrências: 3599, 6314
+
+.lista-revisoes-neon .revisao-preco
+  Ocorrências: 6357, 6395
+
+.marca
+  Ocorrências: 53, 1717
+
+.marca small
+  Ocorrências: 82, 265, 1722
+
+.marca-icone
+  Ocorrências: 61, 5553
+
+.menu-troca-perfil
+  Ocorrências: 7700, 7734, 7826
+
+.moldura-carrossel
+  Ocorrências: 3863, 3883
+
+.moldura-carrossel .carrossel03-wrapper
+  Ocorrências: 3889, 3963
+
+.moldura-carrossel .carrossel03-wrapper > .carrossel03-seta
+  Ocorrências: 3907, 3967
+
+.navegacao
+  Ocorrências: 854, 956, 1700, 1736, 5751
+
+.navegacao button
+  Ocorrências: 861, 961, 1704, 1753, 5558
+
+.navegacao button.nav-ativo
+  Ocorrências: 871, 5569
+
+.nome-revisao-neon
+  Ocorrências: 6659, 6845
+
+.nota-precos-neon
+  Ocorrências: 3618, 3623
+
+.numero-revisao-neon
+  Ocorrências: 6647, 6840
+
+.orcamento-identificacao
+  Ocorrências: 375, 518
+
+.orcamento-mecanico
+  Ocorrências: 347, 547
+
+.orcamento-servico
+  Ocorrências: 416, 522
+
+.orcamento-servico-preco
+  Ocorrências: 451, 526
+
+.ordenar-plano-neon
+  Ocorrências: 6603, 6829
+
+.pagina
+  Ocorrências: 33, 5535
+
+.painel-status
+  Ocorrências: 2967, 2995
+
+.perfil-cabecalho
+  Ocorrências: 7441, 7454
+
+.plano-revisoes-neon
+  Ocorrências: 6454, 6783, 6886
+
+.plano-titulo-neon
+  Ocorrências: 6480, 6793
+
+.plano-topo-neon
+  Ocorrências: 6474, 6788
+
+.prazo-revisao-neon
+  Ocorrências: 6663, 6849
+
+.precificacao input
+  Ocorrências: 912, 993
+
+.preco-revisao-neon
+  Ocorrências: 6678, 6860
+
+.principal
+  Ocorrências: 103, 274, 5575, 5759
+
+.principal .card-teste
+  Ocorrências: 1985, 2043
+
+.prioridade-diagnostico
+  Ocorrências: 2776, 2984, 3117, 3162
+
+.referencia-precos-neon > summary.cabecalho-precos-neon
+  Ocorrências: 5929, 5969, 6009
+
+.remover-servico-oficina
+  Ocorrências: 4598, 4639
+
+.resultado
+  Ocorrências: 576, 3001
+
+.resultado-topo
+  Ocorrências: 585, 3012
+
+.resultado-topo h2
+  Ocorrências: 590, 3017
+
+.resumo-revisoes-neon
+  Ocorrências: 6407, 6443
+
+.revisao-indicador
+  Ocorrências: 6364, 6399
+
+.rodape
+  Ocorrências: 246, 5735
+
+.rodape-diagnostico
+  Ocorrências: 2658, 2684, 3139, 3175, 3233
+
+.selecao-perfis
+  Ocorrências: 2077, 2151, 5603
+
+.seletor-perfil-cabecalho
+  Ocorrências: 7687, 7821
+
+.servicos-individuais-neon .tabela-precos-rolagem
+  Ocorrências: 6961, 7025, 7043
+
+.seta-revisao-neon
+  Ocorrências: 6684, 6866
+
+.status
+  Ocorrências: 88, 270, 1727
+
+.status-aberto
+  Ocorrências: 1456, 1580
+
+.status-concluido
+  Ocorrências: 1468, 1592
+
+.status-em_andamento
+  Ocorrências: 1462, 1586
+
+.status-pendente
+  Ocorrências: 797, 2945
+
+.status-ponto
+  Ocorrências: 96, 1448, 1572
+
+.status-validado
+  Ocorrências: 791, 2940
+
+.status-validado,
+.status-pendente
+  Ocorrências: 782, 2929
+
+.visualizador-codigo
+  Ocorrências: 4060, 4127
+
+.visualizador-codigo > img
+  Ocorrências: 4086, 4132
+
+.visualizador-video
+  Ocorrências: 4645, 4718
+
+.visualizador-video-player
+  Ocorrências: 4676, 4725
+
+.whatsapp-botao
+  Ocorrências: 6041, 6163, 6168, 7867, 7899
+
+.whatsapp-botao:hover
+  Ocorrências: 6061, 6184
+
+.whatsapp-flutuante
+  Ocorrências: 6030, 6158, 7859, 7880
+
+.whatsapp-painel
+  Ocorrências: 6072, 7871, 7892
+
+h1
+  Ocorrências: 117, 279

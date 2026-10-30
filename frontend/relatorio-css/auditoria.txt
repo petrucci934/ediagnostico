@@ -1,7 +1,7 @@
 RELATÓRIO DE AUDITORIA CSS
-Modo: APLICAÇÃO
+Modo: SIMULAÇÃO
 Declarações repetidas encontradas: 0
-Blocos idênticos encontrados: 30
+Blocos idênticos encontrados: 0
 
 Seletores possivelmente não utilizados (revisar manualmente):
 - #ajuda-codigo
