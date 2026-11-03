@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { criarLinkWhatsApp } from "./whatsappUtils.js";
 import {
   ListChecks,
   Wrench,
@@ -8,6 +9,7 @@ import {
   FileText,
   Trash2,
   X,
+  Search,
 } from "lucide-react";
 
 function moeda(valor) {
@@ -123,10 +125,13 @@ function Orcamento({ onPrecificar, ativo, token }) {
     ...new Set(servicos.map((servico) => servico.categoria).filter(Boolean)),
   ].sort((a, b) => a.localeCompare(b, "pt-BR"));
 
+  const normalizarBusca = (texto) =>
+    texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase().trim().replace(/\s+/g, " ");
+  const termosBusca = normalizarBusca(busca).split(" ").filter(Boolean);
   const servicosFiltrados = servicos.filter((servico) => {
-    const correspondeBusca = `${servico.nome} ${servico.categoria || ""}`
-      .toLowerCase()
-      .includes(busca.toLowerCase());
+    const texto = normalizarBusca(`${servico.nome} ${servico.categoria || ""}`);
+    const correspondeBusca = termosBusca.every((termo) => texto.includes(termo));
 
     const correspondeFiltro =
       filtroVeiculo === "Todos" || servico.categoria === filtroVeiculo;
@@ -176,30 +181,29 @@ function Orcamento({ onPrecificar, ativo, token }) {
       })
       .join("\n");
 
-    const mensagem = `Olá, *${clienteSelecionado.nome}*! Tudo bem? \u{1F60A}
+    const mensagem = `Olá, ${clienteSelecionado.nome}! Tudo bem? 😊
 
-Conforme solicitado, segue o orçamento dos serviços e peças${veiculo ? ` para sua *${veiculo}*` : ""}:
+Preparamos seu orçamento${veiculo ? ` para o veículo ${veiculo}` : ""}. Confira os detalhes abaixo:
 
-\u{1F527} *DETALHAMENTO DO ORÇAMENTO*
+🔧 *Serviços e peças*
 
 ${lista}
 
-*RESUMO DOS VALORES*
+📋 *Resumo do orçamento*
 
 Mão de obra: ${moeda(totalMO)}
 Materiais e peças: ${moeda(totalMA)}
 
-\u{1F4B0} *VALOR TOTAL: ${moeda(total)}*
+💰 *Total: ${moeda(total)}*
 
-${observacoes ? `\u{1F4DD} *Observações:* ${observacoes}\n\n` : ""}Se estiver de acordo, podemos dar sequência ao serviço.
+${observacoes ? `📝 Observações: ${observacoes}\n\n` : ""}Podemos seguir com o serviço? É só responder por aqui para confirmar ou tirar suas dúvidas. 💬
 
-Agradecemos pela confiança e preferência!
+Obrigado pela confiança! Será um prazer cuidar do seu veículo elétrico. 🤝
 
-*E-Diagnóstico*
-Tecnologia e precisão para cuidar do seu veículo elétrico. \u{26A1}`;
+⚡ *E-Diagnóstico*
+Tecnologia e precisão para cuidar do seu veículo elétrico.`;
 
-    const parametros = new URLSearchParams({ text: mensagem });
-    const urlWhatsApp = `https://wa.me/${telefone}?${parametros.toString()}`;
+    const urlWhatsApp = criarLinkWhatsApp(telefone, mensagem, navigator.userAgent);
 
     window.open(urlWhatsApp, "_blank", "noopener,noreferrer");
   }
@@ -231,11 +235,13 @@ Tecnologia e precisão para cuidar do seu veículo elétrico. \u{26A1}`;
 
           <div className="orcamento-filtros">
             <label className="orcamento-busca">
+              <Search className="icone-busca-orcamento" aria-hidden="true" />
               <input
                 type="search"
+                aria-label="Buscar serviço"
                 value={busca}
                 onChange={(e) => setBusca(e.target.value)}
-                placeholder="⌕  Buscar serviço..."
+                placeholder="Buscar serviço..."
               />
             </label>
 

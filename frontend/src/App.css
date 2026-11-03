@@ -1253,9 +1253,65 @@ h1 span {
 /* Tela de precificação */
 .precificacao {
   width: 100%;
-  max-width: 760px;
+  max-width: 1000px;
   margin: 32px auto 0;
   text-align: left;
+}
+
+.precificacao-calculo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+  align-items: start;
+}
+
+.precificacao-campos {
+  min-width: 0;
+}
+
+.precificacao-calculo h2 {
+  margin-top: 0;
+}
+
+.precificacao-campos select {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.precificacao-atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.precificacao-atalhos button {
+  min-height: 44px;
+  padding: 8px 14px;
+}
+
+.precificacao-atalhos button[aria-pressed="true"] {
+  outline: 2px solid #b7f36b;
+  outline-offset: 2px;
+}
+
+.precificacao .precificacao-resumo {
+  margin-top: 0;
+}
+
+.precificacao-resumo .botao-adicionar-servico {
+  width: 100%;
+  margin-top: 20px;
+}
+
+@media (max-width: 700px) {
+  .precificacao-calculo {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .precificacao h2 {
@@ -8988,4 +9044,131 @@ textarea {
 .orcamento-filtros .orcamento-busca input {
   min-height: 44px;
   padding-left: 43px;
+}
+
+/* Layout da precificação: regras específicas após os formulários gerais. */
+.principal.tela-precificacao {
+  text-align: left;
+}
+.tela-precificacao > .etiqueta,
+.tela-precificacao > h1,
+.tela-precificacao > .introducao {
+  display: block;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+.tela-precificacao > h1 {
+  font-size: clamp(1.7rem, 3vw, 2.25rem);
+  line-height: 1.2;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.tela-precificacao .configuracao-oficina {
+  padding: 18px 22px;
+  border: 1px solid #34445a;
+  border-radius: 12px;
+  background: #111c2c;
+}
+.tela-precificacao .configuracao-oficina summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+.precificacao-hora {
+  color: #aebed0;
+  font-size: 0.9rem;
+}
+.precificacao-hora strong {
+  color: #b7f36b;
+}
+.principal.tela-precificacao form.precificacao-calculo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  max-width: none;
+  width: 100%;
+  gap: 24px;
+  margin: 24px 0;
+  align-items: start;
+}
+.tela-precificacao .precificacao-campos {
+  padding: 24px;
+  border: 1px solid #34445a;
+  border-radius: 12px;
+  background: #111c2c;
+}
+.tela-precificacao .precificacao-atalhos button {
+  background: #0b1220;
+  border: 1px solid #40516a;
+  border-radius: 8px;
+  color: #eaf0f6;
+  font: inherit;
+  cursor: pointer;
+}
+.tela-precificacao .precificacao-resumo > strong {
+  font-size: 1.1rem;
+}
+.tela-precificacao .precificacao-resumo > strong:nth-of-type(4) {
+  font-size: 2.3rem;
+  margin-bottom: 16px;
+}
+:root[data-tema="light"] .tela-precificacao .configuracao-oficina,
+:root[data-tema="light"] .tela-precificacao .precificacao-campos {
+  background: #fff;
+  border-color: #cbd5e1;
+}
+:root[data-tema="light"] .tela-precificacao .precificacao-hora {
+  color: #475569;
+}
+:root[data-tema="light"] .tela-precificacao .precificacao-hora strong {
+  color: #3f6212;
+}
+:root[data-tema="light"] .tela-precificacao .precificacao-atalhos button {
+  background: #f1f5f9;
+  color: #172b3d;
+  border-color: #cbd5e1;
+}
+@media (max-width: 700px) {
+  .principal.tela-precificacao form.precificacao-calculo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tela-precificacao .precificacao-campos {
+    padding: 18px;
+  }
+}
+
+.tela-precificacao .sugerir-servico-precificacao {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 0;
+  padding: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.tela-precificacao .sugerir-servico-precificacao:hover {
+  background: rgba(183, 243, 107, 0.08);
+}
+.tela-precificacao .sugerir-servico-precificacao > span:first-child {
+  display: grid;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .tela-precificacao .sugerir-servico-precificacao {
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+  }
 }

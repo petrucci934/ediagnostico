@@ -1,5 +1,5 @@
 import { calcularCustoHora, calcularHoras } from "./calculosPrecificacao";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const CHAVE_PRECIFICACAO = "ediagnostico-precificacao";
 
@@ -44,6 +44,7 @@ function carregarConfiguracao() {
     return {
       ...configuracaoInicial,
       ...dados,
+      horasServico: Math.max(15, Number(dados.horasServico) || 15),
       despesas: Object.fromEntries(
         Object.entries(configuracaoInicial.despesas).map(
           ([chave, valorInicial]) => {
@@ -66,6 +67,9 @@ function carregarConfiguracao() {
   }
 }
 function Precificacao({ token }) {
+  const nomeServicoRef = useRef(null);
+  const [buscaServico, setBuscaServico] = useState("");
+  const [sucessoServico, setSucessoServico] = useState("");
   const [erroServico, setErroServico] = useState("");
   const [salvandoServico, setSalvandoServico] = useState(false);
   const [configuracao, setConfiguracao] = useState(carregarConfiguracao);
@@ -130,8 +134,6 @@ function Precificacao({ token }) {
   const [novoServico, setNovoServico] = useState({
     nome: "",
     categoria: "Bicicleta elétrica",
-    maoDeObra: "",
-    materiais: "",
   });
 
   const {
@@ -197,7 +199,14 @@ function Precificacao({ token }) {
     produtividade,
   });
 
-  const custoServico = custoHora * Number(horasServico / 60) + Number(pecas);
+  const custoMO = custoHora * Number(horasServico / 60);
+  const custoServico = custoMO + Number(pecas);
+  const calculoValido =
+    Number(horasServico) >= 15 &&
+    Number(pecas) >= 0 &&
+    Number(margem) >= 0 &&
+    Number(margem) < 100 &&
+    horasProdutivas > 0;
 
   const precoServico =
     margem >= 0 && margem < 100 ? custoServico / (1 - Number(margem) / 100) : 0;
@@ -212,12 +221,14 @@ function Precificacao({ token }) {
     evento.preventDefault();
     if (salvandoServico) return;
     const nome = novoServico.nome.trim();
-    if (!nome) return;
+    if (!nome || !calculoValido) return;
+    setSucessoServico("");
     setErroServico("");
     setSalvandoServico(true);
     try {
-      const maoDeObra = Number(novoServico.maoDeObra) || 0;
-      const materiais = Number(novoServico.materiais) || 0;
+      const maoDeObra =
+        Math.round((custoMO / (1 - Number(margem) / 100)) * 100) / 100;
+      const materiais = Math.round((precoServico - maoDeObra) * 100) / 100;
       const resposta = await fetch("/api/catalogo-oficina", {
         method: "POST",
         headers: {
@@ -228,7 +239,7 @@ function Precificacao({ token }) {
           nome,
           tipo: "servico",
           categoria: novoServico.categoria,
-          preco: maoDeObra + materiais,
+          preco: Math.round((maoDeObra + materiais) * 100) / 100,
           maoDeObra,
           materiais,
         }),
@@ -248,6 +259,7 @@ function Precificacao({ token }) {
         ...atuais,
       ]);
       setNovoServico((atual) => ({ ...atual, nome: "" }));
+      setSucessoServico("Serviço salvo no catálogo e disponível no orçamento.");
     } catch (erro) {
       setErroServico(erro.message);
     } finally {
@@ -279,27 +291,58 @@ function Precificacao({ token }) {
     }
   }
 
-  const totalNovoServico =
-    (Number(novoServico.maoDeObra) || 0) + (Number(novoServico.materiais) || 0);
+  const normalizar = (texto) =>
+    texto
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  const servicosDoVeiculo = servicosOficina.filter(
+    (servico) =>
+      normalizar(servico.categoria || "") === normalizar(novoServico.categoria),
+  );
+  const tiposVeiculo = [
+    ...new Set([
+      "Bicicleta elétrica",
+      "Patinete elétrico",
+      "Scooter elétrica",
+      "Autopropelido",
+      "Ciclomotor elétrico",
+      ...servicosOficina.map((servico) => servico.categoria).filter(Boolean),
+    ]),
+  ];
+  function sugerirServico(servico) {
+    setNovoServico((atual) => ({ ...atual, nome: servico.nome }));
+    setSucessoServico("");
+    nomeServicoRef.current?.focus();
+    nomeServicoRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }
+  const servicosVisiveis = servicosDoVeiculo.filter((servico) =>
+    normalizar(`${servico.nome} ${servico.categoria || ""}`).includes(
+      normalizar(buscaServico),
+    ),
+  );
 
   return (
-    <section className="principal">
+    <section className="principal tela-precificacao">
       <span className="etiqueta">ÁREA DO MECÂNICO</span>
 
-      <h1>
-        Precifique seu serviço.
-        <br />
-        <span>Conheça seus custos.</span>
-      </h1>
-
+      <h1>Precificação de serviços</h1>
       <p className="introducao">
-        Configure sua jornada de trabalho e calcule o custo da hora técnica e o
-        preço sugerido de cada serviço.
+        Conheça seus custos. Defina seu preço com segurança.
       </p>
 
       <div className="precificacao">
         <details className="configuracao-oficina">
-          <summary>Configurações da oficina</summary>
+          <summary>
+            <span>Configurações da oficina</span>
+            <span className="precificacao-hora">
+              Custo da hora: <strong>{moeda(custoHora)}</strong> · Ajustar
+            </span>
+          </summary>
           <h2>1. Jornada de trabalho</h2>
 
           <div className="grupo-precificacao">
@@ -407,183 +450,187 @@ function Precificacao({ token }) {
             value={produtividade}
             onChange={(e) => atualizarCampo("produtividade", e.target.value)}
           />
+          <div className="resultado-precificacao">
+            <p>Horas mensais disponíveis</p>
+            <strong>{horasMensais.toFixed(1)} h</strong>
+
+            <p>Horas produtivas estimadas</p>
+            <strong>{horasProdutivas.toFixed(1)} h</strong>
+
+            <p>Custo da hora técnica</p>
+            <strong>{moeda(custoHora)}</strong>
+          </div>
         </details>
-        <div className="resultado-precificacao">
-          <p>Horas mensais disponíveis</p>
-          <strong>{horasMensais.toFixed(1)} h</strong>
 
-          <p>Horas produtivas estimadas</p>
-          <strong>{horasProdutivas.toFixed(1)} h</strong>
-
-          <p>Custo da hora técnica</p>
-          <strong>{moeda(custoHora)}</strong>
-        </div>
-
-        <h2>3. Calcular preço do serviço</h2>
-
-        <label htmlFor="duracaoServico">Duração do serviço (minutos)</label>
-        <select
-          id="duracaoServico"
-          style={{ font: "inherit" }}
-          value={horasServico}
-          onChange={(e) => atualizarCampo("horasServico", e.target.value)}
-        >
-          {Array.from({ length: 288 }, (_, i) => (i + 1) * 5).map((minutos) => (
-            <option key={minutos} value={minutos}>
-              {minutos} min
-              {minutos >= 60
-                ? ` (${Math.floor(minutos / 60)}h${minutos % 60 ? ` ${minutos % 60}min` : ""})`
-                : ""}
-            </option>
-          ))}
-        </select>
-
-        <label>Custo das peças (R$)</label>
-        <input
-          type="number"
-          min="0"
-          step="0.01"
-          value={pecas}
-          onChange={(e) => atualizarCampo("pecas", e.target.value)}
-        />
-
-        <label>Margem de lucro desejada (%)</label>
-        <input
-          type="number"
-          min="0"
-          max="99"
-          value={margem}
-          onChange={(e) => atualizarCampo("margem", e.target.value)}
-        />
-
-        <div className="resultado-precificacao destaque-preco">
-          <p>Custo estimado do serviço</p>
-          <strong>{moeda(custoServico)}</strong>
-
-          <p>Preço sugerido ao cliente</p>
-          <strong>{moeda(precoServico)}</strong>
-        </div>
-
-        <p className="aviso-precificacao">
-          Estimativa inicial. Confira impostos, taxas, garantia e demais
-          despesas antes de definir o preço final.
-        </p>
-
+        <form className="precificacao-calculo" onSubmit={adicionarServico}>
+          <section className="precificacao-campos">
+            <h2>Calcular serviço</h2>
+            <label htmlFor="preco-nome">Nome do serviço</label>
+            <input
+              id="preco-nome"
+              ref={nomeServicoRef}
+              list="sugestoes-servicos-veiculo"
+              required
+              value={novoServico.nome}
+              onChange={(e) =>
+                setNovoServico({ ...novoServico, nome: e.target.value })
+              }
+              placeholder="Ex.: Troca de bateria"
+            />
+            <datalist id="sugestoes-servicos-veiculo">
+              {[
+                ...new Set(servicosDoVeiculo.map((servico) => servico.nome)),
+              ].map((nome) => (
+                <option key={nome} value={nome} />
+              ))}
+            </datalist>
+            <label htmlFor="preco-veiculo">Tipo de veículo</label>
+            <select
+              id="preco-veiculo"
+              value={novoServico.categoria}
+              onChange={(e) =>
+                setNovoServico({ ...novoServico, categoria: e.target.value })
+              }
+            >
+              {tiposVeiculo.map((tipo) => (
+                <option key={tipo}>{tipo}</option>
+              ))}
+            </select>
+            <label htmlFor="duracaoServico">Duração estimada (minutos)</label>
+            <input
+              id="duracaoServico"
+              type="number"
+              required
+              min="15"
+              step="1"
+              value={horasServico}
+              onChange={(e) => atualizarCampo("horasServico", e.target.value)}
+              onBlur={() => {
+                if (Number(horasServico) < 15)
+                  atualizarCampo("horasServico", 15);
+              }}
+            />
+            <div
+              className="precificacao-atalhos"
+              aria-label="Durações frequentes"
+            >
+              {[15, 30, 60, 120].map((minutos) => (
+                <button
+                  key={minutos}
+                  type="button"
+                  aria-pressed={Number(horasServico) === minutos}
+                  onClick={() => atualizarCampo("horasServico", minutos)}
+                >
+                  {minutos < 60 ? `${minutos} min` : `${minutos / 60} h`}
+                </button>
+              ))}
+            </div>
+            <label htmlFor="preco-pecas">
+              Custo das peças e materiais (R$)
+            </label>
+            <input
+              id="preco-pecas"
+              type="number"
+              required
+              min="0"
+              step="0.01"
+              value={pecas}
+              onChange={(e) => atualizarCampo("pecas", e.target.value)}
+            />
+            <label htmlFor="preco-margem">Margem desejada (%)</label>
+            <input
+              id="preco-margem"
+              type="number"
+              required
+              min="0"
+              max="99"
+              step="0.1"
+              value={margem}
+              onChange={(e) => atualizarCampo("margem", e.target.value)}
+            />
+          </section>
+          <aside
+            className="resultado-precificacao destaque-preco precificacao-resumo"
+            aria-live="polite"
+          >
+            <h2>Resumo do cálculo</h2>
+            <p>Mão de obra — custo</p>
+            <strong>{moeda(custoMO)}</strong>
+            <p>Peças e materiais — custo</p>
+            <strong>{moeda(Number(pecas) || 0)}</strong>
+            <p>Custo estimado do serviço</p>
+            <strong>{moeda(custoServico)}</strong>
+            <p>Preço sugerido ao cliente</p>
+            <strong>{calculoValido ? moeda(precoServico) : "—"}</strong>
+            <p>Diferença sobre o custo</p>
+            <strong>
+              {calculoValido ? moeda(precoServico - custoServico) : "—"}
+            </strong>
+            <button
+              className="botao-adicionar-servico"
+              type="submit"
+              disabled={salvandoServico || !calculoValido}
+            >
+              {salvandoServico ? "Salvando..." : "Salvar no catálogo"}
+            </button>
+            {!calculoValido && (
+              <p role="alert">
+                Confira a jornada, produtividade, duração mínima de 15 minutos,
+                custos e margem.
+              </p>
+            )}
+            {erroServico && <p role="alert">{erroServico}</p>}
+            {sucessoServico && <p role="status">{sucessoServico}</p>}
+            <p className="aviso-precificacao">
+              Confira impostos, taxas, garantia e demais despesas antes de
+              definir o preço final. A margem é aplicada à mão de obra e aos
+              materiais.
+            </p>
+          </aside>
+        </form>
         <section
           className="catalogo-servicos-oficina"
           aria-labelledby="titulo-catalogo-servicos"
         >
           <span className="etiqueta">CATÁLOGO DA OFICINA</span>
-          <h2 id="titulo-catalogo-servicos">Preço de cada serviço</h2>
-          <p className="catalogo-servicos-descricao">
-            Some a mão de obra (MO) aos materiais e peças (MA) para chegar ao
-            preço final.
+          <h2 id="titulo-catalogo-servicos">Serviços cadastrados</h2>
+          <p role="status">
+            {servicosDoVeiculo.length} serviços para {novoServico.categoria}.
+            Clique em um serviço para usar o nome no cálculo.
           </p>
-
-          <form className="form-servico-oficina" onSubmit={adicionarServico}>
-            <label className="campo-servico-nome">
-              Serviço
-              <input
-                required
-                value={novoServico.nome}
-                onChange={(evento) =>
-                  setNovoServico({ ...novoServico, nome: evento.target.value })
-                }
-                placeholder="Ex.: Troca de manete acelerador"
-              />
-            </label>
-            <label>
-              Tipo de veículo
-              <select
-                value={novoServico.categoria}
-                onChange={(evento) =>
-                  setNovoServico({
-                    ...novoServico,
-                    categoria: evento.target.value,
-                  })
-                }
-              >
-                <option>Bicicleta elétrica</option>
-                <option>Autopropelido</option>
-                <option>Ciclomotor elétrico</option>
-              </select>
-            </label>
-            <label>
-              Mão de obra (MO)
-              <span className="campo-servico-valor">
-                <span>R$</span>
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={novoServico.maoDeObra}
-                  onChange={(evento) =>
-                    setNovoServico({
-                      ...novoServico,
-                      maoDeObra: evento.target.value,
-                    })
-                  }
-                  placeholder="0,00"
-                />
-              </span>
-            </label>
-            <label>
-              Materiais e peças (MA)
-              <span className="campo-servico-valor">
-                <span>R$</span>
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={novoServico.materiais}
-                  onChange={(evento) =>
-                    setNovoServico({
-                      ...novoServico,
-                      materiais: evento.target.value,
-                    })
-                  }
-                  placeholder="0,00"
-                />
-              </span>
-            </label>
-
-            <div className="resumo-preco-servico" aria-live="polite">
-              <span>Preço final</span>
-              <strong>{moeda(totalNovoServico)}</strong>
-              <small>
-                MO {moeda(Number(novoServico.maoDeObra) || 0)} + MA{" "}
-                {moeda(Number(novoServico.materiais) || 0)}
-              </small>
-            </div>
-            {erroServico && <p role="alert">{erroServico}</p>}
-            <button
-              className="botao-adicionar-servico"
-              type="submit"
-              disabled={salvandoServico}
-            >
-              {salvandoServico ? "Salvando..." : "Adicionar à lista"}
-            </button>
-          </form>
-
+          <label htmlFor="busca-servico-preco">Buscar serviço</label>
+          <input
+            id="busca-servico-preco"
+            type="search"
+            value={buscaServico}
+            onChange={(e) => setBuscaServico(e.target.value)}
+            placeholder="Nome ou tipo de veículo"
+          />
           <div className="lista-servicos-oficina">
-            <h3>Serviços cadastrados</h3>
-            {servicosOficina.length ? (
-              servicosOficina.map((servico) => (
+            {servicosVisiveis.length ? (
+              servicosVisiveis.map((servico) => (
                 <article className="item-servico-oficina" key={servico.id}>
-                  <div>
-                    <strong>{servico.nome}</strong>
-                    <span>{servico.categoria}</span>
-                  </div>
-                  <div className="item-servico-valores">
-                    <small>MO {moeda(Number(servico.maoDeObra) || 0)}</small>
-                    <small>MA {moeda(Number(servico.materiais) || 0)}</small>
-                    <strong>
-                      {moeda(
-                        (Number(servico.maoDeObra) || 0) +
-                          (Number(servico.materiais) || 0),
-                      )}
-                    </strong>
-                  </div>
+                  <button
+                    type="button"
+                    className="sugerir-servico-precificacao"
+                    aria-label={`Usar serviço: ${servico.nome}`}
+                    onClick={() => sugerirServico(servico)}
+                  >
+                    <span>
+                      <strong>{servico.nome}</strong>
+                      <span>{servico.categoria}</span>
+                    </span>
+                    <span className="item-servico-valores">
+                      <small>MO {moeda(Number(servico.maoDeObra) || 0)}</small>
+                      <small>MA {moeda(Number(servico.materiais) || 0)}</small>
+                      <strong>
+                        {moeda(
+                          (Number(servico.maoDeObra) || 0) +
+                            (Number(servico.materiais) || 0),
+                        )}
+                      </strong>
+                    </span>
+                  </button>
                   <button
                     type="button"
                     className="remover-servico-oficina"
@@ -596,7 +643,9 @@ function Precificacao({ token }) {
               ))
             ) : (
               <p className="lista-servicos-vazia">
-                Adicione o primeiro serviço da oficina.
+                {buscaServico
+                  ? "Nenhum serviço encontrado."
+                  : "Nenhum serviço cadastrado para este tipo de veículo."}
               </p>
             )}
           </div>

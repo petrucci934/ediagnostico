@@ -65,7 +65,10 @@ export function obterMenuPrincipal({
           },
         ];
   }
-  if (perfilAtual === "mecanico") return [diagnostico, ...itensMecanico];
+  if (perfilAtual === "mecanico")
+    return [diagnostico, ...itensMecanico].sort((a, b) =>
+      a.texto.localeCompare(b.texto, "pt-BR"),
+    );
   if (
     perfilAtual === "cliente" ||
     (!perfilAtual && perfilEscolhido === "cliente")

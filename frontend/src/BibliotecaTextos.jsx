@@ -21,6 +21,7 @@ export default function BibliotecaTextos() {
     ordem: "trilha",
   });
   const [artigoId, setArtigoId] = useState(null);
+  const [mostrarResultados, setMostrarResultados] = useState(false);
   const tituloRef = useRef(null);
   const resultadosRef = useRef(null);
   const filtrados = filtrarArtigos(artigos, filtros);
@@ -37,6 +38,7 @@ export default function BibliotecaTextos() {
   function atualizarFiltro(chave, valor) {
     setFiltros((atuais) => ({ ...atuais, [chave]: valor }));
     setArtigoId(null);
+    setMostrarResultados(true);
   }
   function limparFiltros() {
     setBusca("");
@@ -48,6 +50,7 @@ export default function BibliotecaTextos() {
       ordem: "trilha",
     });
     setArtigoId(null);
+    setMostrarResultados(false);
   }
   function abrirArtigo(id) {
     setArtigoId(id);
@@ -79,7 +82,16 @@ export default function BibliotecaTextos() {
         contagens={contagens}
       />
       <section className="bt-textos" aria-label="Textos da biblioteca">
-        {!artigo ? (
+        {!mostrarResultados ? (
+          <div className="bt-estado-vazio">
+            <BookOpen size={34} aria-hidden="true" />
+            <h2>O que você deseja consultar?</h2>
+            <p>
+              Escolha uma categoria acima ou pesquise um assunto para encontrar
+              os conteúdos técnicos.
+            </p>
+          </div>
+        ) : !artigo ? (
           <>
             <div className="bt-resultados-cabecalho">
               <div>

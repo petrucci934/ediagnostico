@@ -2,19 +2,19 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { obterMenuPrincipal, itemMenuAtivo } from "../src/menuPrincipal.js";
 
-test("menu do mecânico inclui todas as funções de oficina", () => {
+test("menu do mecânico inclui todas as funções em ordem alfabética", () => {
   const menu = obterMenuPrincipal({ perfil: "mecanico" });
   assert.deepEqual(
     menu.map((item) => item.id),
     [
-      "diagnostico",
-      "biblioteca",
-      "novo-teste",
-      "historico-testes",
-      "precificacao",
-      "orcamento",
       "atendimentos",
+      "biblioteca",
       "cadastros",
+      "diagnostico",
+      "historico-testes",
+      "novo-teste",
+      "orcamento",
+      "precificacao",
     ],
   );
   for (const id of [
