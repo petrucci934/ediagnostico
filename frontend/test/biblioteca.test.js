@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { filtrarArtigos } from "../src/bibliotecaUtils.js";
 const artigos = JSON.parse(
   readFileSync(
-    new URL("../src/data/artigos-biblioteca.json", import.meta.url),
+    new URL("../../backend/data/artigos-biblioteca.json", import.meta.url),
     "utf8",
   ),
 );

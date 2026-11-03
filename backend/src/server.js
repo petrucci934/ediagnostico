@@ -11,6 +11,7 @@ app.use(express.json());
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const registrarRotasRecuperacao = require("./passwordResetRoutes");
+const registrarRotasBiblioteca = require("./bibliotecaRoutes");
 
 if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET não configurada no arquivo .env");
@@ -115,6 +116,8 @@ const db = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
 });
+
+registrarRotasBiblioteca({ app, db, autenticarToken, exigirEditor });
 
 registrarRotasRecuperacao({
   app,

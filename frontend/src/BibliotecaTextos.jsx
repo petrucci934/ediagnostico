@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -8,10 +8,38 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import BibliotecaCabecalho from "./BibliotecaCabecalho";
-import artigos from "./data/artigos-biblioteca.json";
 import { filtrarArtigos } from "./bibliotecaUtils";
 
-export default function BibliotecaTextos() {
+export default function BibliotecaTextos({ token }) {
+  const [artigos, setArtigos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+  const [tentativa, setTentativa] = useState(0);
+  useEffect(() => {
+    const controller = new AbortController();
+    async function carregar() {
+      try {
+        const resposta = await fetch("/api/biblioteca/artigos", {
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller.signal,
+        });
+        const dados = await resposta.json();
+        if (!resposta.ok)
+          throw new Error(
+            dados.erro || "Não foi possível carregar a biblioteca.",
+          );
+        if (!Array.isArray(dados.artigos))
+          throw new Error("Resposta inválida da biblioteca.");
+        if (!controller.signal.aborted) setArtigos(dados.artigos);
+      } catch (falha) {
+        if (!controller.signal.aborted) setErro(falha.message);
+      } finally {
+        if (!controller.signal.aborted) setCarregando(false);
+      }
+    }
+    carregar();
+    return () => controller.abort();
+  }, [token, tentativa]);
   const [busca, setBusca] = useState("");
   const [filtros, setFiltros] = useState({
     busca: "",
@@ -68,6 +96,31 @@ export default function BibliotecaTextos() {
       resultadosRef.current?.focus({ preventScroll: true }),
     );
   }
+  if (carregando) return <p role="status">Carregando biblioteca técnica...</p>;
+  if (erro)
+    return (
+      <div className="bt-estado-vazio">
+        <p role="alert">{erro}</p>
+        <button
+          type="button"
+          className="bt-acao-secundaria"
+          onClick={() => {
+            setCarregando(true);
+            setErro("");
+            setTentativa((atual) => atual + 1);
+          }}
+        >
+          Tentar novamente
+        </button>
+      </div>
+    );
+  if (!artigos.length)
+    return (
+      <div className="bt-estado-vazio">
+        <h2>Biblioteca sem conteúdos</h2>
+        <p>Os conteúdos técnicos ainda não foram cadastrados.</p>
+      </div>
+    );
   return (
     <>
       <BibliotecaCabecalho

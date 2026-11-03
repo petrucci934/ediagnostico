@@ -2253,7 +2253,7 @@ function App() {
                   <p role="status">Carregando textos da biblioteca...</p>
                 }
               >
-                <BibliotecaTextos />
+                <BibliotecaTextos key={token} token={token} />
               </Suspense>
             ) : (
               <>

@@ -90,6 +90,20 @@ psql -d ediagnostico -f backend/migrations/20261103_completar_recursos.sql
 
 A migração cria as tabelas ausentes de catálogo, contatos e recuperação de senha e adiciona os valores separados de mão de obra e materiais ao catálogo existente, sem excluir registros. Não substitua uma base existente pelo `schema.sql`.
 
+### Biblioteca técnica no PostgreSQL
+
+A biblioteca consulta `GET /api/biblioteca/artigos`, com autenticação e acesso de mecânicos e administradores. Os textos ficam na tabela `biblioteca_artigos`; seções e referências usam JSONB para preservar a estrutura dos documentos. O frontend não importa mais o arquivo de conteúdos.
+
+Para criar a tabela e importar os 84 textos, configure o `.env` do backend e execute dentro de `backend`:
+
+```bash
+npm run migrar:biblioteca
+```
+
+O comando aplica a migração e importa os textos em uma única transação. Pode ser repetido: registros com o mesmo identificador são preservados, incluindo futuras edições no banco. O arquivo `backend/data/artigos-biblioteca.json` é somente a carga inicial, não a fonte usada pela aplicação em execução. Reinicie o backend após atualizar o código para disponibilizar a nova rota. Em uma instalação nova, o `schema.sql` já contém a tabela, mas a carga inicial ainda deve ser executada.
+
+Esta migração disponibiliza a leitura pelo banco. A edição dos textos por uma tela administrativa será uma funcionalidade separada.
+
 A recuperação de senha requer `FRONTEND_URL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` e `SMTP_PASS` no ambiente do backend; use `SMTP_SECURE=true` quando exigido pelo servidor de e-mail. A hospedagem do frontend deve encaminhar `/redefinir-senha` para `index.html`, preservando a query string, e `/api` para o backend.
 
 Novos serviços adicionados na precificação são gravados na API e ficam disponíveis no orçamento. Os serviços antigos armazenados apenas no navegador são preservados; eles não são importados automaticamente para evitar duplicação. Para utilizá-los no orçamento, cadastre-os no catálogo compartilhado.

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node test/regressoes.test.js",
+    "test": "node --test test/*.test.js",
+    "migrar:biblioteca": "node scripts/migrar-biblioteca.js",
     "criar-admin": "node scripts/criar-admin.js",
     "criar-admin-padrao": "node scripts/criar-admin-padrao.js",
     "start": "node src/server.js",
