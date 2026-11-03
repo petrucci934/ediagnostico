@@ -1,0 +1,816 @@
+/* Biblioteca do mecânico: estilos restritos à tela de referência. */
+.principal.biblioteca-tecnica {
+  width: min(1500px, calc(100% - 40px));
+  margin: 28px auto 48px;
+  padding: 24px 26px 32px;
+  border: 1px solid #145674;
+  border-radius: 26px;
+  background:
+    radial-gradient(ellipse at 50% 0, #00233570, transparent 65%), #001322;
+  color: #e5eff7;
+  font-family: var(--sans, system-ui, sans-serif);
+  line-height: 1.45;
+}
+.bt-apresentacao {
+  text-align: center;
+}
+.bt-area {
+  color: #a0ff00;
+  font-size: clamp(16px, 2vw, 25px);
+  font-weight: 800;
+}
+.bt-titulo {
+  display: grid;
+  grid-template-columns: 72px minmax(0, auto);
+  align-items: center;
+  justify-content: center;
+  column-gap: 22px;
+  row-gap: 4px;
+  margin: 14px 0 10px;
+}
+.bt-titulo > svg {
+  grid-column: 1;
+  grid-row: 1;
+  display: block;
+  width: 72px;
+  height: 72px;
+  color: #a0ff00;
+  stroke-width: 1.6;
+  flex-shrink: 0;
+}
+.biblioteca-tecnica .bt-titulo h1 {
+  grid-column: 2;
+  grid-row: 1;
+  text-align: left;
+  margin: 0;
+  color: #f6f8fc;
+  font-size: clamp(30px, 4vw, 58px);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+}
+.biblioteca-tecnica .bt-titulo h2 {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  text-align: center;
+  margin: 0;
+  color: #a0ff00;
+  font-size: clamp(20px, 2.6vw, 32px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.bt-apresentacao > p {
+  margin: 12px auto 22px;
+  max-width: 1200px;
+  font-size: clamp(15px, 1.65vw, 23px);
+  line-height: 1.4;
+}
+.bt-categorias {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+  margin: 24px 0 28px;
+}
+.bt-categoria.bt-verde {
+  --bt-cor: #00cd62;
+  --bt-fundo: #003b25;
+  --bt-icone: #a0ff00;
+}
+.bt-categoria.bt-azul {
+  --bt-cor: #00c7ff;
+  --bt-fundo: #00365d;
+}
+.bt-categoria.bt-roxo {
+  --bt-cor: #db66f4;
+  --bt-fundo: #422062;
+}
+.bt-categoria.bt-amarelo {
+  --bt-cor: #ffca00;
+  --bt-fundo: #633000;
+}
+.bt-categoria.bt-ciano {
+  --bt-cor: #00e5ec;
+  --bt-fundo: #00404c;
+}
+.bt-categoria.bt-rosa {
+  --bt-cor: #fa39cb;
+  --bt-fundo: #4e103e;
+}
+.biblioteca-tecnica .bt-categoria {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 166px;
+  padding: 16px 8px;
+  border: 2px solid var(--bt-cor);
+  border-radius: 17px;
+  background:
+    linear-gradient(135deg, var(--bt-fundo), #00132255), var(--bt-fundo);
+  box-shadow: inset 0 0 15px color-mix(in srgb, var(--bt-cor) 22%, transparent);
+  color: #fff;
+  opacity: 1;
+  cursor: default;
+}
+.bt-categoria > svg {
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  color: var(--bt-icone, var(--bt-cor));
+  stroke-width: 1.8;
+}
+.bt-categoria strong {
+  font-size: clamp(15px, 1.4vw, 21px);
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5em;
+  line-height: 1.25;
+}
+.bt-categoria span {
+  font-size: clamp(14px, 1.4vw, 20px);
+}
+.bt-pesquisa {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 195px;
+  gap: 26px;
+}
+.bt-campo-busca {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+  padding: 0 22px;
+  border: 2px solid #63869d;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #102735, #0a202e);
+}
+.bt-campo-busca > svg {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  color: #f4f7fb;
+}
+.biblioteca-tecnica .bt-campo-busca input {
+  width: 100%;
+  min-width: 0;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #d1dfe9;
+  font-size: 20px;
+  box-shadow: none;
+}
+.bt-campo-busca input::placeholder {
+  color: #c6d5e0;
+  opacity: 1;
+}
+.biblioteca-tecnica .bt-botao-pesquisar {
+  border: 0;
+  border-radius: 14px;
+  background: #a0ff20;
+  color: #071000;
+  font-size: 22px;
+  font-weight: 800;
+  opacity: 1;
+  cursor: default;
+}
+.bt-filtros {
+  display: grid;
+  grid-template-columns: 1.1fr 0.93fr 1fr 1.18fr;
+  gap: 26px;
+  margin: 20px 0 24px;
+}
+.biblioteca-tecnica .bt-filtros button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px 20px;
+  border: 2px solid #63869d;
+  border-radius: 13px;
+  background: linear-gradient(120deg, #102735, #0a202e);
+  color: #f5f7fc;
+  font-size: clamp(14px, 1.55vw, 21px);
+  text-align: left;
+  opacity: 1;
+  cursor: default;
+}
+.bt-filtros svg {
+  width: 22px;
+  flex-shrink: 0;
+}
+.bt-aviso {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin: 0 0 26px;
+  padding: 13px 28px;
+  border: 2px solid #00e6ef;
+  border-radius: 17px;
+  background: linear-gradient(110deg, #00212d, #072231);
+}
+.bt-aviso > svg {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  color: #b0f500;
+  stroke-width: 2.2;
+}
+.bt-aviso > div {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+.bt-aviso strong {
+  color: #b0f500;
+  font-size: 23px;
+  font-weight: 800;
+}
+.bt-aviso p {
+  margin: 2px 0 0;
+  text-align: left;
+  color: #f2f6fa;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.4;
+}
+.biblioteca-tecnica .galeria-mecanico {
+  margin: 0;
+  padding: 20px;
+  border: 1px solid #18587b;
+  border-radius: 27px;
+  background: #03203460;
+}
+.biblioteca-tecnica .moldura-carrossel {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.85fr) minmax(0, 1.75fr);
+  align-items: center;
+  gap: 18px;
+  margin: 0 0 20px;
+  padding: 24px;
+  border: 1px solid #23516c;
+  border-radius: 19px;
+  background: #00122185;
+}
+.biblioteca-tecnica .galeria-cabecalho {
+  margin: 0;
+  text-align: left;
+}
+.biblioteca-tecnica .galeria-cabecalho .etiqueta {
+  color: #a0ff00;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.biblioteca-tecnica .galeria-cabecalho h2 {
+  margin: 8px 0 12px;
+  color: #f6f7fc;
+  font-size: clamp(23px, 2.6vw, 35px);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.biblioteca-tecnica .galeria-cabecalho p {
+  font-size: 19px;
+  line-height: 1.4;
+  color: #d4e4ed;
+}
+.biblioteca-tecnica .galeria-codigo-card {
+  border-radius: 13px;
+}
+.biblioteca-tecnica .galeria-codigo-card.card-autoplay-ativo {
+  border-color: #00cfff;
+  box-shadow: 0 0 13px #00b9ff70;
+}
+
+@media (max-width: 1100px) {
+  .bt-categorias {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .bt-categoria strong {
+    font-size: 19px;
+  }
+  .bt-filtros {
+    gap: 12px;
+  }
+  .bt-filtros button {
+    padding: 10px 12px;
+  }
+  .biblioteca-tecnica .moldura-carrossel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 650px) {
+  .principal.biblioteca-tecnica {
+    width: calc(100% - 20px);
+    margin: 16px auto 28px;
+    padding: 22px 14px;
+    border-radius: 20px;
+  }
+  .bt-titulo {
+    grid-template-columns: 48px minmax(0, auto);
+    column-gap: 12px;
+  }
+  .bt-titulo > svg {
+    width: 48px;
+    height: 48px;
+  }
+  .bt-quebra-desktop {
+    display: none;
+  }
+  .bt-categorias {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .biblioteca-tecnica .bt-categoria {
+    min-height: 145px;
+    padding: 14px 6px;
+  }
+  .bt-categoria strong {
+    font-size: 16px;
+    letter-spacing: -0.4px;
+  }
+  .bt-pesquisa {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .bt-campo-busca {
+    gap: 10px;
+    padding: 0 12px;
+  }
+  .biblioteca-tecnica .bt-campo-busca input {
+    font-size: 15px;
+    height: 52px;
+  }
+  .biblioteca-tecnica .bt-botao-pesquisar {
+    min-height: 48px;
+    font-size: 18px;
+  }
+  .bt-filtros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .biblioteca-tecnica .bt-filtros button {
+    padding: 10px;
+    font-size: 13px;
+  }
+  .bt-aviso {
+    gap: 12px;
+    padding: 14px 12px;
+    align-items: flex-start;
+  }
+  .bt-aviso > svg {
+    width: 30px;
+    height: 30px;
+  }
+  .bt-aviso strong {
+    font-size: 18px;
+  }
+  .biblioteca-tecnica .galeria-mecanico {
+    padding: 12px;
+    border-radius: 19px;
+  }
+  .biblioteca-tecnica .moldura-carrossel {
+    padding: 14px 10px;
+  }
+  .biblioteca-tecnica .galeria-cabecalho p {
+    font-size: 16px;
+  }
+}
+
+.bt-categoria > .bt-patinete {
+  stroke-width: 3.5;
+}
+.biblioteca-tecnica .carrossel03-wrapper {
+  min-width: 0;
+}
+.biblioteca-tecnica .carrossel03-wrapper > .galeria-codigos {
+  height: 208px;
+  padding-block: 12px !important;
+}
+.biblioteca-tecnica .carrossel03-wrapper .galeria-codigo-card {
+  height: 180px;
+  min-height: 180px;
+  max-height: 180px;
+  padding: 8px;
+  background: #00101e;
+}
+.biblioteca-tecnica .carrossel03-wrapper .galeria-codigo-card > img {
+  height: 160px;
+  min-height: 0;
+  max-height: 160px;
+  object-fit: contain;
+  background: transparent;
+}
+.biblioteca-tecnica .carrossel03-wrapper .galeria-codigo-card > h3 {
+  display: none;
+}
+.biblioteca-tecnica .carrossel03-wrapper .galeria-guia-card > h3 {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+.biblioteca-tecnica .carrossel03-wrapper > .autoplay-indicadores {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  gap: 5px;
+  left: auto;
+  overflow: hidden;
+}
+.biblioteca-tecnica .carrossel03-wrapper .autoplay-indicador {
+  flex: 0 1 22px;
+  width: 22px;
+  min-width: 0;
+  height: 5px;
+}
+@media (max-width: 650px) {
+  .biblioteca-tecnica .bt-titulo h1 {
+    letter-spacing: -0.8px;
+    font-size: clamp(24px, 7.3vw, 30px);
+  }
+  .bt-categoria strong {
+    min-height: 2.5em;
+  }
+  .biblioteca-tecnica .bt-filtros button {
+    min-height: 60px;
+    line-height: 1.45;
+  }
+  .biblioteca-tecnica .moldura-carrossel .carrossel03-wrapper {
+    grid-template-columns: 28px minmax(0, 1fr) 28px;
+  }
+  .biblioteca-tecnica
+    .moldura-carrossel
+    .carrossel03-wrapper
+    > .carrossel03-seta {
+    width: 28px !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    font-size: 25px;
+  }
+  .biblioteca-tecnica .carrossel03-wrapper > .galeria-codigos,
+  .biblioteca-tecnica .carrossel03-wrapper > .galeria-guias {
+    scroll-padding-inline: 0;
+  }
+  .biblioteca-tecnica .carrossel03-wrapper .galeria-codigo-card,
+  .biblioteca-tecnica .carrossel03-wrapper .galeria-guia-card {
+    flex-basis: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
+/* Supera as dimensões antigas dos carrosséis sem afetar as outras telas. */
+.biblioteca-tecnica
+  .moldura-carrossel
+  .carrossel03-wrapper
+  > .galeria-codigos
+  > .galeria-codigo-card {
+  height: 180px !important;
+  min-height: 180px !important;
+  max-height: 180px !important;
+}
+.biblioteca-tecnica
+  .moldura-carrossel
+  .carrossel03-wrapper
+  > .galeria-codigos
+  > .galeria-codigo-card
+  > img {
+  height: 160px !important;
+  min-height: 0 !important;
+  max-height: 160px !important;
+  flex-basis: 160px !important;
+}
+@media (max-width: 650px) {
+  .biblioteca-tecnica
+    .moldura-carrossel
+    .carrossel03-wrapper
+    > .galeria-codigos
+    > .galeria-codigo-card,
+  .biblioteca-tecnica
+    .moldura-carrossel
+    .carrossel03-wrapper
+    > .galeria-guias
+    > .galeria-guia-card {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .bt-titulo {
+    grid-template-columns: 36px minmax(0, auto);
+    column-gap: 8px;
+  }
+  .bt-titulo > svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Catálogo de textos e leitor técnico. */
+.biblioteca-tecnica .bt-categoria:not(:disabled),
+.biblioteca-tecnica .bt-botao-pesquisar:not(:disabled) {
+  cursor: pointer;
+}
+.biblioteca-tecnica .bt-categoria[aria-pressed="true"] {
+  outline: 3px solid #e8f6ff;
+  outline-offset: 3px;
+}
+.principal.biblioteca-tecnica form.bt-pesquisa {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 195px;
+  gap: 26px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.bt-filtros label {
+  text-align: left;
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+.bt-filtro-label {
+  font-size: 13px;
+  color: #b7cddd;
+}
+.biblioteca-tecnica .bt-filtros select {
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 2px solid #63869d;
+  border-radius: 13px;
+  background: #0a202e;
+  color: #f5f7fc;
+  font: inherit;
+  font-size: 16px;
+}
+.bt-textos {
+  margin: 0 0 26px;
+  padding: clamp(16px, 2.5vw, 28px);
+  border: 1px solid #23516b;
+  border-radius: 20px;
+  background: #061c2b;
+  text-align: left;
+}
+.bt-resultados-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.bt-textos-etiqueta {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: #a3ff12;
+}
+.biblioteca-tecnica .bt-textos h2 {
+  margin: 8px 0 10px;
+  color: #eef5fa;
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.2;
+  text-align: left;
+}
+.biblioteca-tecnica .bt-textos p {
+  margin: 0 0 12px;
+  color: #c4d6e2;
+  line-height: 1.65;
+  text-align: left;
+}
+.bt-lista-textos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.bt-texto-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  border: 1px solid #2a4c62;
+  border-radius: 15px;
+  background: #092333;
+}
+.bt-texto-metadados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: #9dd5d2;
+  font-size: 13px;
+}
+.biblioteca-tecnica .bt-textos h3 {
+  margin: 14px 0 12px;
+  font-size: 21px;
+  color: #eef5fa;
+  line-height: 1.3;
+  text-align: left;
+}
+.bt-texto-card small {
+  font-size: 12px;
+  color: #d2c79b;
+  margin: auto 0 15px;
+}
+.biblioteca-tecnica .bt-texto-card button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  align-self: flex-start;
+  padding: 11px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: #a3ff12;
+  color: #092000;
+  font-weight: 700;
+  cursor: pointer;
+}
+.biblioteca-tecnica .bt-acao-secundaria,
+.biblioteca-tecnica .bt-voltar,
+.bt-navegacao-leituras button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  min-height: 44px;
+  border: 1px solid #55758c;
+  border-radius: 9px;
+  background: #102b3b;
+  color: #e5f3fc;
+  font: inherit;
+  cursor: pointer;
+}
+.bt-estado-vazio {
+  padding: 26px 0;
+}
+.bt-estado-vazio > svg {
+  color: #a3ff12;
+}
+.bt-leitura-localizacao {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0;
+  color: #9dc2d4;
+  font-size: 13px;
+}
+.bt-leitura-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  gap: 30px;
+  align-items: start;
+}
+.bt-artigo {
+  min-width: 0;
+}
+.bt-artigo header {
+  padding: 0 0 22px;
+  border-bottom: 1px solid #2a475a;
+}
+.biblioteca-tecnica .bt-artigo .bt-status-editorial {
+  color: #dacb98;
+  font-size: 13px;
+  margin-top: 14px;
+}
+.bt-artigo > section {
+  padding: 16px 0;
+  border-bottom: 1px solid #2a475a;
+  scroll-margin-top: 24px;
+}
+.biblioteca-tecnica .bt-artigo h3 {
+  color: #40d5e8;
+}
+.bt-artigo ul {
+  margin: 10px 0 16px;
+  padding-left: 23px;
+  color: #c4d6e2;
+  line-height: 1.7;
+}
+.bt-artigo li {
+  margin-bottom: 9px;
+}
+.bt-artigo-aviso {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  background: #113440;
+  border-left: 3px solid #00d6e7;
+  border-radius: 0 10px 10px 0;
+  margin: 16px 0;
+}
+.bt-artigo-aviso svg {
+  flex-shrink: 0;
+  color: #40d5e8;
+  margin-top: 3px;
+}
+.biblioteca-tecnica .bt-artigo-aviso p {
+  margin: 0;
+}
+.bt-indice {
+  position: sticky;
+  top: 24px;
+  padding: 18px;
+  border: 1px solid #2a475a;
+  border-radius: 14px;
+  background: #0b2331;
+}
+.bt-indice strong {
+  display: block;
+  margin-bottom: 12px;
+}
+.bt-indice a {
+  display: block;
+  padding: 10px 8px;
+  color: #9bd9ff;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.bt-indice a:hover {
+  background: #153d4c;
+  color: #fff;
+}
+.bt-fontes a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  color: #9bd9ff;
+  overflow-wrap: anywhere;
+}
+.bt-fontes a svg {
+  flex-shrink: 0;
+}
+.bt-navegacao-leituras {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+.bt-navegacao-leituras button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.bt-textos :is(button, a):focus-visible,
+.bt-filtros select:focus-visible,
+.bt-campo-busca input:focus-visible {
+  outline: 2px solid #00d6e7;
+  outline-offset: 4px;
+}
+#bt-artigo-titulo {
+  scroll-margin-top: 24px;
+}
+@media (max-width: 900px) {
+  .bt-leitura-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bt-indice {
+    position: static;
+    grid-row: 1;
+  }
+  .bt-indice a {
+    display: inline-block;
+    margin-right: 8px;
+  }
+}
+@media (max-width: 650px) {
+  .bt-lista-textos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bt-texto-card {
+    padding: 16px;
+  }
+  .biblioteca-tecnica .bt-filtros select {
+    font-size: 14px;
+    padding: 10px 8px;
+  }
+}
+
+@media (max-width: 650px) {
+  .principal.biblioteca-tecnica form.bt-pesquisa {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}

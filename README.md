@@ -79,3 +79,19 @@ Na pasta `backend/`:
 ## Cuidados com dados locais
 
 Segredos, dependências, dumps e cópias de segurança ficam fora do controle de versão pela configuração raiz do Git. Os arquivos locais não são apagados.
+
+## Atualização de 03/11/2026
+
+Antes de iniciar a API atualizada em uma base existente, faça backup e aplique:
+
+```sh
+psql -d ediagnostico -f backend/migrations/20261103_completar_recursos.sql
+```
+
+A migração cria as tabelas ausentes de catálogo, contatos e recuperação de senha e adiciona os valores separados de mão de obra e materiais ao catálogo existente, sem excluir registros. Não substitua uma base existente pelo `schema.sql`.
+
+A recuperação de senha requer `FRONTEND_URL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` e `SMTP_PASS` no ambiente do backend; use `SMTP_SECURE=true` quando exigido pelo servidor de e-mail. A hospedagem do frontend deve encaminhar `/redefinir-senha` para `index.html`, preservando a query string, e `/api` para o backend.
+
+Novos serviços adicionados na precificação são gravados na API e ficam disponíveis no orçamento. Os serviços antigos armazenados apenas no navegador são preservados; eles não são importados automaticamente para evitar duplicação. Para utilizá-los no orçamento, cadastre-os no catálogo compartilhado.
+
+Execute `npm test` na pasta `backend/` para as verificações de regressão. Elas usam banco simulado e não modificam dados reais. Execute `npm run lint` e `npm run build` na pasta `frontend/` para validar a interface.

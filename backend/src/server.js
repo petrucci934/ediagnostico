@@ -60,13 +60,9 @@ async function autenticarToken(req, res, next) {
     };
 
     const rotaTrocaCredenciais =
-      req.method === "PUT" &&
-      req.path === "/api/auth/credenciais";
+      req.method === "PUT" && req.path === "/api/auth/credenciais";
 
-    if (
-      usuario.deve_trocar_credenciais &&
-      !rotaTrocaCredenciais
-    ) {
+    if (usuario.deve_trocar_credenciais && !rotaTrocaCredenciais) {
       return res.status(403).json({
         erro: "Troque suas credenciais antes de continuar.",
         deve_trocar_credenciais: true,
@@ -75,10 +71,7 @@ async function autenticarToken(req, res, next) {
 
     return next();
   } catch (erro) {
-    console.error(
-      "Erro ao validar usuário autenticado:",
-      erro.message,
-    );
+    console.error("Erro ao validar usuário autenticado:", erro.message);
 
     return res.status(500).json({
       erro: "Não foi possível validar a conta do usuário.",
@@ -132,11 +125,12 @@ registrarRotasRecuperacao({
 });
 
 app.post("/api/auth/login", async (req, res) => {
-  const login = typeof req.body?.login === "string"
-    ? req.body.login.trim().toLowerCase()
-    : typeof req.body?.email === "string"
-      ? req.body.email.trim().toLowerCase()
-      : "";
+  const login =
+    typeof req.body?.login === "string"
+      ? req.body.login.trim().toLowerCase()
+      : typeof req.body?.email === "string"
+        ? req.body.email.trim().toLowerCase()
+        : "";
   const { senha } = req.body || {};
 
   if (!login || typeof senha !== "string" || !senha) {
@@ -197,15 +191,23 @@ app.post("/api/auth/login", async (req, res) => {
 });
 
 app.put("/api/auth/credenciais", autenticarToken, async (req, res) => {
-  const usuarioNovo = typeof req.body?.usuario === "string" ? req.body.usuario.trim() : "";
+  const usuarioNovo =
+    typeof req.body?.usuario === "string" ? req.body.usuario.trim() : "";
   const senhaNova = typeof req.body?.senha === "string" ? req.body.senha : "";
   if (!/^[a-zA-Z0-9._-]{3,80}$/.test(usuarioNovo) || senhaNova.length < 12) {
     return res.status(400).json({
       erro: "Escolha um usuário de 3 a 80 caracteres (letras, números, ponto, hífen ou sublinhado) e uma senha com pelo menos 12 caracteres.",
     });
   }
-  if (usuarioNovo.toLowerCase() === "admin" || senhaNova.toLowerCase() === "admin") {
-    return res.status(400).json({ erro: "Escolha um usuário e uma senha diferentes das credenciais temporárias." });
+  if (
+    usuarioNovo.toLowerCase() === "admin" ||
+    senhaNova.toLowerCase() === "admin"
+  ) {
+    return res
+      .status(400)
+      .json({
+        erro: "Escolha um usuário e uma senha diferentes das credenciais temporárias.",
+      });
   }
   try {
     const senhaHash = await bcrypt.hash(senhaNova, 12);
@@ -217,324 +219,400 @@ app.put("/api/auth/credenciais", autenticarToken, async (req, res) => {
       [usuarioNovo, senhaHash, req.usuario.sub],
     );
     if (!resultado.rowCount) {
-      return res.status(409).json({ erro: "A troca inicial de credenciais não está pendente para esta conta." });
+      return res
+        .status(409)
+        .json({
+          erro: "A troca inicial de credenciais não está pendente para esta conta.",
+        });
     }
     res.json({ usuario: resultado.rows[0] });
   } catch (erro) {
-    if (erro.code === "23505") return res.status(409).json({ erro: "Esse usuário já está em uso." });
+    if (erro.code === "23505")
+      return res.status(409).json({ erro: "Esse usuário já está em uso." });
     console.error("Erro ao trocar credenciais iniciais:", erro.message);
-    res.status(500).json({ erro: "Não foi possível atualizar as credenciais." });
+    res
+      .status(500)
+      .json({ erro: "Não foi possível atualizar as credenciais." });
   }
 });
 
 // Gestão administrativa de contas de mecânicos.
-app.get("/api/admin/mecanicos", autenticarToken, exigirAdmin, async (_req, res) => {
-  try {
-    const resultado = await db.query(
-      `SELECT id, nome, email, ativo, criado_em
+app.get(
+  "/api/admin/mecanicos",
+  autenticarToken,
+  exigirAdmin,
+  async (_req, res) => {
+    try {
+      const resultado = await db.query(
+        `SELECT id, nome, email, ativo, criado_em
        FROM usuarios WHERE perfil = 'mecanico' ORDER BY nome, id`,
-    );
-    res.json({ mecanicos: resultado.rows });
-  } catch (erro) {
-    console.error("Erro ao listar mecânicos:", erro.message);
-    res.status(500).json({ erro: "Não foi possível listar os mecânicos." });
-  }
-});
+      );
+      res.json({ mecanicos: resultado.rows });
+    } catch (erro) {
+      console.error("Erro ao listar mecânicos:", erro.message);
+      res.status(500).json({ erro: "Não foi possível listar os mecânicos." });
+    }
+  },
+);
 
-app.post("/api/admin/mecanicos", autenticarToken, exigirAdmin, async (req, res) => {
-  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
-  const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
-  const senha = typeof req.body?.senha === "string" ? req.body.senha : "";
-  if (!nome || !email || senha.length < 8) {
-    return res.status(400).json({ erro: "Informe nome, e-mail e senha com pelo menos 8 caracteres." });
-  }
-  try {
-    const senhaHash = await bcrypt.hash(senha, 10);
-    const resultado = await db.query(
-      `INSERT INTO usuarios (nome, email, senha_hash, perfil)
+app.post(
+  "/api/admin/mecanicos",
+  autenticarToken,
+  exigirAdmin,
+  async (req, res) => {
+    const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+    const email =
+      typeof req.body?.email === "string"
+        ? req.body.email.trim().toLowerCase()
+        : "";
+    const senha = typeof req.body?.senha === "string" ? req.body.senha : "";
+    if (!nome || !email || senha.length < 8) {
+      return res
+        .status(400)
+        .json({
+          erro: "Informe nome, e-mail e senha com pelo menos 8 caracteres.",
+        });
+    }
+    try {
+      const senhaHash = await bcrypt.hash(senha, 10);
+      const resultado = await db.query(
+        `INSERT INTO usuarios (nome, email, senha_hash, perfil)
        VALUES ($1, $2, $3, 'mecanico')
        RETURNING id, nome, email, ativo, criado_em`,
-      [nome, email, senhaHash],
-    );
-    res.status(201).json({ mecanico: resultado.rows[0] });
-  } catch (erro) {
-    if (erro.code === "23505") return res.status(409).json({ erro: "Já existe uma conta com este e-mail." });
-    console.error("Erro ao cadastrar mecânico:", erro.message);
-    res.status(500).json({ erro: "Não foi possível cadastrar o mecânico." });
-  }
-});
-
-app.put("/api/admin/mecanicos/:id", autenticarToken, exigirAdmin, async (req, res) => {
-  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
-  const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
-  const ativo = req.body?.ativo;
-  const senha = typeof req.body?.senha === "string" ? req.body.senha : "";
-  if (!nome || !email || typeof ativo !== "boolean" || (senha && senha.length < 8)) {
-    return res.status(400).json({ erro: "Confira nome, e-mail, situação e senha (mínimo de 8 caracteres)." });
-  }
-  try {
-    const valores = [nome, email, ativo, req.params.id];
-    let sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3
-               WHERE id = $4 AND perfil = 'mecanico'`;
-    if (senha) {
-      valores.push(await bcrypt.hash(senha, 10));
-      sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3, senha_hash = $5
-             WHERE id = $4 AND perfil = 'mecanico'`;
+        [nome, email, senhaHash],
+      );
+      res.status(201).json({ mecanico: resultado.rows[0] });
+    } catch (erro) {
+      if (erro.code === "23505")
+        return res
+          .status(409)
+          .json({ erro: "Já existe uma conta com este e-mail." });
+      console.error("Erro ao cadastrar mecânico:", erro.message);
+      res.status(500).json({ erro: "Não foi possível cadastrar o mecânico." });
     }
-    const resultado = await db.query(`${sql} RETURNING id, nome, email, ativo, criado_em`, valores);
-    if (!resultado.rowCount) return res.status(404).json({ erro: "Mecânico não encontrado." });
-    res.json({ mecanico: resultado.rows[0] });
-  } catch (erro) {
-    if (erro.code === "23505") return res.status(409).json({ erro: "Já existe uma conta com este e-mail." });
-    console.error("Erro ao atualizar mecânico:", erro.message);
-    res.status(500).json({ erro: "Não foi possível atualizar o mecânico." });
-  }
-});
+  },
+);
+
+app.put(
+  "/api/admin/mecanicos/:id",
+  autenticarToken,
+  exigirAdmin,
+  async (req, res) => {
+    const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+    const email =
+      typeof req.body?.email === "string"
+        ? req.body.email.trim().toLowerCase()
+        : "";
+    const ativo = req.body?.ativo;
+    const senha = typeof req.body?.senha === "string" ? req.body.senha : "";
+    if (
+      !nome ||
+      !email ||
+      typeof ativo !== "boolean" ||
+      (senha && senha.length < 8)
+    ) {
+      return res
+        .status(400)
+        .json({
+          erro: "Confira nome, e-mail, situação e senha (mínimo de 8 caracteres).",
+        });
+    }
+    try {
+      const valores = [nome, email, ativo, req.params.id];
+      let sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3
+               WHERE id = $4 AND perfil = 'mecanico'`;
+      if (senha) {
+        valores.push(await bcrypt.hash(senha, 10));
+        sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3, senha_hash = $5
+             WHERE id = $4 AND perfil = 'mecanico'`;
+      }
+      const resultado = await db.query(
+        `${sql} RETURNING id, nome, email, ativo, criado_em`,
+        valores,
+      );
+      if (!resultado.rowCount)
+        return res.status(404).json({ erro: "Mecânico não encontrado." });
+      res.json({ mecanico: resultado.rows[0] });
+    } catch (erro) {
+      if (erro.code === "23505")
+        return res
+          .status(409)
+          .json({ erro: "Já existe uma conta com este e-mail." });
+      console.error("Erro ao atualizar mecânico:", erro.message);
+      res.status(500).json({ erro: "Não foi possível atualizar o mecânico." });
+    }
+  },
+);
+
+function exigirAcessoClientes(req, res, next) {
+  return req.path.startsWith("/api/admin/")
+    ? exigirAdmin(req, res, next)
+    : exigirEditor(req, res, next);
+}
 
 // Clientes compartilhados entre mecânicos e administrador.
-app.get("/api/clientes", autenticarToken, exigirEditor, async (_req, res) => {
-  try {
-    const resultado = await db.query(
-      "SELECT * FROM clientes ORDER BY nome, id"
-    );
-    res.json({ clientes: resultado.rows });
-  } catch (erro) {
-    console.error("Erro ao listar clientes:", erro.message);
-    res.status(500).json({ erro: "Não foi possível listar os clientes." });
-  }
-});
+app.get(
+  ["/api/clientes", "/api/admin/clientes"],
+  autenticarToken,
+  exigirAcessoClientes,
+  async (_req, res) => {
+    try {
+      const resultado = await db.query(
+        "SELECT * FROM clientes ORDER BY nome, id",
+      );
+      res.json({ clientes: resultado.rows });
+    } catch (erro) {
+      console.error("Erro ao listar clientes:", erro.message);
+      res.status(500).json({ erro: "Não foi possível listar os clientes." });
+    }
+  },
+);
 
-app.post("/api/clientes", autenticarToken, exigirEditor, async (req, res) => {
-  const nome =
-    typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+app.post(
+  ["/api/clientes", "/api/admin/clientes"],
+  autenticarToken,
+  exigirAcessoClientes,
+  async (req, res) => {
+    const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
 
-  if (!nome) {
-    return res.status(400).json({ erro: "Informe o nome do cliente." });
-  }
+    if (!nome) {
+      return res.status(400).json({ erro: "Informe o nome do cliente." });
+    }
 
-  const texto = (valor) =>
-    typeof valor === "string" ? valor.trim() : "";
+    const texto = (valor) => (typeof valor === "string" ? valor.trim() : "");
 
-  try {
-    const resultado = await db.query(
-      `INSERT INTO clientes (nome, telefone, email, veiculo)
+    try {
+      const resultado = await db.query(
+        `INSERT INTO clientes (nome, telefone, email, veiculo)
        VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [
-        nome,
-        texto(req.body.telefone) || null,
-        texto(req.body.email).toLowerCase() || null,
-        texto(req.body.veiculo) || null,
-      ],
-    );
+        [
+          nome,
+          texto(req.body.telefone) || null,
+          texto(req.body.email).toLowerCase() || null,
+          texto(req.body.veiculo) || null,
+        ],
+      );
 
-    res.status(201).json({ cliente: resultado.rows[0] });
-  } catch (erro) {
-    console.error("Erro ao cadastrar cliente:", erro.message);
-    res.status(500).json({ erro: "Não foi possível cadastrar o cliente." });
-  }
-});
+      res.status(201).json({ cliente: resultado.rows[0] });
+    } catch (erro) {
+      console.error("Erro ao cadastrar cliente:", erro.message);
+      res.status(500).json({ erro: "Não foi possível cadastrar o cliente." });
+    }
+  },
+);
 
-// Cadastro administrativo de clientes.
-app.get("/api/admin/clientes", autenticarToken, exigirAdmin, async (_req, res) => {
-  try {
-    const resultado = await db.query("SELECT * FROM clientes ORDER BY nome, id");
-    res.json({ clientes: resultado.rows });
-  } catch (erro) {
-    console.error("Erro ao listar clientes:", erro.message);
-    res.status(500).json({ erro: "Não foi possível listar os clientes." });
-  }
-});
+app.put(
+  ["/api/clientes/:id", "/api/admin/clientes/:id"],
+  autenticarToken,
+  exigirAcessoClientes,
+  async (req, res) => {
+    const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
 
-app.post("/api/admin/clientes", autenticarToken, exigirAdmin, async (req, res) => {
-  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
-  if (!nome) return res.status(400).json({ erro: "Informe o nome do cliente." });
-  try {
-    const resultado = await db.query(
-      `INSERT INTO clientes (nome, telefone, email, veiculo)
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [nome, req.body.telefone?.trim() || null, req.body.email?.trim().toLowerCase() || null, req.body.veiculo?.trim() || null],
-    );
-    res.status(201).json({ cliente: resultado.rows[0] });
-  } catch (erro) {
-    console.error("Erro ao cadastrar cliente:", erro.message);
-    res.status(500).json({ erro: "Não foi possível cadastrar o cliente." });
-  }
-});
+    if (!nome) {
+      return res.status(400).json({ erro: "Informe o nome do cliente." });
+    }
 
-app.put("/api/admin/clientes/:id", autenticarToken, exigirAdmin, async (req, res) => {
-  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
-  if (!nome) return res.status(400).json({ erro: "Informe o nome do cliente." });
-  try {
-    const resultado = await db.query(
-      `UPDATE clientes SET nome = $1, telefone = $2, email = $3, veiculo = $4
-       WHERE id = $5 RETURNING *`,
-      [nome, req.body.telefone?.trim() || null, req.body.email?.trim().toLowerCase() || null, req.body.veiculo?.trim() || null, req.params.id],
-    );
-    if (!resultado.rowCount) return res.status(404).json({ erro: "Cliente não encontrado." });
-    res.json({ cliente: resultado.rows[0] });
-  } catch (erro) {
-    console.error("Erro ao atualizar cliente:", erro.message);
-    res.status(500).json({ erro: "Não foi possível atualizar o cliente." });
-  }
-});
+    const texto = (valor) => (typeof valor === "string" ? valor.trim() : "");
 
-app.delete("/api/admin/clientes/:id", autenticarToken, exigirAdmin, async (req, res) => {
-  try {
-    const resultado = await db.query("DELETE FROM clientes WHERE id = $1", [req.params.id]);
-    if (!resultado.rowCount) return res.status(404).json({ erro: "Cliente não encontrado." });
-    res.status(204).end();
-  } catch (erro) {
-    console.error("Erro ao excluir cliente:", erro.message);
-    res.status(500).json({ erro: "Não foi possível excluir o cliente." });
-  }
-});
-
-
-app.put("/api/clientes/:id", autenticarToken, exigirEditor, async (req, res) => {
-  const nome =
-    typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
-
-  if (!nome) {
-    return res.status(400).json({ erro: "Informe o nome do cliente." });
-  }
-
-  const texto = (valor) =>
-    typeof valor === "string" ? valor.trim() : "";
-
-  try {
-    const resultado = await db.query(
-      `UPDATE clientes
+    try {
+      const resultado = await db.query(
+        `UPDATE clientes
        SET nome = $1, telefone = $2, email = $3, veiculo = $4
        WHERE id = $5
        RETURNING *`,
-      [
-        nome,
-        texto(req.body.telefone) || null,
-        texto(req.body.email).toLowerCase() || null,
-        texto(req.body.veiculo) || null,
+        [
+          nome,
+          texto(req.body.telefone) || null,
+          texto(req.body.email).toLowerCase() || null,
+          texto(req.body.veiculo) || null,
+          req.params.id,
+        ],
+      );
+
+      if (!resultado.rowCount) {
+        return res.status(404).json({ erro: "Cliente não encontrado." });
+      }
+
+      res.json({ cliente: resultado.rows[0] });
+    } catch (erro) {
+      console.error("Erro ao atualizar cliente:", erro.message);
+      res.status(500).json({ erro: "Não foi possível atualizar o cliente." });
+    }
+  },
+);
+
+app.delete(
+  ["/api/clientes/:id", "/api/admin/clientes/:id"],
+  autenticarToken,
+  exigirAcessoClientes,
+  async (req, res) => {
+    try {
+      const resultado = await db.query("DELETE FROM clientes WHERE id = $1", [
         req.params.id,
-      ],
-    );
+      ]);
 
-    if (!resultado.rowCount) {
-      return res.status(404).json({ erro: "Cliente não encontrado." });
+      if (!resultado.rowCount) {
+        return res.status(404).json({ erro: "Cliente não encontrado." });
+      }
+
+      res.status(204).end();
+    } catch (erro) {
+      console.error("Erro ao excluir cliente:", erro.message);
+      res.status(500).json({ erro: "Não foi possível excluir o cliente." });
     }
-
-    res.json({ cliente: resultado.rows[0] });
-  } catch (erro) {
-    console.error("Erro ao atualizar cliente:", erro.message);
-    res.status(500).json({ erro: "Não foi possível atualizar o cliente." });
-  }
-});
-
-app.delete("/api/clientes/:id", autenticarToken, exigirEditor, async (req, res) => {
-  try {
-    const resultado = await db.query(
-      "DELETE FROM clientes WHERE id = $1",
-      [req.params.id],
-    );
-
-    if (!resultado.rowCount) {
-      return res.status(404).json({ erro: "Cliente não encontrado." });
-    }
-
-    res.status(204).end();
-  } catch (erro) {
-    console.error("Erro ao excluir cliente:", erro.message);
-    res.status(500).json({ erro: "Não foi possível excluir o cliente." });
-  }
-});
-
+  },
+);
 
 /* Gestão dos contatos de WhatsApp */
 
 // Catálogo de serviços e peças da oficina.
-app.get("/api/catalogo-oficina", autenticarToken, exigirEditor, async (_req, res) => {
-  try {
-    const resultado = await db.query(
-      "SELECT * FROM catalogo_oficina ORDER BY nome, id"
-    );
-    res.json({ itens: resultado.rows });
-  } catch (erro) {
-    console.error("Erro ao listar catálogo:", erro.message);
-    res.status(500).json({ erro: "Não foi possível listar o catálogo." });
-  }
-});
+app.get(
+  "/api/catalogo-oficina",
+  autenticarToken,
+  exigirEditor,
+  async (_req, res) => {
+    try {
+      const resultado = await db.query(
+        "SELECT * FROM catalogo_oficina ORDER BY nome, id",
+      );
+      res.json({ itens: resultado.rows });
+    } catch (erro) {
+      console.error("Erro ao listar catálogo:", erro.message);
+      res.status(500).json({ erro: "Não foi possível listar o catálogo." });
+    }
+  },
+);
 
-app.post("/api/catalogo-oficina", autenticarToken, exigirEditor, async (req, res) => {
-  const { nome, tipo, categoria, preco } = req.body;
-  const valor = Number(preco ?? 0);
+app.post(
+  "/api/catalogo-oficina",
+  autenticarToken,
+  exigirEditor,
+  async (req, res) => {
+    const { nome, tipo, categoria, preco, maoDeObra, materiais } =
+      req.body || {};
+    const valor = Number(preco ?? 0);
 
-  if (!nome?.trim() || !["servico", "peca"].includes(tipo) ||
-      !Number.isFinite(valor) || valor < 0) {
-    return res.status(400).json({ erro: "Dados do item inválidos." });
-  }
+    if (
+      typeof nome !== "string" ||
+      !nome.trim() ||
+      (categoria != null && typeof categoria !== "string") ||
+      !["servico", "peca"].includes(tipo) ||
+      !Number.isFinite(valor) ||
+      valor < 0 ||
+      [maoDeObra, materiais].some(
+        (v) =>
+          v != null && (typeof v !== "number" || !Number.isFinite(v) || v < 0),
+      ) ||
+      ((maoDeObra != null || materiais != null) &&
+        Math.abs(valor - ((maoDeObra ?? 0) + (materiais ?? 0))) > 0.005)
+    ) {
+      return res.status(400).json({ erro: "Dados do item inválidos." });
+    }
 
-  try {
-    const resultado = await db.query(
-      `INSERT INTO catalogo_oficina (nome, tipo, categoria, preco)
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [nome.trim(), tipo, categoria?.trim() || null, valor]
-    );
-    res.status(201).json({ item: resultado.rows[0] });
-  } catch (erro) {
-    console.error("Erro ao cadastrar item:", erro.message);
-    res.status(500).json({ erro: "Não foi possível cadastrar o item." });
-  }
-});
+    try {
+      const resultado = await db.query(
+        `INSERT INTO catalogo_oficina (nome, tipo, categoria, preco, mao_de_obra, materiais)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+        [
+          nome.trim(),
+          tipo,
+          categoria?.trim() || null,
+          valor,
+          maoDeObra ?? null,
+          materiais ?? null,
+        ],
+      );
+      res.status(201).json({ item: resultado.rows[0] });
+    } catch (erro) {
+      console.error("Erro ao cadastrar item:", erro.message);
+      res.status(500).json({ erro: "Não foi possível cadastrar o item." });
+    }
+  },
+);
 
-app.put("/api/catalogo-oficina/:id", autenticarToken, exigirEditor, async (req, res) => {
-  const { nome, tipo, categoria, preco } = req.body;
-  const valor = Number(preco ?? 0);
+app.put(
+  "/api/catalogo-oficina/:id",
+  autenticarToken,
+  exigirEditor,
+  async (req, res) => {
+    const { nome, tipo, categoria, preco, maoDeObra, materiais } =
+      req.body || {};
+    const valor = Number(preco ?? 0);
 
-  if (!/^[1-9]\d*$/.test(req.params.id) ||
-      !nome?.trim() || !["servico", "peca"].includes(tipo) ||
-      !Number.isFinite(valor) || valor < 0) {
-    return res.status(400).json({ erro: "Dados do item inválidos." });
-  }
+    if (
+      !/^[1-9]\d*$/.test(req.params.id) ||
+      typeof nome !== "string" ||
+      !nome.trim() ||
+      (categoria != null && typeof categoria !== "string") ||
+      !["servico", "peca"].includes(tipo) ||
+      !Number.isFinite(valor) ||
+      valor < 0 ||
+      [maoDeObra, materiais].some(
+        (v) =>
+          v != null && (typeof v !== "number" || !Number.isFinite(v) || v < 0),
+      ) ||
+      ((maoDeObra != null || materiais != null) &&
+        Math.abs(valor - ((maoDeObra ?? 0) + (materiais ?? 0))) > 0.005)
+    ) {
+      return res.status(400).json({ erro: "Dados do item inválidos." });
+    }
 
-  try {
-    const resultado = await db.query(
-      `UPDATE catalogo_oficina
+    try {
+      const resultado = await db.query(
+        `UPDATE catalogo_oficina
        SET nome = $1, tipo = $2, categoria = $3,
-           preco = $4, atualizado_em = CURRENT_TIMESTAMP
-       WHERE id = $5 RETURNING *`,
-      [nome.trim(), tipo, categoria?.trim() || null, valor, req.params.id]
-    );
+           preco = $4, mao_de_obra = $5, materiais = $6, atualizado_em = CURRENT_TIMESTAMP
+       WHERE id = $7 RETURNING *`,
+        [
+          nome.trim(),
+          tipo,
+          categoria?.trim() || null,
+          valor,
+          maoDeObra ?? null,
+          materiais ?? null,
+          req.params.id,
+        ],
+      );
 
-    if (!resultado.rowCount) {
-      return res.status(404).json({ erro: "Item não encontrado." });
+      if (!resultado.rowCount) {
+        return res.status(404).json({ erro: "Item não encontrado." });
+      }
+
+      res.json({ item: resultado.rows[0] });
+    } catch (erro) {
+      console.error("Erro ao atualizar item:", erro.message);
+      res.status(500).json({ erro: "Não foi possível atualizar o item." });
+    }
+  },
+);
+
+app.delete(
+  "/api/catalogo-oficina/:id",
+  autenticarToken,
+  exigirEditor,
+  async (req, res) => {
+    if (!/^[1-9]\d*$/.test(req.params.id)) {
+      return res.status(400).json({ erro: "Identificador inválido." });
     }
 
-    res.json({ item: resultado.rows[0] });
-  } catch (erro) {
-    console.error("Erro ao atualizar item:", erro.message);
-    res.status(500).json({ erro: "Não foi possível atualizar o item." });
-  }
-});
+    try {
+      const resultado = await db.query(
+        "DELETE FROM catalogo_oficina WHERE id = $1",
+        [req.params.id],
+      );
 
-app.delete("/api/catalogo-oficina/:id", autenticarToken, exigirEditor, async (req, res) => {
-  if (!/^[1-9]\d*$/.test(req.params.id)) {
-    return res.status(400).json({ erro: "Identificador inválido." });
-  }
+      if (!resultado.rowCount) {
+        return res.status(404).json({ erro: "Item não encontrado." });
+      }
 
-  try {
-    const resultado = await db.query(
-      "DELETE FROM catalogo_oficina WHERE id = $1",
-      [req.params.id]
-    );
-
-    if (!resultado.rowCount) {
-      return res.status(404).json({ erro: "Item não encontrado." });
+      res.status(204).end();
+    } catch (erro) {
+      console.error("Erro ao excluir item:", erro.message);
+      res.status(500).json({ erro: "Não foi possível excluir o item." });
     }
-
-    res.status(204).end();
-  } catch (erro) {
-    console.error("Erro ao excluir item:", erro.message);
-    res.status(500).json({ erro: "Não foi possível excluir o item." });
-  }
-});
+  },
+);
 
 // Listar contatos no painel administrativo.
 app.get(
@@ -546,7 +624,7 @@ app.get(
       const resultado = await db.query(
         `SELECT id, nome, telefone, ativo, criado_em
          FROM whatsapp_contatos
-         ORDER BY nome, id`
+         ORDER BY nome, id`,
       );
 
       return res.json({ contatos: resultado.rows });
@@ -556,7 +634,7 @@ app.get(
         erro: "Não foi possível listar os contatos de WhatsApp.",
       });
     }
-  }
+  },
 );
 
 // Cadastrar um contato.
@@ -565,13 +643,10 @@ app.post(
   autenticarToken,
   exigirAdmin,
   async (req, res) => {
-    const nome =
-      typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+    const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
 
     const telefoneInformado =
-      typeof req.body?.telefone === "string"
-        ? req.body.telefone.trim()
-        : "";
+      typeof req.body?.telefone === "string" ? req.body.telefone.trim() : "";
 
     if (!nome || nome.length > 100 || !telefoneInformado) {
       return res.status(400).json({
@@ -598,7 +673,7 @@ app.post(
         `INSERT INTO whatsapp_contatos (nome, telefone)
          VALUES ($1, $2)
          RETURNING id, nome, telefone, ativo, criado_em`,
-        [nome, telefone]
+        [nome, telefone],
       );
 
       return res.status(201).json({
@@ -617,7 +692,7 @@ app.post(
         erro: "Não foi possível cadastrar o contato de WhatsApp.",
       });
     }
-  }
+  },
 );
 
 // Excluir um contato.
@@ -637,7 +712,7 @@ app.delete(
     try {
       const resultado = await db.query(
         "DELETE FROM whatsapp_contatos WHERE id = $1 RETURNING id",
-        [id]
+        [id],
       );
 
       if (!resultado.rowCount) {
@@ -653,7 +728,7 @@ app.delete(
         erro: "Não foi possível excluir o contato de WhatsApp.",
       });
     }
-  }
+  },
 );
 
 // Listar somente os contatos ativos para o botão público.
@@ -663,7 +738,7 @@ app.get("/api/whatsapp-contatos", async (_req, res) => {
       `SELECT nome, telefone
        FROM whatsapp_contatos
        WHERE ativo = TRUE
-       ORDER BY nome, id`
+       ORDER BY nome, id`,
     );
 
     return res.json({ contatos: resultado.rows });
@@ -674,7 +749,6 @@ app.get("/api/whatsapp-contatos", async (_req, res) => {
     });
   }
 });
-
 
 // Teste da API
 app.get("/", (req, res) => {
@@ -763,8 +837,8 @@ app.get("/api/detalhes/:codigo", async (req, res) => {
         sugestoes,
       });
     }
-const imagens = await db.query(
-  `
+    const imagens = await db.query(
+      `
     SELECT
       fi.image_path,
       fi.caption,
@@ -787,16 +861,16 @@ const imagens = await db.query(
       )
     ORDER BY fi.id
   `,
-  [codigo]
-);
-res.json({
-  codigo,
-  quantidade_fontes: resultado.rows.filter(
-    (linha) => linha.source_title !== null,
-  ).length,
-  resultados: resultado.rows,
-  imagens: imagens.rows,
-});
+      [codigo],
+    );
+    res.json({
+      codigo,
+      quantidade_fontes: resultado.rows.filter(
+        (linha) => linha.source_title !== null,
+      ).length,
+      resultados: resultado.rows,
+      imagens: imagens.rows,
+    });
   } catch (erro) {
     console.error("Erro nos detalhes:", erro.message);
     console.error("Erro ao consultar detalhes:", erro);
@@ -1196,113 +1270,128 @@ app.get("/api/fontes", async (req, res) => {
     });
   }
 });
-app.get("/api/atendimentos", async (req, res) => {
-  try {
-    const resultado = await db.query(
-      `SELECT id, codigo_erro, fabricante, modelo,
+app.get(
+  "/api/atendimentos",
+  autenticarToken,
+  exigirEditor,
+  async (req, res) => {
+    try {
+      const resultado = await db.query(
+        `SELECT id, codigo_erro, fabricante, modelo,
               problema_relatado, status, criado_em, atualizado_em
        FROM atendimentos
        ORDER BY criado_em DESC`,
-    );
+      );
 
-    res.json({
-      quantidade: resultado.rows.length,
-      atendimentos: resultado.rows,
-    });
-  } catch (erro) {
-    console.error("Erro ao listar atendimentos:", erro.message);
+      res.json({
+        quantidade: resultado.rows.length,
+        atendimentos: resultado.rows,
+      });
+    } catch (erro) {
+      console.error("Erro ao listar atendimentos:", erro.message);
 
-    res.status(500).json({
-      erro: "Não foi possível listar os atendimentos.",
-    });
-  }
-});
-
-app.post("/api/atendimentos", async (req, res) => {
-  try {
-    const { codigo_erro, fabricante, modelo, problema_relatado } = req.body;
-
-    if (
-      !codigo_erro?.trim() ||
-      !fabricante?.trim() ||
-      !modelo?.trim() ||
-      !problema_relatado?.trim()
-    ) {
-      return res.status(400).json({
-        erro: "Preencha o código de erro, fabricante, modelo e problema relatado.",
+      res.status(500).json({
+        erro: "Não foi possível listar os atendimentos.",
       });
     }
+  },
+);
 
-    const resultado = await db.query(
-      `INSERT INTO atendimentos
+app.post(
+  "/api/atendimentos",
+  autenticarToken,
+  exigirEditor,
+  async (req, res) => {
+    try {
+      const { codigo_erro, fabricante, modelo, problema_relatado } = req.body;
+
+      if (
+        !codigo_erro?.trim() ||
+        !fabricante?.trim() ||
+        !modelo?.trim() ||
+        !problema_relatado?.trim()
+      ) {
+        return res.status(400).json({
+          erro: "Preencha o código de erro, fabricante, modelo e problema relatado.",
+        });
+      }
+
+      const resultado = await db.query(
+        `INSERT INTO atendimentos
         (codigo_erro, fabricante, modelo, problema_relatado)
        VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [
-        codigo_erro.trim().toUpperCase(),
-        fabricante.trim(),
-        modelo.trim(),
-        problema_relatado.trim(),
-      ],
-    );
+        [
+          codigo_erro.trim().toUpperCase(),
+          fabricante.trim(),
+          modelo.trim(),
+          problema_relatado.trim(),
+        ],
+      );
 
-    res.status(201).json({
-      mensagem: "Atendimento cadastrado com sucesso.",
-      atendimento: resultado.rows[0],
-    });
-  } catch (erro) {
-    console.error("Erro ao cadastrar atendimento:", erro.message);
+      res.status(201).json({
+        mensagem: "Atendimento cadastrado com sucesso.",
+        atendimento: resultado.rows[0],
+      });
+    } catch (erro) {
+      console.error("Erro ao cadastrar atendimento:", erro.message);
 
-    res.status(500).json({
-      erro: "Não foi possível cadastrar o atendimento.",
-    });
-  }
-});
-app.patch("/api/atendimentos/:id/status", async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+      res.status(500).json({
+        erro: "Não foi possível cadastrar o atendimento.",
+      });
+    }
+  },
+);
+app.patch(
+  "/api/atendimentos/:id/status",
+  autenticarToken,
+  exigirEditor,
+  async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
 
-  const statusValidos = ["aberto", "em_andamento", "concluido"];
+    const statusValidos = ["aberto", "em_andamento", "concluido"];
 
-  if (!/^\d+$/.test(id)) {
-    return res.status(400).json({
-      erro: "ID de atendimento inválido.",
-    });
-  }
-
-  if (!statusValidos.includes(status)) {
-    return res.status(400).json({
-      erro: "Status inválido.",
-    });
-  }
-
-  try {
-    const resultado = await db.query(
-      `UPDATE atendimentos
-       SET status = $1, atualizado_em = NOW()
-       WHERE id = $2
-       RETURNING *`,
-      [status, id],
-    );
-
-    if (resultado.rows.length === 0) {
-      return res.status(404).json({
-        erro: "Atendimento não encontrado.",
+    if (!/^\d+$/.test(id)) {
+      return res.status(400).json({
+        erro: "ID de atendimento inválido.",
       });
     }
 
-    res.json({
-      mensagem: "Status atualizado com sucesso.",
-      atendimento: resultado.rows[0],
-    });
-  } catch (erro) {
-    console.error("Erro ao atualizar status:", erro.message);
+    if (!statusValidos.includes(status)) {
+      return res.status(400).json({
+        erro: "Status inválido.",
+      });
+    }
 
-    res.status(500).json({
-      erro: "Não foi possível atualizar o status.",
-    });
-  }
-});
+    try {
+      const resultado = await db.query(
+        `UPDATE atendimentos
+       SET status = $1, atualizado_em = NOW()
+       WHERE id = $2
+       RETURNING *`,
+        [status, id],
+      );
+
+      if (resultado.rows.length === 0) {
+        return res.status(404).json({
+          erro: "Atendimento não encontrado.",
+        });
+      }
+
+      res.json({
+        mensagem: "Status atualizado com sucesso.",
+        atendimento: resultado.rows[0],
+      });
+    } catch (erro) {
+      console.error("Erro ao atualizar status:", erro.message);
+
+      res.status(500).json({
+        erro: "Não foi possível atualizar o status.",
+      });
+    }
+  },
+);
 
 app.get("/api/testes-tecnicos", autenticarToken, async (req, res) => {
   try {
@@ -1578,10 +1667,11 @@ app.post(
       });
     }
 
-    const client = await db.connect();
+    let client;
     let transacaoIniciada = false;
 
     try {
+      client = await db.connect();
       await client.query("BEGIN");
       transacaoIniciada = true;
 
@@ -1656,7 +1746,7 @@ app.post(
         erro: "Não foi possível concluir a revisão.",
       });
     } finally {
-      client.release();
+      client?.release();
     }
   },
 );

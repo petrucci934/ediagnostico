@@ -127,9 +127,10 @@ module.exports = function registrarRotasRecuperacao({
     }
 
     const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
-    const conexao = await db.connect();
+    let conexao;
 
     try {
+      conexao = await db.connect();
       await conexao.query("BEGIN");
 
       const consulta = await conexao.query(
@@ -152,10 +153,10 @@ module.exports = function registrarRotasRecuperacao({
       const { token_id, usuario_id } = consulta.rows[0];
       const senhaHash = await bcrypt.hash(senha, 12);
 
-      await conexao.query(
-        `UPDATE usuarios SET senha_hash = $1 WHERE id = $2`,
-        [senhaHash, usuario_id],
-      );
+      await conexao.query(`UPDATE usuarios SET senha_hash = $1 WHERE id = $2`, [
+        senhaHash,
+        usuario_id,
+      ]);
 
       await conexao.query(
         `UPDATE password_reset_tokens
@@ -176,16 +177,17 @@ module.exports = function registrarRotasRecuperacao({
       await conexao.query("COMMIT");
 
       return res.json({
-        mensagem: "Senha redefinida com sucesso. Você já pode entrar com a nova senha.",
+        mensagem:
+          "Senha redefinida com sucesso. Você já pode entrar com a nova senha.",
       });
     } catch (erro) {
-      await conexao.query("ROLLBACK").catch(() => {});
+      if (conexao) await conexao.query("ROLLBACK").catch(() => {});
       console.error("Erro ao redefinir senha:", erro.message);
       return res.status(500).json({
         erro: "Não foi possível redefinir a senha.",
       });
     } finally {
-      conexao.release();
+      conexao?.release();
     }
   });
 };

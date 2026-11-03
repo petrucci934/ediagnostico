@@ -19,11 +19,13 @@ function moeda(valor) {
 
 function calcularValores(servico) {
   const separados =
-    servico.maoDeObra != null || servico.materiais != null;
+    servico.maoDeObra != null ||
+    servico.mao_de_obra != null ||
+    servico.materiais != null;
 
   if (separados) {
     return {
-      maoDeObra: Number(servico.maoDeObra) || 0,
+      maoDeObra: Number(servico.maoDeObra ?? servico.mao_de_obra) || 0,
       materiais: Number(servico.materiais) || 0,
     };
   }
@@ -72,15 +74,11 @@ function Orcamento({ onPrecificar, ativo, token }) {
         ]);
 
         if (!resServicos.ok) {
-          throw new Error(
-            dadosServicos.erro || "Erro ao carregar serviços."
-          );
+          throw new Error(dadosServicos.erro || "Erro ao carregar serviços.");
         }
 
         if (!resClientes.ok) {
-          throw new Error(
-            dadosClientes.erro || "Erro ao carregar clientes."
-          );
+          throw new Error(dadosClientes.erro || "Erro ao carregar clientes.");
         }
 
         if (atual) {
@@ -102,36 +100,33 @@ function Orcamento({ onPrecificar, ativo, token }) {
   }, [ativo, token]);
 
   const clienteSelecionado = clientes.find(
-    (cliente) => String(cliente.id) === String(clienteId)
+    (cliente) => String(cliente.id) === String(clienteId),
   );
 
   const itensSelecionados = servicos.filter((servico) =>
-    selecionados.includes(servico.id)
+    selecionados.includes(servico.id),
   );
 
   const totalMO = itensSelecionados.reduce(
-    (soma, servico) =>
-      soma + calcularValores(servico).maoDeObra,
-    0
+    (soma, servico) => soma + calcularValores(servico).maoDeObra,
+    0,
   );
 
   const totalMA = itensSelecionados.reduce(
-    (soma, servico) =>
-      soma + calcularValores(servico).materiais,
-    0
+    (soma, servico) => soma + calcularValores(servico).materiais,
+    0,
   );
 
   const total = totalMO + totalMA;
 
-  const tiposVeiculo = [...new Set(
-    servicos.map((servico) => servico.categoria).filter(Boolean)
-  )].sort((a, b) => a.localeCompare(b, "pt-BR"));
+  const tiposVeiculo = [
+    ...new Set(servicos.map((servico) => servico.categoria).filter(Boolean)),
+  ].sort((a, b) => a.localeCompare(b, "pt-BR"));
 
   const servicosFiltrados = servicos.filter((servico) => {
-    const correspondeBusca =
-      `${servico.nome} ${servico.categoria || ""}`
-        .toLowerCase()
-        .includes(busca.toLowerCase());
+    const correspondeBusca = `${servico.nome} ${servico.categoria || ""}`
+      .toLowerCase()
+      .includes(busca.toLowerCase());
 
     const correspondeFiltro =
       filtroVeiculo === "Todos" || servico.categoria === filtroVeiculo;
@@ -143,16 +138,14 @@ function Orcamento({ onPrecificar, ativo, token }) {
     setSelecionados((atuais) =>
       atuais.includes(id)
         ? atuais.filter((item) => item !== id)
-        : [...atuais, id]
+        : [...atuais, id],
     );
   }
 
   function selecionarCliente(valor) {
     setClienteId(valor);
 
-    const cliente = clientes.find(
-      (item) => String(item.id) === String(valor)
-    );
+    const cliente = clientes.find((item) => String(item.id) === String(valor));
 
     setVeiculo(cliente?.veiculo || "");
   }
@@ -178,7 +171,7 @@ function Orcamento({ onPrecificar, ativo, token }) {
       .map((servico) => {
         const valores = calcularValores(servico);
         return `• ${servico.nome}: ${moeda(
-          valores.maoDeObra + valores.materiais
+          valores.maoDeObra + valores.materiais,
         )}`;
       })
       .join("\n");
@@ -254,7 +247,9 @@ Tecnologia e precisão para cuidar do seu veículo elétrico. \u{26A1}`;
               >
                 <option value="Todos">Todos</option>
                 {tiposVeiculo.map((tipo) => (
-                  <option key={tipo} value={tipo}>{tipo}</option>
+                  <option key={tipo} value={tipo}>
+                    {tipo}
+                  </option>
                 ))}
               </select>
             </label>
@@ -277,9 +272,18 @@ Tecnologia e precisão para cuidar do seu veículo elétrico. \u{26A1}`;
                       onChange={() => alternarServico(servico.id)}
                     />
 
-                    <span className="orcamento-servico-icone" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <span
+                      className="orcamento-servico-icone"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4l-3 3-3-3z" />
                       </svg>
                     </span>
@@ -332,27 +336,36 @@ Tecnologia e precisão para cuidar do seu veículo elétrico. \u{26A1}`;
 
           <div className="orcamento-indicadores">
             <div>
-              <span><ListChecks size={17} /> Serviços</span>
+              <span>
+                <ListChecks size={17} /> Serviços
+              </span>
               <strong>{itensSelecionados.length}</strong>
             </div>
             <div>
-              <span><Wrench size={17} /> Mão de obra</span>
+              <span>
+                <Wrench size={17} /> Mão de obra
+              </span>
               <strong>{moeda(totalMO)}</strong>
             </div>
             <div>
-              <span><Database size={17} /> Materiais</span>
+              <span>
+                <Database size={17} /> Materiais
+              </span>
               <strong>{moeda(totalMA)}</strong>
             </div>
           </div>
 
           <div className="orcamento-total">
-            <span><Calculator size={19} /> Total do orçamento</span>
+            <span>
+              <Calculator size={19} /> Total do orçamento
+            </span>
             <strong>{moeda(total)}</strong>
           </div>
 
           <div className="orcamento-identificacao">
             <label>
-              <UserRound size={17} />cliente
+              <UserRound size={17} />
+              cliente
               <select
                 value={clienteId}
                 onChange={(e) => selecionarCliente(e.target.value)}
@@ -406,7 +419,7 @@ Tecnologia e precisão para cuidar do seu veículo elétrico. \u{26A1}`;
                     <small>
                       {moeda(
                         calcularValores(servico).maoDeObra +
-                        calcularValores(servico).materiais
+                          calcularValores(servico).materiais,
                       )}
                     </small>
                   </div>
@@ -459,13 +472,12 @@ Tecnologia e precisão para cuidar do seu veículo elétrico. \u{26A1}`;
               <FileText size={19} /> Gerar PDF do orçamento
             </button>
 
-            <small>
-              {itensSelecionados.length} serviço(s) selecionado(s)
-            </small>
+            <small>{itensSelecionados.length} serviço(s) selecionado(s)</small>
           </div>
 
           <p className="orcamento-aviso-envio">
-            Confira os dados e os valores antes de enviar ou imprimir a proposta.
+            Confira os dados e os valores antes de enviar ou imprimir a
+            proposta.
           </p>
         </aside>
       </div>

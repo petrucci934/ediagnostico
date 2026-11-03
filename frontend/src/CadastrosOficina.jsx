@@ -125,21 +125,17 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
     try {
       setErroClientes("");
 
-      if (clienteEditando) {
-        setErroClientes(
-          "A edição de clientes precisa ser conectada à rota de atualização da API.",
-        );
-        return;
-      }
-
-      const resposta = await fetch("/api/clientes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const resposta = await fetch(
+        clienteEditando ? `/api/clientes/${clienteEditando}` : "/api/clientes",
+        {
+          method: clienteEditando ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(registro),
         },
-        body: JSON.stringify(registro),
-      });
+      );
 
       const dados = await resposta.json();
 
@@ -147,7 +143,13 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
         throw new Error(dados.erro || "Não foi possível cadastrar o cliente.");
       }
 
-      setClientes((lista) => [dados.cliente, ...lista]);
+      setClientes((lista) =>
+        clienteEditando
+          ? lista.map((cliente) =>
+              cliente.id === clienteEditando ? dados.cliente : cliente,
+            )
+          : [dados.cliente, ...lista],
+      );
 
       setFormCliente({
         nome: "",
@@ -198,9 +200,7 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
 
       if (itemEditando) {
         setItens((lista) =>
-          lista.map((item) =>
-            item.id === itemEditando ? dados.item : item,
-          ),
+          lista.map((item) => (item.id === itemEditando ? dados.item : item)),
         );
       } else {
         setItens((lista) => [dados.item, ...lista]);
@@ -517,7 +517,9 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
 
                           if (!resposta.ok) {
                             const dados = await resposta.json();
-                            throw new Error(dados.erro || "Não foi possível excluir.");
+                            throw new Error(
+                              dados.erro || "Não foi possível excluir.",
+                            );
                           }
 
                           setItens((lista) =>

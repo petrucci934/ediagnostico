@@ -1,0 +1,32 @@
+BEGIN;
+CREATE TABLE IF NOT EXISTS catalogo_oficina (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nome VARCHAR(160) NOT NULL,
+    tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('servico', 'peca')),
+    categoria VARCHAR(180),
+    preco NUMERIC(12,2) NOT NULL DEFAULT 0 CHECK (preco >= 0),
+    mao_de_obra NUMERIC(12,2) CHECK (mao_de_obra >= 0),
+    materiais NUMERIC(12,2) CHECK (materiais >= 0),
+    criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+ALTER TABLE catalogo_oficina
+    ADD COLUMN IF NOT EXISTS mao_de_obra NUMERIC(12,2) CHECK (mao_de_obra >= 0),
+    ADD COLUMN IF NOT EXISTS materiais NUMERIC(12,2) CHECK (materiais >= 0);
+CREATE TABLE IF NOT EXISTS whatsapp_contatos (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(13) NOT NULL UNIQUE,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    usuario_id BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    token_hash VARCHAR(64) NOT NULL UNIQUE,
+    expira_em TIMESTAMPTZ NOT NULL,
+    utilizado_em TIMESTAMPTZ,
+    criado_em TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_usuario ON password_reset_tokens (usuario_id);
+COMMIT;

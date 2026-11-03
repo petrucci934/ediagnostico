@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "format": "prettier --write src"
+    "format": "prettier --write src",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "lucide-react": "^1.59.0",

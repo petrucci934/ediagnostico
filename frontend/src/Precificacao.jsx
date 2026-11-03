@@ -1,3 +1,4 @@
+import { calcularCustoHora, calcularHoras } from "./calculosPrecificacao";
 import { useEffect, useState } from "react";
 
 const CHAVE_PRECIFICACAO = "ediagnostico-precificacao";
@@ -64,7 +65,9 @@ function carregarConfiguracao() {
     return configuracaoInicial;
   }
 }
-function Precificacao() {
+function Precificacao({ token }) {
+  const [erroServico, setErroServico] = useState("");
+  const [salvandoServico, setSalvandoServico] = useState(false);
   const [configuracao, setConfiguracao] = useState(carregarConfiguracao);
   const [servicosOficina, setServicosOficina] = useState(() => {
     try {
@@ -83,6 +86,47 @@ function Precificacao() {
       return [];
     }
   });
+  useEffect(() => {
+    if (!token) return;
+    let ativo = true;
+    async function carregarCatalogo() {
+      try {
+        const resposta = await fetch("/api/catalogo-oficina", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const dados = await resposta.json();
+        if (!resposta.ok)
+          throw new Error(
+            dados.erro || "Não foi possível carregar os serviços.",
+          );
+        if (ativo) {
+          const cadastrados = (dados.itens || [])
+            .filter((item) => item.tipo === "servico")
+            .map((item) => ({
+              id: `catalogo-${item.id}`,
+              catalogoId: item.id,
+              nome: item.nome,
+              categoria: item.categoria,
+              maoDeObra: Number(
+                item.mao_de_obra ?? (item.materiais == null ? item.preco : 0),
+              ),
+              materiais: Number(item.materiais ?? 0),
+            }));
+          // Mantém os serviços antigos do navegador até uma migração explícita.
+          setServicosOficina((atuais) => [
+            ...cadastrados,
+            ...atuais.filter((item) => !item.catalogoId),
+          ]);
+        }
+      } catch (erro) {
+        if (ativo) setErroServico(erro.message);
+      }
+    }
+    carregarCatalogo();
+    return () => {
+      ativo = false;
+    };
+  }, [token]);
   const [novoServico, setNovoServico] = useState({
     nome: "",
     categoria: "Bicicleta elétrica",
@@ -134,19 +178,6 @@ function Precificacao() {
     }));
   }
 
-  function calcularHoras(inicio, fim, almoco) {
-    const [horaInicio, minutoInicio] = inicio.split(":").map(Number);
-    const [horaFim, minutoFim] = fim.split(":").map(Number);
-
-    const minutos =
-      horaFim * 60 +
-      minutoFim -
-      (horaInicio * 60 + minutoInicio) -
-      Number(almoco);
-
-    return Math.max(0, minutos / 60);
-  }
-
   const horasSemana = calcularHoras(inicioSemana, fimSemana, almocoSemana);
   const horasSabado = calcularHoras(inicioSabado, fimSabado, almocoSabado);
   const custos = Object.values(despesas).reduce(
@@ -155,7 +186,16 @@ function Precificacao() {
   );
   const horasMensais = (horasSemana * 5 + horasSabado) * (52 / 12);
   const horasProdutivas = horasMensais * (Number(produtividade) / 100);
-  const custoHora = horasProdutivas > 0 ? Number(custos) / horasProdutivas : 0;
+  const custoHora = calcularCustoHora({
+    inicioSemana,
+    fimSemana,
+    almocoSemana,
+    inicioSabado,
+    fimSabado,
+    almocoSabado,
+    despesas,
+    produtividade,
+  });
 
   const custoServico = custoHora * Number(horasServico / 60) + Number(pecas);
 
@@ -168,22 +208,75 @@ function Precificacao() {
       currency: "BRL",
     });
 
-  function adicionarServico(evento) {
+  async function adicionarServico(evento) {
     evento.preventDefault();
+    if (salvandoServico) return;
     const nome = novoServico.nome.trim();
     if (!nome) return;
+    setErroServico("");
+    setSalvandoServico(true);
+    try {
+      const maoDeObra = Number(novoServico.maoDeObra) || 0;
+      const materiais = Number(novoServico.materiais) || 0;
+      const resposta = await fetch("/api/catalogo-oficina", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          nome,
+          tipo: "servico",
+          categoria: novoServico.categoria,
+          preco: maoDeObra + materiais,
+          maoDeObra,
+          materiais,
+        }),
+      });
+      const dados = await resposta.json();
+      if (!resposta.ok)
+        throw new Error(dados.erro || "Não foi possível salvar o serviço.");
+      setServicosOficina((atuais) => [
+        {
+          ...novoServico,
+          id: crypto.randomUUID(),
+          catalogoId: dados.item.id,
+          nome,
+          maoDeObra,
+          materiais,
+        },
+        ...atuais,
+      ]);
+      setNovoServico((atual) => ({ ...atual, nome: "" }));
+    } catch (erro) {
+      setErroServico(erro.message);
+    } finally {
+      setSalvandoServico(false);
+    }
+  }
 
-    setServicosOficina((atuais) => [
-      {
-        ...novoServico,
-        id: crypto.randomUUID(),
-        nome,
-        maoDeObra: Number(novoServico.maoDeObra) || 0,
-        materiais: Number(novoServico.materiais) || 0,
-      },
-      ...atuais,
-    ]);
-    setNovoServico({ ...novoServico, nome: "" });
+  async function removerServico(servico) {
+    setErroServico("");
+    try {
+      if (servico.catalogoId) {
+        const resposta = await fetch(
+          `/api/catalogo-oficina/${servico.catalogoId}`,
+          {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        if (!resposta.ok && resposta.status !== 404) {
+          const dados = await resposta.json();
+          throw new Error(dados.erro || "Não foi possível remover o serviço.");
+        }
+      }
+      setServicosOficina((atuais) =>
+        atuais.filter((item) => item.id !== servico.id),
+      );
+    } catch (erro) {
+      setErroServico(erro.message);
+    }
   }
 
   const totalNovoServico =
@@ -462,8 +555,13 @@ function Precificacao() {
                 {moeda(Number(novoServico.materiais) || 0)}
               </small>
             </div>
-            <button className="botao-adicionar-servico" type="submit">
-              Adicionar à lista
+            {erroServico && <p role="alert">{erroServico}</p>}
+            <button
+              className="botao-adicionar-servico"
+              type="submit"
+              disabled={salvandoServico}
+            >
+              {salvandoServico ? "Salvando..." : "Adicionar à lista"}
             </button>
           </form>
 
@@ -490,11 +588,7 @@ function Precificacao() {
                     type="button"
                     className="remover-servico-oficina"
                     aria-label={`Remover ${servico.nome}`}
-                    onClick={() =>
-                      setServicosOficina((atuais) =>
-                        atuais.filter((item) => item.id !== servico.id),
-                      )
-                    }
+                    onClick={() => removerServico(servico)}
                   >
                     ×
                   </button>

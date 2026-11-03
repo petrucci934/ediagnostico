@@ -1,6 +1,8 @@
 import {
   Children,
   cloneElement,
+  lazy,
+  Suspense,
   useCallback,
   useEffect,
   useRef,
@@ -11,15 +13,13 @@ import {
   Wrench,
   ShieldCheck,
   ClipboardList,
-  CircleDollarSign,
   Search,
-  History,
-  MessageCircle,
   CarFront,
   Bike,
   House,
   ChevronDown,
 } from "lucide-react";
+import RedefinirSenha from "./RedefinirSenha";
 import Precificacao from "./Precificacao";
 import Orcamento from "./Orcamento";
 import CadastrosOficina from "./CadastrosOficina";
@@ -27,8 +27,12 @@ import Administrador from "./Administrador";
 import PrimeiroAcessoAdmin from "./PrimeiroAcessoAdmin";
 import CampoSenha from "./CampoSenha";
 import TabelaPrecosNeon from "./TabelaPrecosNeon";
+import { obterMenuPrincipal, itemMenuAtivo } from "./menuPrincipal";
 import videosBiblioteca from "./data/videos-biblioteca.json";
 import "./App.css";
+import "./BibliotecaTecnica.css";
+
+const BibliotecaTextos = lazy(() => import("./BibliotecaTextos"));
 
 function Carrossel({ className, children, label }) {
   const galeriaRef = useRef(null);
@@ -791,6 +795,9 @@ function App() {
       if (evento.key === "Escape") {
         setMenuAberto(false);
         setMenuPerfilAberto(false);
+        if (menuRef.current?.contains(document.activeElement)) {
+          document.querySelector(".botao-menu")?.focus();
+        }
       }
     }
 
@@ -806,7 +813,6 @@ function App() {
   const [erroAtendimentos, setErroAtendimentos] = useState("");
   const [abaTeste, setAbaTeste] = useState("biblioteca");
   const [abaCadastroInicial, setAbaCadastroInicial] = useState("clientes");
-  const [mostrarCadastroInline, setMostrarCadastroInline] = useState(false);
   const [abaCliente, setAbaCliente] = useState("falhas");
   const [codigoAmpliado, setCodigoAmpliado] = useState(null);
 
@@ -1154,6 +1160,26 @@ function App() {
   const ehMecanico =
     perfil === "mecanico" || usuarioLogado?.perfil === "mecanico";
   const ehCliente = perfil === "cliente" || perfilEscolhido === "cliente";
+  const itensMenu = obterMenuPrincipal({
+    perfil,
+    usuarioLogado,
+    perfilEscolhido,
+  });
+  const estadoNavegacao = {
+    telaAtual,
+    abaTeste,
+    abaCliente,
+    abaCadastroInicial,
+  };
+
+  function navegarPeloMenu(item) {
+    setTelaAtual(item.tela);
+    if (item.abaTeste) setAbaTeste(item.abaTeste);
+    if (item.abaCliente) setAbaCliente(item.abaCliente);
+    if (item.abaCadastroInicial) setAbaCadastroInicial(item.abaCadastroInicial);
+    setMenuAberto(false);
+    setMenuPerfilAberto(false);
+  }
 
   return (
     <>
@@ -1264,83 +1290,22 @@ function App() {
             id="menu-principal"
             ref={menuRef}
             className={`navegacao ${menuAberto ? "menu-aberto" : ""}`}
+            aria-label="Menu principal"
           >
-            {perfil !== "admin" && usuarioLogado?.perfil !== "admin" && (
-              <button
-                type="button"
-                className={telaAtual === "diagnostico" ? "nav-ativo" : ""}
-                onClick={() => {
-                  setTelaAtual("diagnostico");
-                  setMenuAberto(false);
-                }}
-              >
-                Diagnóstico
-              </button>
-            )}
-
-            {ehMecanico && (
-              <button
-                type="button"
-                className={telaAtual === "precificacao" ? "nav-ativo" : ""}
-                onClick={() => {
-                  setTelaAtual("precificacao");
-                  setMenuAberto(false);
-                }}
-              >
-                Precificação de Serviços
-              </button>
-            )}
-
-            {(perfil === "mecanico" ||
-              usuarioLogado?.perfil === "mecanico") && (
-              <>
+            {itensMenu.map((item) => {
+              const ativo = itemMenuAtivo(item, estadoNavegacao);
+              return (
                 <button
+                  key={item.id}
                   type="button"
-                  className={telaAtual === "atendimentos" ? "nav-ativo" : ""}
-                  onClick={() => {
-                    setTelaAtual("atendimentos");
-                    setMenuAberto(false);
-                  }}
+                  className={ativo ? "nav-ativo" : ""}
+                  aria-current={ativo ? "page" : undefined}
+                  onClick={() => navegarPeloMenu(item)}
                 >
-                  Atendimentos
+                  {item.texto}
                 </button>
-
-                <button
-                  type="button"
-                  className={telaAtual === "cadastros" ? "nav-ativo" : ""}
-                  onClick={() => {
-                    setTelaAtual("cadastros");
-                    setMenuAberto(false);
-                  }}
-                >
-                  Clientes e catálogo
-                </button>
-
-                <button
-                  type="button"
-                  className={telaAtual === "testes" ? "nav-ativo" : ""}
-                  onClick={() => {
-                    setTelaAtual("testes");
-                    setMenuAberto(false);
-                  }}
-                >
-                  Biblioteca Técnica
-                </button>
-              </>
-            )}
-            {(perfil === "admin" || usuarioLogado?.perfil === "admin") &&
-              !usuarioLogado?.deve_trocar_credenciais && (
-                <button
-                  type="button"
-                  className={telaAtual === "administracao" ? "nav-ativo" : ""}
-                  onClick={() => {
-                    setTelaAtual("administracao");
-                    setMenuAberto(false);
-                  }}
-                >
-                  Administrador
-                </button>
-              )}
+              );
+            })}
           </nav>
         </header>
 
@@ -1975,6 +1940,7 @@ function App() {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify(atendimento),
                   });
@@ -2086,7 +2052,9 @@ function App() {
                 setErroAtendimentos("");
 
                 try {
-                  const resposta = await fetch("/api/atendimentos");
+                  const resposta = await fetch("/api/atendimentos", {
+                    headers: { Authorization: `Bearer ${token}` },
+                  });
                   const resultado = await resposta.json();
 
                   if (!resposta.ok) {
@@ -2209,6 +2177,7 @@ function App() {
                                   method: "PATCH",
                                   headers: {
                                     "Content-Type": "application/json",
+                                    Authorization: `Bearer ${token}`,
                                   },
                                   body: JSON.stringify({ status: novoStatus }),
                                 },
@@ -2270,125 +2239,41 @@ function App() {
         {(perfil === "admin" || usuarioLogado?.perfil === "admin") &&
           !usuarioLogado?.deve_trocar_credenciais &&
           telaAtual === "administracao" && <Administrador token={token} />}
-        {ehMecanico && telaAtual === "precificacao" && <Precificacao />}
+        {ehMecanico && telaAtual === "precificacao" && (
+          <Precificacao token={token} />
+        )}
 
         {perfil === "mecanico" && telaAtual === "testes" && (
-          <section className="principal">
-            <span className="etiqueta">ÁREA DO MECÂNICO</span>
-            <h1>Biblioteca Técnica</h1>
-            <p>
-              Registre testes realizados e contribua para a validação técnica
-              dos códigos de falha.
-            </p>
-            <div className="abas-mecanico">
-              <button
-                type="button"
-                className={`aba-mecanico biblioteca ${abaTeste === "biblioteca" ? "ativa" : ""}`}
-                onClick={() => { setMostrarCadastroInline(false); setAbaTeste("biblioteca"); }}
+          <section
+            className={`principal ${abaTeste === "biblioteca" ? "biblioteca-tecnica" : ""}`}
+          >
+            {abaTeste === "biblioteca" ? (
+              <Suspense
+                fallback={
+                  <p role="status">Carregando textos da biblioteca...</p>
+                }
               >
-                <span className="aba-icone">▥</span>
-                <span className="aba-titulo">Biblioteca Técnica</span>
-                <span className="aba-descricao">Códigos e guias</span>
-              </button>
-
-              <button
-                type="button"
-                className={`aba-mecanico novo-teste ${abaTeste === "novo-teste" ? "ativa" : ""}`}
-                onClick={() => { setMostrarCadastroInline(false); setAbaTeste("novo-teste"); }}
-              >
-                <span className="aba-icone">♧</span>
-                <span className="aba-titulo">Novo Teste</span>
-                <span className="aba-descricao">Cadastrar teste</span>
-              </button>
-
-              <button
-                type="button"
-                className="aba-mecanico precificar"
-                onClick={() => { setMostrarCadastroInline(false); setTelaAtual("precificacao"); }}
-              >
-                <span className="aba-icone" aria-hidden="true">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8" />
-                    <path d="M12 6v12" />
-                  </svg>
-                </span>
-                <span className="aba-titulo">Precificar</span>
-                <span className="aba-descricao">MO + materiais</span>
-              </button>
-
-              <button
-                type="button"
-                className={`aba-mecanico orcamento ${abaTeste === "orcamento" ? "ativa" : ""}`}
-                onClick={() => { setMostrarCadastroInline(false); setAbaTeste("orcamento"); }}
-              >
-                <span className="aba-icone" aria-hidden="true">
-                  ▤
-                </span>
-                <span className="aba-titulo">Orçamento</span>
-                <span className="aba-descricao">Montar proposta</span>
-              </button>
-
-              <button
-                type="button"
-                className="aba-mecanico historico-atendimentos"
-                onClick={() => { setMostrarCadastroInline(false); setTelaAtual("atendimentos"); }}
-              >
-                <span className="aba-icone" aria-hidden="true">
-                  ▤
-                </span>
-                <span className="aba-titulo">Histórico de atendimentos</span>
-                <span className="aba-descricao">
-                  Consultar atendimentos registrados
-                </span>
-              </button>
-
-              <button
-                type="button"
-                className="aba-mecanico cadastrar-itens"
-                onClick={() => {
-                  setAbaCadastroInicial("itens");
-                  setMostrarCadastroInline(true);
-                }}
-              >
-                <span className="aba-icone" aria-hidden="true">
-                  ⚙
-                </span>
-                <span className="aba-titulo">Cadastrar serviço/peças</span>
-                <span className="aba-descricao">
-                  Gerenciar serviços e peças
-                </span>
-              </button>
-            </div>
-
-            {mostrarCadastroInline && (
-              <section className="cadastro-inline">
-                <CadastrosOficina
-                  key={abaCadastroInicial}
-                  abaInicial={abaCadastroInicial}
-                  token={token}
-                />
-              </section>
+                <BibliotecaTextos />
+              </Suspense>
+            ) : (
+              <>
+                <span className="etiqueta">ÁREA DO MECÂNICO</span>
+                <h1>
+                  {abaTeste === "orcamento"
+                    ? "Orçamento"
+                    : abaTeste === "historico-testes"
+                      ? "Histórico de testes"
+                      : "Novo teste"}
+                </h1>
+                <p>
+                  {abaTeste === "orcamento"
+                    ? "Selecione o cliente e os serviços para montar a proposta da oficina."
+                    : abaTeste === "historico-testes"
+                      ? "Consulte os testes registrados, seus resultados e o status de validação."
+                      : "Registre medições, procedimentos e evidências para revisão técnica."}
+                </p>
+              </>
             )}
-
-            <div className="orientacao-seguranca">
-              <strong>Importante</strong>
-              <p>
-                Todo registro será enviado para revisão. O teste não valida
-                automaticamente o código de falha.
-              </p>
-            </div>
-
             {abaTeste === "biblioteca" && (
               <section className="galeria-mecanico">
                 <div className="moldura-carrossel">
@@ -2523,6 +2408,16 @@ function App() {
                 </div>
                 <BibliotecaVideos />
               </section>
+            )}
+
+            {abaTeste === "novo-teste" && (
+              <div className="orientacao-seguranca">
+                <strong>Importante</strong>
+                <p>
+                  Todo registro será enviado para revisão. O teste não valida
+                  automaticamente o código de falha.
+                </p>
+              </div>
             )}
 
             {abaTeste === "novo-teste" && (
@@ -2679,7 +2574,7 @@ function App() {
               </form>
             )}
 
-            {abaTeste === "novo-teste" && (
+            {(abaTeste === "novo-teste" || abaTeste === "historico-testes") && (
               <section className="historico-testes">
                 <h2>Histórico de testes</h2>
 
@@ -2699,7 +2594,10 @@ function App() {
                   </p>
                 )}
 
-                {[...testesTecnicos].slice(0, 2).map((teste) => (
+                {(abaTeste === "historico-testes"
+                  ? testesTecnicos
+                  : testesTecnicos.slice(0, 2)
+                ).map((teste) => (
                   <article className="card-teste" key={teste.id}>
                     <h3>
                       {teste.fabricante} {teste.modelo}
@@ -2760,4 +2658,10 @@ function App() {
   );
 }
 
-export default App;
+export default function Aplicacao() {
+  return window.location.pathname === "/redefinir-senha" ? (
+    <RedefinirSenha />
+  ) : (
+    <App />
+  );
+}

@@ -780,14 +780,6 @@ h1 span {
   .orcamento-layout {
     grid-template-columns: minmax(0, 1fr);
   }
-
-  .orcamento-resumo {
-    order: 0;
-  }
-
-  .orcamento-painel-servicos {
-    order: 1;
-  }
 }
 
 /* Celular */
@@ -8784,13 +8776,6 @@ textarea {
 }
 
 @media (max-width: 560px) {
-  .orcamento-servico {
-    grid-template-columns: 18px 34px minmax(0, 1fr) auto !important;
-  }
-
-  .orcamento-servico-valor {
-    display: none;
-  }
 
   .orcamento-servico-preco {
     white-space: normal;
