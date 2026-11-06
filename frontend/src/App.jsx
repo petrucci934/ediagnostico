@@ -19,7 +19,9 @@ import {
   House,
   ChevronDown,
 } from "lucide-react";
+import { urlMaterial } from "./api.js";
 import RedefinirSenha from "./RedefinirSenha";
+import RecuperacaoAdmin from "./RecuperacaoAdmin";
 import Precificacao from "./Precificacao";
 import Orcamento from "./Orcamento";
 import CadastrosOficina from "./CadastrosOficina";
@@ -280,7 +282,7 @@ function BibliotecaVideos() {
       if (/^sudu/i.test(video.modelo)) return "Sudu";
       return "Outros modelos";
     })(),
-    local: `/videos/${video.arquivo}`,
+    local: urlMaterial(`/videos/${video.arquivo}`),
     origem: `https://pub-c4a1e03d410a4b8a86df09223cab2563.r2.dev/${video.arquivo}`,
   }));
   const marcas = [...new Set(videos.map((video) => video.marca))].sort((a, b) =>
@@ -1380,9 +1382,19 @@ function App() {
                   </button>
                 </div>
               ) : perfilEscolhido !== "cliente" ? (
-                <form className="formulario" onSubmit={fazerLogin}>
+                <form
+                  className="formulario formulario-login"
+                  onSubmit={fazerLogin}
+                >
                   <p>
-                    Perfil selecionado: <strong>{perfilEscolhido}</strong>
+                    Perfil selecionado:{" "}
+                    <strong>
+                      {{
+                        admin: "Administrador",
+                        mecanico: "Mecânico",
+                        revisor: "Revisor técnico",
+                      }[perfilEscolhido] || perfilEscolhido}
+                    </strong>
                   </p>
 
                   <label htmlFor="emailLogin">Usuário ou e-mail</label>
@@ -1408,20 +1420,24 @@ function App() {
 
                   {erroLogin && <p role="alert">{erroLogin}</p>}
 
-                  <button type="submit" disabled={carregandoLogin}>
-                    {carregandoLogin ? "Entrando..." : "Entrar"}
-                  </button>
+                  {perfilEscolhido === "admin" && <RecuperacaoAdmin />}
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPerfilEscolhido("");
-                      setErroLogin("");
-                      setSenhaLogin("");
-                    }}
-                  >
-                    Voltar
-                  </button>
+                  <div className="login-acoes">
+                    <button type="submit" disabled={carregandoLogin}>
+                      {carregandoLogin ? "Entrando..." : "Entrar"}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPerfilEscolhido("");
+                        setErroLogin("");
+                        setSenhaLogin("");
+                      }}
+                    >
+                      Voltar
+                    </button>
+                  </div>
                 </form>
               ) : null}
             </section>
@@ -1632,7 +1648,9 @@ function App() {
 
                         <a
                           className="galeria-guia-card"
-                          href="/images/mecanico/Guia%20para%20me%C3%A2nicos.pdf"
+                          href={urlMaterial(
+                            "/images/mecanico/Guia para meânicos.pdf",
+                          )}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -1647,7 +1665,9 @@ function App() {
 
                         <a
                           className="galeria-guia-card"
-                          href="/images/mecanico/codigo-erros.pdf"
+                          href={urlMaterial(
+                            "/images/mecanico/codigo-erros.pdf",
+                          )}
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -1677,7 +1697,7 @@ function App() {
                         {GUIAS_PDF.map(({ titulo, arquivo, capa }) => (
                           <a
                             className="galeria-guia-card"
-                            href={`/images/pdf/${arquivo}`}
+                            href={urlMaterial(`/images/pdf/${arquivo}`)}
                             key={arquivo}
                             target="_blank"
                             rel="noreferrer"
@@ -2346,7 +2366,9 @@ function App() {
 
                     <a
                       className="galeria-guia-card"
-                      href="/images/mecanico/Guia%20para%20me%C3%A2nicos.pdf"
+                      href={urlMaterial(
+                        "/images/mecanico/Guia para meânicos.pdf",
+                      )}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -2361,7 +2383,7 @@ function App() {
 
                     <a
                       className="galeria-guia-card"
-                      href="/images/mecanico/codigo-erros.pdf"
+                      href={urlMaterial("/images/mecanico/codigo-erros.pdf")}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -2391,7 +2413,7 @@ function App() {
                     {GUIAS_PDF.map(({ titulo, arquivo, capa }) => (
                       <a
                         className="galeria-guia-card"
-                        href={`/images/pdf/${arquivo}`}
+                        href={urlMaterial(`/images/pdf/${arquivo}`)}
                         key={arquivo}
                         target="_blank"
                         rel="noreferrer"

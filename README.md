@@ -104,8 +104,30 @@ O comando aplica a migração e importa os textos em uma única transação. Pod
 
 Esta migração disponibiliza a leitura pelo banco. A edição dos textos por uma tela administrativa será uma funcionalidade separada.
 
+### Aplicativo Android e materiais da biblioteca
+
+O PostgreSQL armazena o cadastro dos vídeos e PDFs em `biblioteca_arquivos`, incluindo caminho e tamanho. Os arquivos continuam no servidor em `frontend/public/videos` e `frontend/public/images`. Não apague essas pastas: o aplicativo consulta `/api/biblioteca/arquivos/conteudo?caminho=...`, que confere o cadastro e transmite o arquivo com suporte a requisições parciais (Range). Esses materiais mantêm o acesso público que já possuíam como arquivos estáticos.
+
+Para cadastrar os arquivos existentes sem duplicar registros, execute `npm run cadastrar:materiais` dentro de `backend`. A conta do banco precisa de SELECT e INSERT nessa tabela e USAGE na sequência de IDs. O cadastro não grava os vídeos como conteúdo binário no banco.
+
+Para gerar um Android leve, crie `frontend/.env.android` com `VITE_API_URL` apontando para o endereço da API acessível pelo celular (sem `/api` ao final). Na pasta `frontend`, execute:
+
+```sh
+npm run build:android
+cd android
+./gradlew assembleDebug
+```
+
+Esse comando de frontend exclui vídeos e PDFs dos recursos copiados para o Android, preservando os originais e as imagens da interface. O APK fica em `frontend/android/app/build/outputs/apk/debug/app-debug.apk`. Vídeos e PDFs precisam de conexão com o servidor. Endereço local só funciona na mesma rede; para distribuição externa, configure a API com HTTPS. `npm run build` continua sendo a compilação web normal; para Android use sempre `build:android` antes de compilar o APK.
+
 A recuperação de senha requer `FRONTEND_URL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` e `SMTP_PASS` no ambiente do backend; use `SMTP_SECURE=true` quando exigido pelo servidor de e-mail. A hospedagem do frontend deve encaminhar `/redefinir-senha` para `index.html`, preservando a query string, e `/api` para o backend.
 
 Novos serviços adicionados na precificação são gravados na API e ficam disponíveis no orçamento. Os serviços antigos armazenados apenas no navegador são preservados; eles não são importados automaticamente para evitar duplicação. Para utilizá-los no orçamento, cadastre-os no catálogo compartilhado.
 
 Execute `npm test` na pasta `backend/` para as verificações de regressão. Elas usam banco simulado e não modificam dados reais. Execute `npm run lint` e `npm run build` na pasta `frontend/` para validar a interface.
+
+### Contas e recuperação do administrador
+
+A lista de mecânicos permite excluir uma conta mediante confirmação. Somente administradores podem usar a exclusão; contas de outros perfis não são removidas por essa rota. Se houver histórico vinculado que impeça a exclusão, use Desativar.
+
+No login do perfil Administrador, “Esqueci minha senha” solicita o e-mail cadastrado e chama `POST /api/auth/admin/recuperacao-senha`. A solicitação considera apenas administradores ativos, responde sem confirmar a existência do e-mail e limita novas solicitações durante um minuto. O link expira em 30 minutos e usa a tela existente de redefinição. Configure FRONTEND_URL e SMTP no backend; o endereço do frontend deve ser acessível no dispositivo em que o e-mail será aberto.

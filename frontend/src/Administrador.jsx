@@ -1,3 +1,4 @@
+import { filtrarPorInicioNome } from "./buscaCadastros";
 import { useCallback, useEffect, useState } from "react";
 import CampoSenha from "./CampoSenha";
 
@@ -8,7 +9,11 @@ const contatoWhatsAppVazio = { nome: "", telefone: "" };
 function Administrador({ token }) {
   const [aba, setAba] = useState("mecanicos");
   const [mecanicos, setMecanicos] = useState([]);
+  const [buscaMecanico, setBuscaMecanico] = useState("");
+  const mecanicosFiltrados = filtrarPorInicioNome(mecanicos, buscaMecanico);
   const [clientes, setClientes] = useState([]);
+  const [buscaCliente, setBuscaCliente] = useState("");
+  const clientesFiltrados = filtrarPorInicioNome(clientes, buscaCliente);
   const [contatosWhatsApp, setContatosWhatsApp] = useState([]);
   const [formWhatsApp, setFormWhatsApp] = useState(contatoWhatsAppVazio);
   const [formMecanico, setFormMecanico] = useState(mecanicoVazio);
@@ -138,26 +143,23 @@ function Administrador({ token }) {
     }
   }
 
-  async function enviarLinkRecuperacao(mecanico) {
+  async function excluirMecanico(mecanico) {
     if (
       !window.confirm(
-        `Enviar um link para redefinir a senha de ${mecanico.nome} (${mecanico.email})?`,
+        `Excluir a conta de ${mecanico.nome}? Esta ação não pode ser desfeita.`,
       )
-    ) {
+    )
       return;
-    }
-
     setErro("");
-
     try {
-      const resultado = await requisicao(
-        `/api/admin/usuarios/${mecanico.id}/recuperacao-senha`,
-        { method: "POST" },
-      );
-
-      window.alert(
-        resultado.mensagem || "Link de redefinição enviado com sucesso.",
-      );
+      await requisicao(`/api/admin/mecanicos/${mecanico.id}`, {
+        method: "DELETE",
+      });
+      setMecanicos((lista) => lista.filter((item) => item.id !== mecanico.id));
+      if (mecanicoEditando?.id === mecanico.id) {
+        setMecanicoEditando(null);
+        setFormMecanico(mecanicoVazio);
+      }
     } catch (falha) {
       setErro(falha.message);
     }
@@ -259,6 +261,22 @@ function Administrador({ token }) {
               />
             </label>
             <label>
+              Usuário
+              <input
+                readOnly
+                value={formMecanico.nome
+                  .trim()
+                  .split(/\s+/)[0]
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .toUpperCase()}
+              />
+              <small>
+                Gerado pelo primeiro nome, em maiúsculas e sem acentos. Ao
+                salvar, este será o usuário de acesso.
+              </small>
+            </label>
+            <label>
               E-mail
               <input
                 type="email"
@@ -324,8 +342,20 @@ function Administrador({ token }) {
           </form>
           <div className="cadastro-lista">
             <h2>Contas de mecânicos</h2>
-            {mecanicos.length ? (
-              mecanicos.map((mecanico) => (
+            <label className="cadastro-busca">
+              Buscar mecânico por nome
+              <input
+                type="search"
+                value={buscaMecanico}
+                onChange={(e) => setBuscaMecanico(e.target.value)}
+                placeholder="Digite o início do nome"
+              />
+            </label>
+            <p role="status">
+              {mecanicosFiltrados.length} mecânicos encontrados
+            </p>
+            {mecanicosFiltrados.length ? (
+              mecanicosFiltrados.map((mecanico) => (
                 <article className="cadastro-registro" key={mecanico.id}>
                   <div>
                     <h3>{mecanico.nome}</h3>
@@ -337,10 +367,10 @@ function Administrador({ token }) {
                   <div className="cadastro-acoes">
                     <button
                       type="button"
-                      className="secundario"
-                      onClick={() => enviarLinkRecuperacao(mecanico)}
+                      className="perigo"
+                      onClick={() => excluirMecanico(mecanico)}
                     >
-                      Enviar link para redefinir senha
+                      Excluir
                     </button>
                     <button
                       type="button"
@@ -370,7 +400,9 @@ function Administrador({ token }) {
               ))
             ) : (
               <p className="cadastro-vazio">
-                Nenhuma conta de mecânico cadastrada.
+                {buscaMecanico.trim()
+                  ? "Nenhum mecânico começa com as letras informadas."
+                  : "Nenhuma conta de mecânico cadastrada."}
               </p>
             )}
           </div>
@@ -439,8 +471,18 @@ function Administrador({ token }) {
           </form>
           <div className="cadastro-lista">
             <h2>Clientes cadastrados</h2>
-            {clientes.length ? (
-              clientes.map((cliente) => (
+            <label className="cadastro-busca">
+              Buscar cliente por nome
+              <input
+                type="search"
+                value={buscaCliente}
+                onChange={(e) => setBuscaCliente(e.target.value)}
+                placeholder="Digite o início do nome"
+              />
+            </label>
+            <p role="status">{clientesFiltrados.length} clientes encontrados</p>
+            {clientesFiltrados.length ? (
+              clientesFiltrados.map((cliente) => (
                 <article className="cadastro-registro" key={cliente.id}>
                   <div>
                     <h3>{cliente.nome}</h3>
@@ -478,7 +520,11 @@ function Administrador({ token }) {
                 </article>
               ))
             ) : (
-              <p className="cadastro-vazio">Nenhum cliente cadastrado.</p>
+              <p className="cadastro-vazio">
+                {buscaCliente.trim()
+                  ? "Nenhum cliente começa com as letras informadas."
+                  : "Ainda não há clientes cadastrados."}
+              </p>
             )}
           </div>
         </>

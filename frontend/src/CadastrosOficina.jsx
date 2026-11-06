@@ -1,3 +1,4 @@
+import { filtrarPorInicioNome } from "./buscaCadastros";
 import { useEffect, useState } from "react";
 
 function moeda(valor) {
@@ -10,6 +11,8 @@ function moeda(valor) {
 function CadastrosOficina({ abaInicial = "clientes", token }) {
   const [aba, setAba] = useState(abaInicial);
   const [clientes, setClientes] = useState([]);
+  const [buscaCliente, setBuscaCliente] = useState("");
+  const clientesFiltrados = filtrarPorInicioNome(clientes, buscaCliente);
   const [carregandoClientes, setCarregandoClientes] = useState(true);
   const [erroClientes, setErroClientes] = useState("");
   const [itens, setItens] = useState([]);
@@ -333,8 +336,18 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
           </form>
           <div className="cadastro-lista">
             <h2>Clientes cadastrados</h2>
-            {clientes.length ? (
-              clientes.map((cliente) => (
+            <label className="cadastro-busca">
+              Buscar cliente por nome
+              <input
+                type="search"
+                value={buscaCliente}
+                onChange={(e) => setBuscaCliente(e.target.value)}
+                placeholder="Digite o início do nome"
+              />
+            </label>
+            <p role="status">{clientesFiltrados.length} clientes encontrados</p>
+            {clientesFiltrados.length ? (
+              clientesFiltrados.map((cliente) => (
                 <article className="cadastro-registro" key={cliente.id}>
                   <div>
                     <h3>{cliente.nome}</h3>
@@ -377,7 +390,9 @@ function CadastrosOficina({ abaInicial = "clientes", token }) {
               ))
             ) : (
               <p className="cadastro-vazio">
-                Ainda não há clientes cadastrados.
+                {buscaCliente.trim()
+                  ? "Nenhum cliente começa com as letras informadas."
+                  : "Ainda não há clientes cadastrados."}
               </p>
             )}
           </div>

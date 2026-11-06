@@ -189,3 +189,55 @@ test("Cálculos compartilhados mantêm o custo da hora e tratam jornada vazia", 
   );
   assert.equal(calcularCustoHora({ ...config, produtividade: 0 }), 0);
 });
+
+test('cadastro de mecânico grava primeiro nome normalizado como usuário', async () => {
+  const api = preparar();
+  const res = resposta();
+  await api.rota('post', '/api/admin/mecanicos').handlers.at(-1)({ body: {
+    nome: '  jOsÉ   da Silva  ', email: ' JOSE@EXEMPLO.COM ', senha: 'senha-forte-teste',
+  } }, res);
+  assert.equal(res.statusCode, 201);
+  const consulta = api.consultas.at(-1);
+  assert.match(consulta.sql, /perfil, usuario/);
+  assert.equal(consulta.valores[3], 'JOSE');
+});
+
+test('edição de mecânico salva usuário com ou sem alteração de senha', async () => {
+  for (const senha of ['', 'nova-senha-teste']) {
+    const api = preparar();
+    const res = resposta();
+    await api.rota('put', '/api/admin/mecanicos/:id').handlers.at(-1)({ params: { id: '7' }, body: {
+      nome: '  pEtRuCcI  Lucena ', email: 'p@exemplo.com', ativo: true, senha,
+    } }, res);
+    assert.equal(res.statusCode, 200);
+    const consulta = api.consultas.at(-1);
+    assert.match(consulta.sql, /usuario = \$5/);
+    assert.equal(consulta.valores[4], 'PETRUCCI');
+    assert.equal(consulta.valores[3], '7');
+    assert.equal(consulta.valores.length, senha ? 6 : 5);
+    if (senha) assert.match(consulta.sql, /senha_hash = \$6/);
+    assert.match(consulta.sql, /RETURNING id, nome, email, usuario/);
+  }
+});
+
+test('lista de mecânicos inclui usuário para edição', async () => {
+  const api = preparar();
+  await api.rota('get', '/api/admin/mecanicos').handlers.at(-1)({}, resposta());
+  assert.match(api.consultas[0].sql, /SELECT id, nome, email, usuario/);
+});
+
+test('exclusão de mecânico exige administrador e limita a remoção ao perfil mecânico', async () => {
+  const api = preparar();
+  const rota = api.rota('delete', '/api/admin/mecanicos/:id');
+  const anonimo = resposta();
+  await rota.handlers[0]({ headers: {} }, anonimo, () => assert.fail('Acesso anônimo'));
+  assert.equal(anonimo.statusCode, 401);
+  const mecanico = resposta();
+  rota.handlers[1]({ usuario: { perfil: 'mecanico' } }, mecanico, () => assert.fail('Acesso de mecânico'));
+  assert.equal(mecanico.statusCode, 403);
+  const res = resposta();
+  await rota.handlers.at(-1)({ params: { id: '7' } }, res);
+  assert.equal(res.statusCode, 204);
+  assert.match(api.consultas.at(-1).sql, /perfil = 'mecanico'/);
+  assert.deepEqual(Array.from(api.consultas.at(-1).valores), ['7']);
+});

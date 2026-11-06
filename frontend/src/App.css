@@ -9172,3 +9172,98 @@ textarea {
     width: 100%;
   }
 }
+
+/* Capas dos guias: preservar o texto que faz parte da imagem. */
+.carrossel03-wrapper > .galeria-guias > .galeria-guia-card {
+  height: auto !important;
+  min-height: 250px !important;
+  max-height: none !important;
+}
+.carrossel03-wrapper > .galeria-guias > .galeria-guia-card > img {
+  object-fit: contain !important;
+  object-position: center !important;
+}
+.carrossel03-wrapper > .galeria-guias > .galeria-guia-card > h3 {
+  display: block !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: unset;
+}
+
+.cadastro-busca {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+.cadastro-busca input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #40516a;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.formulario.formulario-login {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 560px;
+  box-sizing: border-box;
+}
+.formulario-login > p { margin: 0 0 4px; }
+.formulario-login > label { margin: 0; }
+.formulario-login .login-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+.formulario-login .login-acoes button,
+.formulario-login .recuperacao-admin button {
+  min-height: 44px;
+  padding: 12px 20px;
+  border: 1px solid #40516a;
+  border-radius: 10px;
+  background: #18273b;
+  color: #eaf0f6;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.formulario-login .login-acoes button[type="submit"] {
+  background: #b7f36b;
+  border-color: #b7f36b;
+  color: #102015;
+}
+.formulario-login .login-acoes button { flex: 1; }
+.formulario-login .recuperacao-admin > button {
+  display: block;
+  margin-left: auto;
+  padding: 8px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #8dcaff;
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.formulario-login .recuperacao-admin > div {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+.formulario-login button:disabled { opacity: 0.6; cursor: wait; }
+:root[data-tema="light"] .formulario-login .login-acoes button[type="button"],
+:root[data-tema="light"] .formulario-login .recuperacao-admin > div button {
+  background: #eef2f7;
+  color: #172b3d;
+  border-color: #cbd5e1;
+}
+:root[data-tema="light"] .formulario-login .recuperacao-admin > button { color: #1d5d96; }

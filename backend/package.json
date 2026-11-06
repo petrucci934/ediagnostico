@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node --test test/*.test.js",
     "migrar:biblioteca": "node scripts/migrar-biblioteca.js",
+    "cadastrar:materiais": "node scripts/cadastrar-materiais.js",
     "criar-admin": "node scripts/criar-admin.js",
     "criar-admin-padrao": "node scripts/criar-admin-padrao.js",
     "start": "node src/server.js",

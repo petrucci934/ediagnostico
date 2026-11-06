@@ -1,0 +1,8 @@
+{
+  "appId": "br.com.ediagnostico.app",
+  "appName": "E-Diagnóstico",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "http"
+  }
+}

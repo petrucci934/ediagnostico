@@ -2,9 +2,53 @@ require("dotenv").config();
 
 const express = require("express");
 const { Pool } = require("pg");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+function normalizarUsuario(valor) {
+  return String(valor || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .replace(/\s+/g, "")
+    .toUpperCase();
+}
+
+function primeiroNomeUsuario(nome) {
+  const primeiroNome = String(nome || "").trim().split(/\s+/)[0];
+  return normalizarUsuario(primeiroNome);
+}
+
+
+// Origens autorizadas para acessar a API
+const origensPermitidas = new Set([
+  "http://localhost", // Capacitor Android
+  "http://localhost:5173", // React + Vite
+]);
+
+// Configuração CORS
+app.use((req, res, next) => {
+  const origem = req.headers.origin;
+
+  if (origem && origensPermitidas.has(origem)) {
+    res.setHeader("Access-Control-Allow-Origin", origem);
+    res.setHeader("Vary", "Origin");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization",
+    );
+  }
+
+  if (req.method === "OPTIONS" && origem && origensPermitidas.has(origem)) {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 app.use(express.json());
 
@@ -12,6 +56,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const registrarRotasRecuperacao = require("./passwordResetRoutes");
 const registrarRotasBiblioteca = require("./bibliotecaRoutes");
+const registrarArquivosBiblioteca = require("./bibliotecaArquivosRoutes");
 
 if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET não configurada no arquivo .env");
@@ -118,6 +163,7 @@ const db = new Pool({
 });
 
 registrarRotasBiblioteca({ app, db, autenticarToken, exigirEditor });
+registrarArquivosBiblioteca({ app, db });
 
 registrarRotasRecuperacao({
   app,
@@ -128,12 +174,15 @@ registrarRotasRecuperacao({
 });
 
 app.post("/api/auth/login", async (req, res) => {
-  const login =
+  const loginInformado =
     typeof req.body?.login === "string"
-      ? req.body.login.trim().toLowerCase()
+      ? req.body.login.trim()
       : typeof req.body?.email === "string"
-        ? req.body.email.trim().toLowerCase()
+        ? req.body.email.trim()
         : "";
+
+  const login = loginInformado.toLowerCase();
+  const usuarioNormalizado = normalizarUsuario(loginInformado);
   const { senha } = req.body || {};
 
   if (!login || typeof senha !== "string" || !senha) {
@@ -147,10 +196,10 @@ app.post("/api/auth/login", async (req, res) => {
       `SELECT id, nome, email, usuario, senha_hash, perfil,
               deve_trocar_credenciais
        FROM usuarios
-       WHERE (LOWER(email) = $1 OR LOWER(usuario) = $1) AND ativo = TRUE
+       WHERE (LOWER(email) = $1 OR LOWER(usuario) = LOWER($2)) AND ativo = TRUE
        ORDER BY id
        LIMIT 1`,
-      [login],
+      [login, usuarioNormalizado],
     );
 
     const usuario = resultado.rows[0];
@@ -247,7 +296,7 @@ app.get(
   async (_req, res) => {
     try {
       const resultado = await db.query(
-        `SELECT id, nome, email, ativo, criado_em
+        `SELECT id, nome, email, usuario, ativo, criado_em
        FROM usuarios WHERE perfil = 'mecanico' ORDER BY nome, id`,
       );
       res.json({ mecanicos: resultado.rows });
@@ -279,17 +328,17 @@ app.post(
     try {
       const senhaHash = await bcrypt.hash(senha, 10);
       const resultado = await db.query(
-        `INSERT INTO usuarios (nome, email, senha_hash, perfil)
-       VALUES ($1, $2, $3, 'mecanico')
-       RETURNING id, nome, email, ativo, criado_em`,
-        [nome, email, senhaHash],
+        `INSERT INTO usuarios (nome, email, senha_hash, perfil, usuario)
+       VALUES ($1, $2, $3, 'mecanico', $4)
+       RETURNING id, nome, email, usuario, ativo, criado_em`,
+        [nome, email, senhaHash, primeiroNomeUsuario(nome)],
       );
       res.status(201).json({ mecanico: resultado.rows[0] });
     } catch (erro) {
       if (erro.code === "23505")
         return res
           .status(409)
-          .json({ erro: "Já existe uma conta com este e-mail." });
+          .json({ erro: "Já existe uma conta com este e-mail ou usuário (primeiro nome)." });
       console.error("Erro ao cadastrar mecânico:", erro.message);
       res.status(500).json({ erro: "Não foi possível cadastrar o mecânico." });
     }
@@ -321,16 +370,16 @@ app.put(
         });
     }
     try {
-      const valores = [nome, email, ativo, req.params.id];
-      let sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3
+      const valores = [nome, email, ativo, req.params.id, primeiroNomeUsuario(nome)];
+      let sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3, usuario = $5
                WHERE id = $4 AND perfil = 'mecanico'`;
       if (senha) {
         valores.push(await bcrypt.hash(senha, 10));
-        sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3, senha_hash = $5
+        sql = `UPDATE usuarios SET nome = $1, email = $2, ativo = $3, usuario = $5, senha_hash = $6
              WHERE id = $4 AND perfil = 'mecanico'`;
       }
       const resultado = await db.query(
-        `${sql} RETURNING id, nome, email, ativo, criado_em`,
+        `${sql} RETURNING id, nome, email, usuario, ativo, criado_em`,
         valores,
       );
       if (!resultado.rowCount)
@@ -340,12 +389,25 @@ app.put(
       if (erro.code === "23505")
         return res
           .status(409)
-          .json({ erro: "Já existe uma conta com este e-mail." });
+          .json({ erro: "Já existe uma conta com este e-mail ou usuário (primeiro nome)." });
       console.error("Erro ao atualizar mecânico:", erro.message);
       res.status(500).json({ erro: "Não foi possível atualizar o mecânico." });
     }
   },
 );
+
+app.delete("/api/admin/mecanicos/:id", autenticarToken, exigirAdmin, async (req, res) => {
+  if (!/^\d+$/.test(req.params.id)) return res.status(400).json({ erro: "Identificador inválido." });
+  try {
+    const resultado = await db.query("DELETE FROM usuarios WHERE id = $1 AND perfil = 'mecanico' RETURNING id", [req.params.id]);
+    if (!resultado.rowCount) return res.status(404).json({ erro: "Mecânico não encontrado." });
+    return res.status(204).end();
+  } catch (erro) {
+    if (erro.code === "23503") return res.status(409).json({ erro: "Esta conta possui histórico vinculado e não pode ser excluída. Use Desativar para bloquear o acesso." });
+    console.error("Erro ao excluir mecânico:", erro.message);
+    return res.status(500).json({ erro: "Não foi possível excluir o mecânico." });
+  }
+});
 
 function exigirAcessoClientes(req, res, next) {
   return req.path.startsWith("/api/admin/")
