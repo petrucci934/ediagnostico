@@ -20,6 +20,10 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { urlMaterial } from "./api.js";
+import DiagnosticoGuiado from "./DiagnosticoGuiado";
+import CatalogoDiagnosticos from "./CatalogoDiagnosticos";
+import { catalogoDiagnosticos, filtrarCatalogo, resultadoCatalogo } from "./catalogoDiagnosticos";
+import { atualizarHistorico, validarHistorico, restaurarFiltrosHistorico } from "./historicoConsultas.js";
 import RedefinirSenha from "./RedefinirSenha";
 import RecuperacaoAdmin from "./RecuperacaoAdmin";
 import Precificacao from "./Precificacao";
@@ -28,6 +32,7 @@ import CadastrosOficina from "./CadastrosOficina";
 import Administrador from "./Administrador";
 import PrimeiroAcessoAdmin from "./PrimeiroAcessoAdmin";
 import CampoSenha from "./CampoSenha";
+import TrilhaConhecimento, { CardTrilhaConhecimento } from "./TrilhaConhecimento";
 import TabelaPrecosNeon from "./TabelaPrecosNeon";
 import { obterMenuPrincipal, itemMenuAtivo } from "./menuPrincipal";
 import videosBiblioteca from "./data/videos-biblioteca.json";
@@ -754,9 +759,10 @@ function App() {
   const [fabricanteSelecionado, setFabricanteSelecionado] = useState("");
   const [modelos, setModelos] = useState([]);
   const [modeloSelecionado, setModeloSelecionado] = useState("");
-  // Mantém os procedimentos carregados para a exibição técnica futura.
-  // eslint-disable-next-line no-unused-vars
   const [procedimentos, setProcedimentos] = useState([]);
+  const [estadoProcedimentos, setEstadoProcedimentos] = useState("carregando");
+  const [contextoDiagnostico, setContextoDiagnostico] = useState({});
+  const consultaAtualRef = useRef(0);
   const [telaAtual, setTelaAtual] = useState(() => {
     try {
       const perfilSalvo = JSON.parse(
@@ -860,13 +866,13 @@ function App() {
   const [carregandoLogin, setCarregandoLogin] = useState(false);
   const [historico, setHistorico] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("ediagnostico-historico")) || [];
+      return validarHistorico(JSON.parse(localStorage.getItem("ediagnostico-historico")));
     } catch {
       return [];
     }
   });
   useEffect(() => {
-    localStorage.setItem("ediagnostico-historico", JSON.stringify(historico));
+    try { localStorage.setItem("ediagnostico-historico", JSON.stringify(historico)); } catch { /* Mantém o histórico em memória quando o navegador bloqueia armazenamento. */ }
   }, [historico]);
 
   useEffect(() => {
@@ -1057,7 +1063,46 @@ function App() {
     }
   }
 
+  function registrarReferenciaNoHistorico(referencia) {
+    const { fabricanteId } = restaurarFiltrosHistorico({ fabricante: referencia.fabricante }, fabricantes, []);
+    setHistorico((anterior) => atualizarHistorico(anterior, {
+      codigo: referencia.codigo, fabricante: referencia.fabricante, modelo: referencia.modelo,
+      fabricanteId, referenciaId: referencia.id,
+    }));
+  }
+
+  function reabrirConsulta(item) {
+    if (item.referenciaId) {
+      const referencia = catalogoDiagnosticos.find((ref) => ref.id === item.referenciaId);
+      if (!referencia) { setErro("Esta referência não está mais disponível no catálogo."); return; }
+      ++consultaAtualRef.current;
+      const filtros = restaurarFiltrosHistorico(item, fabricantes, modelos);
+      setFabricanteSelecionado(filtros.fabricanteId);
+      setModeloSelecionado("");
+      setCodigo(referencia.codigo);
+      setResultado(resultadoCatalogo(referencia));
+      setContextoDiagnostico({ fabricante: referencia.fabricante, modelo: referencia.modelo });
+      setProcedimentos([]);
+      setEstadoProcedimentos("pronto");
+      setCarregando(false);
+      setErro("");
+      setSugestoes([]);
+      registrarReferenciaNoHistorico(referencia);
+      return;
+    }
+    const filtros = restaurarFiltrosHistorico(item, fabricantes, modelos);
+    if (((item.fabricanteId || item.fabricante !== "Todos os fabricantes") && !filtros.fabricanteId) || ((item.modeloId || item.modelo) && !filtros.modeloId)) {
+      setErro("O fabricante ou modelo desta consulta não está disponível. Selecione os filtros novamente.");
+      return;
+    }
+    setFabricanteSelecionado(filtros.fabricanteId);
+    setModeloSelecionado(filtros.modeloId);
+    setCodigo(item.codigo);
+    consultarCodigo(null, item.codigo, filtros);
+  }
+
   async function consultarCodigo(event, codigoInformado, filtros = {}) {
+    const consultaId = ++consultaAtualRef.current;
     if (event?.preventDefault) {
       event.preventDefault();
     }
@@ -1071,12 +1116,15 @@ function App() {
     if (!codigoPesquisa) {
       setErro("Digite um código de erro para consultar.");
       setResultado(null);
+      setCarregando(false);
       return;
     }
 
     setCarregando(true);
     setErro("");
     setResultado(null);
+    setProcedimentos([]);
+    setEstadoProcedimentos("carregando");
 
     try {
       const fabricanteId = filtros.fabricanteId ?? fabricanteSelecionado;
@@ -1098,8 +1146,27 @@ function App() {
       const resposta = await fetch(urlConsulta);
 
       const dados = await resposta.json();
+      if (consultaId !== consultaAtualRef.current) return;
       console.log("Resposta da API:", dados);
       if (resposta.status === 404) {
+        const referencias = /^\d+$/.test(codigoPesquisa) && !modeloId
+          ? filtrarCatalogo({ busca: codigoPesquisa, fabricante: fabricante?.name || "" })
+          : [];
+        if (referencias.length === 1) {
+          const referencia = referencias[0];
+          setSugestoes([]);
+          setResultado(resultadoCatalogo(referencia));
+          setContextoDiagnostico({ fabricante: referencia.fabricante, modelo: referencia.modelo });
+          setProcedimentos([]);
+          setEstadoProcedimentos("pronto");
+          registrarReferenciaNoHistorico(referencia);
+          return;
+        }
+        if (referencias.length > 1) {
+          setErro("Este código aparece em mais de um fabricante. Selecione o fabricante ou consulte o catálogo abaixo.");
+          setSugestoes([]);
+          return;
+        }
         setSugestoes(dados.sugestoes || []);
         setErro(dados.mensagem || "Código não encontrado.");
         return;
@@ -1113,41 +1180,38 @@ function App() {
 
       setSugestoes([]);
       setResultado(dados);
+      const fabricantesResultado = [...new Set((dados.resultados || []).map((item) => item.manufacturer).filter(Boolean))];
+      const fabricanteProcedimento = fabricante?.name || (fabricantesResultado.length === 1 ? fabricantesResultado[0] : "");
+      setContextoDiagnostico({ fabricante: fabricanteProcedimento, modelo: modelo?.model_name || "" });
 
       const itemHistorico = {
         codigo: codigoPesquisa,
-        fabricante: fabricante?.name || "Todos os fabricantes",
+        fabricante: fabricanteProcedimento || "Todos os fabricantes",
         modelo: modelo?.model_name || "",
-        data: new Date().toLocaleString("pt-BR"),
+        fabricanteId: fabricante?.id || fabricantes.find((item) => item.name === fabricanteProcedimento)?.id || "",
+        modeloId: modelo?.id || "",
       };
+      setHistorico((anterior) => atualizarHistorico(anterior, itemHistorico));
 
-      setHistorico((historicoAnterior) => {
-        const historicoAtualizado = [
-          itemHistorico,
-          ...historicoAnterior.filter(
-            (item) =>
-              !(
-                item.codigo === itemHistorico.codigo &&
-                item.fabricante === itemHistorico.fabricante &&
-                item.modelo === itemHistorico.modelo
-              ),
-          ),
-        ];
-
-        return historicoAtualizado.slice(0, 2);
-      });
-
-      const respostaProcedimentos = await fetch(
-        `/api/procedimentos/${encodeURIComponent(codigoPesquisa)}`,
-      );
-
-      if (respostaProcedimentos.ok) {
-        const dadosProcedimentos = await respostaProcedimentos.json();
-        setProcedimentos(dadosProcedimentos.procedimentos || []);
+      if (!fabricanteProcedimento) {
+        setEstadoProcedimentos("ambiguo");
       } else {
-        setProcedimentos([]);
+        try {
+          const parametros = new URLSearchParams({ fabricante: fabricanteProcedimento });
+          if (modeloId) parametros.set("modeloId", modeloId);
+          const respostaProcedimentos = await fetch(`/api/procedimentos/${encodeURIComponent(codigoPesquisa)}?${parametros}`);
+          if (!respostaProcedimentos.ok) throw new Error("Procedimentos indisponíveis");
+          const dadosProcedimentos = await respostaProcedimentos.json();
+          if (consultaId !== consultaAtualRef.current) return;
+          if (!Array.isArray(dadosProcedimentos.procedimentos)) throw new Error("Resposta inválida");
+          setProcedimentos(dadosProcedimentos.procedimentos);
+          setEstadoProcedimentos("pronto");
+        } catch {
+          if (consultaId === consultaAtualRef.current) setEstadoProcedimentos("erro");
+        }
       }
     } catch (error) {
+      if (consultaId !== consultaAtualRef.current) return;
       setErro(
         error.message ||
           "Não foi possível conectar à API. Verifique se o backend está ativo.",
@@ -1155,7 +1219,7 @@ function App() {
       setSugestoes([]);
       setResultado(null);
     } finally {
-      setCarregando(false);
+      if (consultaId === consultaAtualRef.current) setCarregando(false);
     }
   }
 
@@ -1573,6 +1637,171 @@ function App() {
                 </>
               )}
 
+              {(!ehCliente || abaCliente === "falhas") && (
+                <form className="formulario" onSubmit={consultarCodigo}>
+                  <div className="formulario-campos">
+                    <div className="formulario-campo">
+                      <label htmlFor="fabricante">Fabricante do veículo</label>
+
+                      <div className="campo-com-icone">
+                        <CarFront size={17} aria-hidden="true" />
+
+                        <select
+                          id="fabricante"
+                          value={fabricanteSelecionado}
+                          onChange={(event) => {
+                            setFabricanteSelecionado(event.target.value);
+                            setModeloSelecionado("");
+                          }}
+                        >
+                          <option value="">Selecione um fabricante</option>
+
+                          {fabricantes.map((fabricante) => (
+                            <option key={fabricante.id} value={fabricante.id}>
+                              {fabricante.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="formulario-campo">
+                      <label htmlFor="modelo">Modelo do veículo</label>
+
+                      <div className="campo-com-icone">
+                        <Bike size={17} aria-hidden="true" />
+
+                        <select
+                          id="modelo"
+                          value={modeloSelecionado}
+                          onChange={(event) =>
+                            setModeloSelecionado(event.target.value)
+                          }
+                          disabled={!fabricanteSelecionado}
+                        >
+                          <option value="">Selecione um modelo</option>
+
+                          {modelos
+                            .filter(
+                              (modelo) =>
+                                String(modelo.manufacturer_id) ===
+                                String(fabricanteSelecionado),
+                            )
+                            .map((modelo) => (
+                              <option key={modelo.id} value={modelo.id}>
+                                {modelo.model_name}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="formulario-campo formulario-campo-codigo">
+                      <label htmlFor="codigo">Código de erro</label>
+
+                      <div className="campo-pesquisa">
+                        <input
+                          id="codigo"
+                          type="text"
+                          value={codigo}
+                          onChange={(event) => setCodigo(event.target.value)}
+                          placeholder="Ex.: E010"
+                          autoComplete="off"
+                          aria-describedby="ajuda-codigo"
+                        />
+
+                        <button type="submit" disabled={carregando}>
+                          <Search size={16} aria-hidden="true" />
+                          {carregando ? "Consultando..." : "Consultar código"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <small id="ajuda-codigo">
+                    Digite o código exibido no painel ou no sistema de
+                    diagnóstico.
+                  </small>
+                </form>
+              )}
+
+              {(!ehCliente || abaCliente === "falhas") && erro && (
+                <div className="mensagem erro" role="alert">
+                  {erro}
+                </div>
+              )}
+              {(!ehCliente || abaCliente === "falhas") &&
+                sugestoes.length > 0 && (
+                  <div className="sugestoes-codigos">
+                    <p>Você quis dizer um destes códigos?</p>
+
+                    <div className="lista-sugestoes">
+                      {sugestoes.map((sugestao) => (
+                        <button
+                          key={sugestao}
+                          type="button"
+                          onClick={() => {
+                            setCodigo(sugestao);
+                            setErro("");
+                            setSugestoes([]);
+                            consultarCodigo(null, sugestao);
+                          }}
+                        >
+                          {sugestao}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              {(!ehCliente ||
+                abaCliente === "falhas" ||
+                abaCliente === "consultas") &&
+                resultado && (
+                  <section className="resultado resultado-ficha" aria-live="polite" aria-label={`Resultado da consulta: ${resultado.codigo}`}>
+                    {criarCardsResultado(resultado).filter((item) => item.imagem).map((item) => (
+                      <CardImagemResultado item={item} key={item.chave} />
+                    ))}
+                    <DiagnosticoGuiado resultado={resultado} procedimentos={procedimentos} estado={estadoProcedimentos} contexto={contextoDiagnostico} />
+                  </section>
+                )}
+
+              {(!ehCliente || abaCliente === "falhas") && (
+                <details className="dg-catalogo-secao" key={resultado ? "com-resultado" : "sem-resultado"}>
+                  <summary>Explorar catálogo de códigos · 14 fichas</summary>
+                  <CatalogoDiagnosticos onConsultar={registrarReferenciaNoHistorico} />
+                </details>
+              )}
+              {(!ehCliente || abaCliente === "falhas") &&
+                historico.length > 0 && (
+                  <section className="historico-consultas">
+                    <h2>Consultas recentes</h2>
+
+                    <div className="lista-historico">
+                      {historico.map((item, indice) => (
+                        <article
+                          className="item-historico"
+                          key={`${item.codigo}-${item.fabricante}-${item.modelo}-${indice}`}
+                        >
+                          <div>
+                            <strong>{item.codigo}</strong>
+                            <p>{item.fabricante}</p>
+                            {item.modelo && <p>{item.modelo}</p>}
+                            <small>{item.data}</small>
+                          </div>
+
+                          <button
+                            type="button"
+                            disabled={carregando}
+                            onClick={() => reabrirConsulta(item)}
+                          >
+                            Consultar novamente
+                          </button>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
               {(perfil === "mecanico" ||
                 usuarioLogado?.perfil === "mecanico") &&
                 abaTeste === "biblioteca" && (
@@ -1716,216 +1945,6 @@ function App() {
                   </section>
                 )}
 
-              {!ehMecanico && (!ehCliente || abaCliente === "falhas") && (
-                <form className="formulario" onSubmit={consultarCodigo}>
-                  <div className="formulario-campos">
-                    <div className="formulario-campo">
-                      <label htmlFor="fabricante">Fabricante do veículo</label>
-
-                      <div className="campo-com-icone">
-                        <CarFront size={17} aria-hidden="true" />
-
-                        <select
-                          id="fabricante"
-                          value={fabricanteSelecionado}
-                          onChange={(event) => {
-                            setFabricanteSelecionado(event.target.value);
-                            setModeloSelecionado("");
-                          }}
-                        >
-                          <option value="">Selecione um fabricante</option>
-
-                          {fabricantes.map((fabricante) => (
-                            <option key={fabricante.id} value={fabricante.id}>
-                              {fabricante.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="formulario-campo">
-                      <label htmlFor="modelo">Modelo do veículo</label>
-
-                      <div className="campo-com-icone">
-                        <Bike size={17} aria-hidden="true" />
-
-                        <select
-                          id="modelo"
-                          value={modeloSelecionado}
-                          onChange={(event) =>
-                            setModeloSelecionado(event.target.value)
-                          }
-                          disabled={!fabricanteSelecionado}
-                        >
-                          <option value="">Selecione um modelo</option>
-
-                          {modelos
-                            .filter(
-                              (modelo) =>
-                                String(modelo.manufacturer_id) ===
-                                String(fabricanteSelecionado),
-                            )
-                            .map((modelo) => (
-                              <option key={modelo.id} value={modelo.id}>
-                                {modelo.model_name}
-                              </option>
-                            ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="formulario-campo formulario-campo-codigo">
-                      <label htmlFor="codigo">Código de erro</label>
-
-                      <div className="campo-pesquisa">
-                        <input
-                          id="codigo"
-                          type="text"
-                          value={codigo}
-                          onChange={(event) => setCodigo(event.target.value)}
-                          placeholder="Ex.: E010"
-                          autoComplete="off"
-                          aria-describedby="ajuda-codigo"
-                        />
-
-                        <button type="submit" disabled={carregando}>
-                          <Search size={16} aria-hidden="true" />
-                          {carregando ? "Consultando..." : "Consultar código"}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <small id="ajuda-codigo">
-                    Digite o código exibido no painel ou no sistema de
-                    diagnóstico.
-                  </small>
-                </form>
-              )}
-
-              {(!ehCliente || abaCliente === "falhas") && erro && (
-                <div className="mensagem erro" role="alert">
-                  {erro}
-                </div>
-              )}
-              {(!ehCliente || abaCliente === "falhas") &&
-                sugestoes.length > 0 && (
-                  <div className="sugestoes-codigos">
-                    <p>Você quis dizer um destes códigos?</p>
-
-                    <div className="lista-sugestoes">
-                      {sugestoes.map((sugestao) => (
-                        <button
-                          key={sugestao}
-                          type="button"
-                          onClick={() => {
-                            setCodigo(sugestao);
-                            setErro("");
-                            setSugestoes([]);
-                            consultarCodigo(null, sugestao);
-                          }}
-                        >
-                          {sugestao}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              {(!ehCliente ||
-                abaCliente === "falhas" ||
-                abaCliente === "consultas") &&
-                resultado && (
-                  <section className="resultado" aria-live="polite">
-                    <div className="resultado-topo">
-                      <span className="etiqueta">RESULTADO DA CONSULTA</span>
-                      <h2>Código {resultado.codigo}</h2>
-
-                      <p>
-                        {(() => {
-                          const quantidadeFontes = (
-                            resultado.resultados || []
-                          ).filter(
-                            (item) => item.source_title || item.source_url,
-                          ).length;
-
-                          if (quantidadeFontes === 1) {
-                            return "1 fonte técnica relacionada";
-                          }
-
-                          if (quantidadeFontes > 1) {
-                            return `${quantidadeFontes} fontes técnicas relacionadas`;
-                          }
-
-                          return "Nenhuma fonte técnica relacionada";
-                        })()}
-                      </p>
-                    </div>
-
-                    {criarCardsResultado(resultado).map((item) => (
-                      <CardImagemResultado item={item} key={item.chave} />
-                    ))}
-                  </section>
-                )}
-
-              {(!ehCliente || abaCliente === "falhas") &&
-                historico.length > 0 && (
-                  <section className="historico-consultas">
-                    <h2>Consultas recentes</h2>
-
-                    <div className="lista-historico">
-                      {historico.map((item, indice) => (
-                        <article
-                          className="item-historico"
-                          key={`${item.codigo}-${item.fabricante}-${item.modelo}-${indice}`}
-                        >
-                          <div>
-                            <strong>{item.codigo}</strong>
-                            <p>{item.fabricante}</p>
-                            {item.modelo && <p>{item.modelo}</p>}
-                            <small>{item.data}</small>
-                          </div>
-
-                          <button
-                            type="button"
-                            disabled={carregando}
-                            onClick={() => {
-                              const fabricante = fabricantes.find(
-                                (fabricante) =>
-                                  fabricante.name === item.fabricante,
-                              );
-
-                              const modelo = item.modelo
-                                ? modelos.find(
-                                    (modelo) =>
-                                      modelo.model_name === item.modelo &&
-                                      String(modelo.manufacturer_id) ===
-                                        String(fabricante?.id),
-                                  )
-                                : undefined;
-
-                              const fabricanteId = fabricante
-                                ? String(fabricante.id)
-                                : "";
-                              const modeloId = modelo ? String(modelo.id) : "";
-
-                              setFabricanteSelecionado(fabricanteId);
-                              setModeloSelecionado(modeloId);
-                              setCodigo(item.codigo);
-
-                              consultarCodigo(null, item.codigo, {
-                                fabricanteId,
-                                modeloId,
-                              });
-                            }}
-                          >
-                            Consultar novamente
-                          </button>
-                        </article>
-                      ))}
-                    </div>
-                  </section>
-                )}
 
               <div className="categorias">
                 <span>Bicicletas elétricas</span>
@@ -2261,6 +2280,13 @@ function App() {
           telaAtual === "administracao" && <Administrador token={token} />}
         {ehMecanico && telaAtual === "precificacao" && (
           <Precificacao token={token} />
+        )}
+
+        {perfil === "mecanico" && ["testes", "diagnostico"].includes(telaAtual) && (
+          <CardTrilhaConhecimento onAbrir={() => setTelaAtual("trilha-conhecimento")} />
+        )}
+        {perfil === "mecanico" && telaAtual === "trilha-conhecimento" && (
+          <TrilhaConhecimento key={token} token={token} onVoltar={() => setTelaAtual("testes")} />
         )}
 
         {perfil === "mecanico" && telaAtual === "testes" && (

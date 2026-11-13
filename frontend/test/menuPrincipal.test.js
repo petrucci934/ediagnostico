@@ -15,6 +15,7 @@ test("menu do mecânico inclui todas as funções em ordem alfabética", () => {
       "novo-teste",
       "orcamento",
       "precificacao",
+      "trilha-conhecimento",
     ],
   );
   for (const id of [

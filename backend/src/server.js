@@ -1223,6 +1223,11 @@ app.get("/api/modelos/:id/codigos", async (req, res) => {
 
 app.get("/api/procedimentos/:codigo", async (req, res) => {
   const codigo = req.params.codigo.trim();
+  const { fabricante, modeloId } = req.query || {};
+  if ((fabricante !== undefined && (typeof fabricante !== "string" || !fabricante.trim() || fabricante.length > 120)) ||
+      (modeloId !== undefined && (typeof modeloId !== "string" || !/^\d+$/.test(modeloId) || !Number.isSafeInteger(Number(modeloId)) || Number(modeloId) <= 0))) {
+    return res.status(400).json({ erro: "Fabricante ou modelo inválido." });
+  }
 
   try {
     const result = await db.query(
@@ -1231,16 +1236,29 @@ app.get("/api/procedimentos/:codigo", async (req, res) => {
                 fp.step_number AS etapa,
                 fp.instruction AS instrucao,
                 fp.safety_warning AS aviso_seguranca,
+                c.component_type AS componente,
+                c.model_name AS modelo_componente,
+                m.name AS fabricante,
+                fc.verification_status AS verificacao,
                 ts.title AS fonte_tecnica,
                 ts.source_url AS fonte_url
              FROM fault_procedures fp
              JOIN fault_codes fc
                 ON fc.id = fp.fault_code_id
+             LEFT JOIN components c ON c.id = fc.component_id
+             LEFT JOIN manufacturers m ON m.id = c.manufacturer_id
              LEFT JOIN technical_sources ts
                 ON ts.id = fp.source_id
              WHERE UPPER(fc.code) = UPPER($1)
-             ORDER BY fp.step_number`,
-      [codigo],
+               AND ($2::text IS NULL OR UPPER(m.name) = UPPER($2))
+               AND ($3::bigint IS NULL OR EXISTS (
+                 SELECT 1 FROM vehicle_model_fault_codes vmfc
+                 JOIN vehicle_models vm ON vm.id = vmfc.vehicle_model_id
+                 WHERE vmfc.fault_code_id = fc.id AND vm.id = $3
+                   AND vm.manufacturer_id = m.id
+               ))
+             ORDER BY fc.id, fp.step_number`,
+      [codigo, fabricante?.trim() || null, modeloId || null],
     );
 
     res.json({

@@ -9267,3 +9267,54 @@ textarea {
   border-color: #cbd5e1;
 }
 :root[data-tema="light"] .formulario-login .recuperacao-admin > button { color: #1d5d96; }
+
+/* Em celulares, reserva uma linha para a marca e outra para os controles. */
+@media (max-width: 480px) {
+  .cabecalho {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    column-gap: 10px;
+    row-gap: 12px;
+  }
+
+  .cabecalho .marca {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .cabecalho .marca > span:last-child {
+    min-width: 0;
+  }
+
+  .cabecalho .marca small {
+    white-space: normal;
+  }
+
+  .cabecalho .cabecalho-inicio {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    min-height: 44px;
+    padding-inline: 12px;
+  }
+
+  .cabecalho .seletor-perfil-cabecalho {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+  }
+
+  .cabecalho .seletor-perfil-cabecalho .perfil-cabecalho {
+    min-height: 44px;
+    padding-inline: 8px;
+  }
+
+  .cabecalho .botao-menu {
+    grid-column: 3;
+    grid-row: 2;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+  }
+}

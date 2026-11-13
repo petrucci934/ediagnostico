@@ -104,6 +104,20 @@ O comando aplica a migração e importa os textos em uma única transação. Pod
 
 Esta migração disponibiliza a leitura pelo banco. A edição dos textos por uma tela administrativa será uma funcionalidade separada.
 
+### Trilha do Conhecimento
+
+A área do mecânico possui um card e um item de menu próprios para a Trilha do Conhecimento. O conteúdo é carregado do PostgreSQL, separado da Biblioteca Técnica: `conhecimento_trilhas` → `conhecimento_modulos` → `conhecimento_aulas`. Títulos, ordem, descrições, pré-requisitos, seções e referências ficam no banco; somente a apresentação visual dos cards fica no frontend.
+
+Para instalar a estrutura e cadastrar o conteúdo, execute em `backend`:
+
+```bash
+npm run migrar:conhecimento
+```
+
+A carga possui **3 trilhas, 18 módulos e 108 aulas**: Elétrica aplicada (12), Eletrônica (12) e Mobilidade elétrica (84). As bases de Elétrica e Eletrônica incluem conceito, parâmetros, exemplo e exercício resolvido e estão identificadas com revisão técnica pendente. O conteúdo é próprio; não é uma importação integral do acervo externo. A trilha de Mobilidade reaproveita as leituras locais em um percurso independente, com ampliação dos textos de controladoras. A Biblioteca Técnica mantém seus registros originais.
+
+O comando executa criação e carga em uma transação e pode ser repetido sem duplicar registros nem sobrescrever edições no banco. `backend/data/trilhas-conhecimento.json` é apenas a carga inicial: a aplicação consulta `GET /api/conhecimento/trilhas` para módulos e resumos e `GET /api/conhecimento/aulas/:id` para o corpo de cada aula, sempre com autenticação e acesso de mecânicos ou administradores. As aulas oferecem índice por seção, referências e navegação anterior/próxima dentro da trilha. Reinicie o backend caso ele não esteja com recarga automática para reconhecer as novas rotas.
+
 ### Aplicativo Android e materiais da biblioteca
 
 O PostgreSQL armazena o cadastro dos vídeos e PDFs em `biblioteca_arquivos`, incluindo caminho e tamanho. Os arquivos continuam no servidor em `frontend/public/videos` e `frontend/public/images`. Não apague essas pastas: o aplicativo consulta `/api/biblioteca/arquivos/conteudo?caminho=...`, que confere o cadastro e transmite o arquivo com suporte a requisições parciais (Range). Esses materiais mantêm o acesso público que já possuíam como arquivos estáticos.

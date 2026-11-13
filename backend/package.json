@@ -10,7 +10,8 @@
     "criar-admin": "node scripts/criar-admin.js",
     "criar-admin-padrao": "node scripts/criar-admin-padrao.js",
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "migrar:conhecimento": "node scripts/migrar-conhecimento.js"
   },
   "keywords": [],
   "author": "",

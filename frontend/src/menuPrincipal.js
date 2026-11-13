@@ -12,6 +12,11 @@ const tabelaServicos = {
 };
 const itensMecanico = [
   {
+    id: "trilha-conhecimento",
+    texto: "Trilha do Conhecimento",
+    tela: "trilha-conhecimento",
+  },
+  {
     id: "biblioteca",
     texto: "Biblioteca Técnica",
     tela: "testes",

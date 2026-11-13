@@ -68,6 +68,32 @@ function resposta() {
   };
 }
 
+test("procedimentos filtram fabricante e modelo usando parâmetros", async () => {
+  const api = preparar();
+  const res = resposta();
+  await api.rota("get", "/api/procedimentos/:codigo").handlers.at(-1)({
+    params: { codigo: "E010" }, query: { fabricante: "SHIMANO", modeloId: "12" },
+  }, res);
+  const consulta = api.consultas.at(-1);
+  assert.deepEqual(Array.from(consulta.valores), ["E010", "SHIMANO", "12"]);
+  assert.match(consulta.sql, /UPPER\(m.name\) = UPPER\(\$2\)/);
+  assert.match(consulta.sql, /vmfc.fault_code_id = fc.id AND vm.id = \$3/);
+  assert.match(consulta.sql, /vm.manufacturer_id = m.id/);
+});
+
+test("procedimentos preservam consultas antigas sem filtros e rejeitam filtros inválidos", async () => {
+  const api = preparar();
+  const handler = api.rota("get", "/api/procedimentos/:codigo").handlers.at(-1);
+  await handler({ params: { codigo: "E010" }, query: {} }, resposta());
+  assert.deepEqual(Array.from(api.consultas[0].valores), ["E010", null, null]);
+  for (const query of [{ modeloId: "12 OR 1=1" }, { fabricante: ["A", "B"] }, { modeloId: "0" }]) {
+    const res = resposta();
+    await handler({ params: { codigo: "E010" }, query }, res);
+    assert.equal(res.statusCode, 400);
+  }
+  assert.equal(api.consultas.length, 1);
+});
+
 for (const [metodo, url] of [
   ["get", "/api/atendimentos"],
   ["post", "/api/atendimentos"],
