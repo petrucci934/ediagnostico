@@ -58,6 +58,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const registrarRotasRecuperacao = require("./passwordResetRoutes");
 const registrarRotasBiblioteca = require("./bibliotecaRoutes");
+const registrarRotasConhecimento = require("./conhecimentoRoutes");
 const registrarArquivosBiblioteca = require("./bibliotecaArquivosRoutes");
 
 if (!process.env.JWT_SECRET) {
@@ -159,6 +160,7 @@ function exigirAdmin(req, res, next) {
 const db = new Pool(configuracaoBanco(process.env));
 
 registrarRotasBiblioteca({ app, db, autenticarToken, exigirEditor });
+registrarRotasConhecimento({ app, db, autenticarToken, exigirEditor });
 registrarArquivosBiblioteca({ app, db, raiz: process.env.MEDIA_ROOT || undefined });
 
 registrarRotasRecuperacao({
