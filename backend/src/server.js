@@ -4,6 +4,7 @@ const express = require("express");
 const { Pool } = require("pg");
 const app = express();
 const PORT = process.env.PORT || 3000;
+const { configuracaoBanco, origensAdicionais } = require("./configHospedagem");
 
 function normalizarUsuario(valor) {
   return String(valor || "")
@@ -24,6 +25,7 @@ function primeiroNomeUsuario(nome) {
 const origensPermitidas = new Set([
   "http://localhost", // Capacitor Android
   "http://localhost:5173", // React + Vite
+  ...origensAdicionais(process.env),
 ]);
 
 // Configuração CORS
@@ -154,16 +156,10 @@ function exigirAdmin(req, res, next) {
 }
 
 // Conexão com o PostgreSQL
-const db = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-});
+const db = new Pool(configuracaoBanco(process.env));
 
 registrarRotasBiblioteca({ app, db, autenticarToken, exigirEditor });
-registrarArquivosBiblioteca({ app, db });
+registrarArquivosBiblioteca({ app, db, raiz: process.env.MEDIA_ROOT || undefined });
 
 registrarRotasRecuperacao({
   app,
