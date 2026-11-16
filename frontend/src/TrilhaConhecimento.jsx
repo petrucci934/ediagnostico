@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import "./TrilhaConhecimento.css";
 import CalculadoraBateria from "./CalculadoraBateria";
+import MontePack from "./MontePack";
 
 const apresentacao = {
   eletrica: { Icone: Zap, cor: "amarela" },
@@ -257,6 +258,7 @@ export default function TrilhaConhecimento({ token, onVoltar }) {
             <span className="tc-etiqueta">UM CAMINHO PARA APRENDER</span>
             <h1 id="tc-titulo">Trilha do Conhecimento</h1>
           </header>
+          <MontePack />
           <CalculadoraBateria />
           <p className="tc-introducao">
             Dos fundamentos à prática na oficina. Escolha uma trilha, explore
