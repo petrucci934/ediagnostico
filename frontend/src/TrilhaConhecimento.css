@@ -423,3 +423,374 @@
     margin-right: 18px;
   }
 }
+
+/* Catálogo de aprendizado: mesma identidade visual da Biblioteca Técnica. */
+.tc-pagina.tc-catalogo {
+  width: min(1500px, calc(100% - 40px));
+  padding: 24px 26px 32px;
+  border-color: #145674;
+  border-radius: 26px;
+  background:
+    radial-gradient(ellipse at 50% 0, #00233570, transparent 65%), #001322;
+}
+.tc-catalogo-cabecalho {
+  text-align: center;
+  padding: 28px 0;
+}
+.tc-catalogo-cabecalho .tc-etiqueta {
+  color: #a0ff00;
+}
+.tc-catalogo-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 12px 0;
+}
+.tc-catalogo-titulo > svg {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  color: #a0ff00;
+  stroke-width: 1.6;
+}
+.pagina .tc-catalogo-titulo h1 {
+  margin: 0;
+  color: #f6f8fc;
+  font-size: clamp(28px, 4vw, 54px);
+  line-height: 1.15;
+  letter-spacing: -1.4px;
+  text-align: left;
+}
+.pagina .tc-catalogo-cabecalho h2 {
+  margin: 4px 0 12px;
+  color: #a0ff00;
+  font-size: clamp(20px, 2.6vw, 30px);
+  text-align: center;
+}
+.tc-catalogo-cabecalho > p {
+  max-width: 740px;
+  margin: auto;
+  color: #bdd1df;
+  font-size: 17px;
+  line-height: 1.6;
+  text-align: center;
+}
+.pagina .tc-titulo-secao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  color: #edf6fc;
+  font-size: 23px;
+  text-align: left;
+  line-height: 1.4;
+}
+.tc-titulo-secao > svg {
+  color: #a0ff00;
+  flex-shrink: 0;
+}
+.pagina .tc-escolha-trilha {
+  margin-top: 30px;
+}
+.tc-ferramentas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.pagina .tc-ferramenta-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #488449;
+  border-radius: 17px;
+  background: #082b27;
+  color: #f2f7fc;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    transform 0.15s;
+}
+.pagina .tc-card-pack {
+  border-color: #496b93;
+  background: #082438;
+}
+.pagina .tc-ferramenta-card:hover {
+  border-color: #a0ff00;
+  transform: translateY(-2px);
+}
+.tc-ferramenta-miniatura {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  min-height: 174px;
+  background: radial-gradient(ellipse at 50% 100%, #194d3f, #041a24 85%);
+}
+.tc-card-pack .tc-ferramenta-miniatura {
+  background: radial-gradient(ellipse at 50% 100%, #1d3155, #041a2b 85%);
+}
+.tc-ferramenta-miniatura > svg {
+  color: #a0ff00;
+  flex-shrink: 0;
+}
+.tc-mini-calculadora {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  width: 245px;
+  padding: 14px;
+  border: 1px solid #426456;
+  border-radius: 10px;
+  background: #0a2527;
+  box-shadow: 0 12px 30px #0003;
+}
+.tc-mini-calculadora > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tc-mini-calculadora small {
+  color: #d3e4e3;
+  font-size: 10px;
+}
+.tc-mini-calculadora b {
+  color: #bdff69;
+  font-size: 23px;
+}
+.tc-mini-rodape {
+  padding-top: 10px;
+  margin-top: 4px;
+  border-top: 1px solid #35534b;
+  color: #bdd1df;
+  font-size: 11px;
+}
+.tc-mini-pack {
+  display: flex;
+  gap: 14px;
+  padding: 12px 22px;
+  border: 1px solid #3b5370;
+  border-radius: 12px;
+  background: #061a2a;
+}
+.tc-mini-grupo {
+  display: grid;
+  gap: 10px;
+  position: relative;
+  --tc-celula: #06d9ee;
+}
+.tc-mini-grupo-1 {
+  --tc-celula: #ffa326;
+}
+.tc-mini-grupo-2 {
+  --tc-celula: #c96aff;
+}
+.tc-mini-celula {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 4px solid var(--tc-celula);
+  border-radius: 50%;
+  background: #d8e2ec;
+  color: #162333;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 800;
+}
+.tc-mini-grupo::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 18px;
+  top: 22px;
+  width: 10px;
+  height: 56px;
+  border-radius: 4px;
+  background: linear-gradient(100deg, #8c9baa, #e7edf3, #a2b1bf);
+}
+.tc-mini-grupo-0::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 22px;
+  top: 46px;
+  width: 60px;
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(#e7edf3, #9aaaba);
+}
+.tc-ferramenta-descricao {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+  width: 100%;
+  padding: 20px 24px;
+  box-sizing: border-box;
+}
+.tc-ferramenta-descricao > small {
+  color: #b7ef8e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+}
+.tc-card-pack .tc-ferramenta-descricao > small {
+  color: #8fd7f3;
+}
+.tc-ferramenta-descricao > strong {
+  color: #f2f7fc;
+  font-size: 25px;
+  line-height: 1.3;
+}
+.tc-ferramenta-descricao > span:not(.tc-ferramenta-acao) {
+  color: #bdd1df;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.tc-ferramenta-acao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #ffffff20;
+  color: #a0ff00;
+  font-size: 14px;
+  font-weight: 700;
+}
+.tc-ferramenta-descricao > span + .tc-ferramenta-acao {
+  margin-top: 12px;
+}
+.tc-catalogo .tc-grid {
+  gap: 18px;
+}
+.tc-catalogo .tc-trilha {
+  align-items: center;
+  text-align: center;
+  border: 2px solid #00cd62;
+  background: linear-gradient(135deg, #003b25, #122432);
+  --tc-cor: #a0ff00;
+}
+.tc-catalogo .tc-amarela {
+  border-color: #ffca00;
+  background: linear-gradient(135deg, #513005, #122432);
+  --tc-cor: #ffca00;
+}
+.tc-catalogo .tc-roxa {
+  border-color: #db66f4;
+  background: linear-gradient(135deg, #3c2056, #122432);
+  --tc-cor: #db66f4;
+}
+.tc-catalogo .tc-trilha-icone {
+  margin-bottom: 12px;
+}
+.tc-catalogo .tc-trilha-icone svg {
+  width: 42px;
+  height: 42px;
+  stroke-width: 1.6;
+}
+.pagina .tc-catalogo .tc-trilha h2 {
+  text-align: center;
+}
+.tc-catalogo .tc-trilha > p {
+  min-height: 0;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.tc-catalogo .tc-ver-assuntos,
+.tc-catalogo .tc-assuntos {
+  width: 100%;
+  box-sizing: border-box;
+}
+.tc-catalogo .tc-assuntos {
+  text-align: left;
+}
+.tc-catalogo .tc-contagem {
+  margin-top: auto;
+}
+.tc-catalogo-orientacao {
+  margin: 24px 0 0;
+  border-color: #00bfc9;
+  background: #062834;
+}
+.tc-catalogo-orientacao strong {
+  color: #a0ff00;
+}
+.tc-titulo-ferramenta {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.tc-tela-ferramenta {
+  scroll-margin-top: 20px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pagina .tc-ferramenta-card {
+    transition: none;
+  }
+}
+@media (max-width: 900px) {
+  .tc-catalogo .tc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 650px) {
+  .tc-pagina.tc-catalogo {
+    width: calc(100% - 24px);
+    padding: 20px 16px;
+  }
+  .tc-ferramentas-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .tc-catalogo-titulo {
+    gap: 12px;
+  }
+  .tc-catalogo-titulo > svg {
+    width: 36px;
+    height: 36px;
+  }
+  .pagina .tc-catalogo-titulo h1 {
+    letter-spacing: -0.7px;
+    font-size: 29px;
+  }
+  .tc-catalogo-cabecalho > p {
+    font-size: 15px;
+  }
+  .tc-ferramenta-descricao {
+    padding: 18px;
+  }
+  .tc-ferramenta-descricao > strong {
+    font-size: 23px;
+  }
+}
+@media (max-width: 380px) {
+  .tc-ferramenta-miniatura {
+    gap: 12px;
+    padding: 16px 12px;
+  }
+  .tc-ferramenta-miniatura > svg {
+    width: 30px;
+  }
+  .tc-mini-calculadora b {
+    font-size: 20px;
+  }
+  .tc-mini-calculadora small {
+    font-size: 8px;
+  }
+}

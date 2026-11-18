@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   calcularPack,
+  limitesPack,
   conexoesPack,
   polaridadePack,
   pontosBmsPack,
@@ -24,7 +25,7 @@ test("exemplo 3S2P e entrada decimal com vírgula", () => {
 test("rejeita entradas vazias, não finitas, fora dos limites e S/P fracionários", () => {
   const base = { serie: 3, paralelo: 2, tensao: 3.7, capacidade: 2.5 };
   for (const [campo, valores] of Object.entries({
-    serie: ["", 0, 13, 1.5],
+    serie: ["", 0, limitesPack.serie + 1, 1.5],
     paralelo: ["", 0, 9, 2.5],
     tensao: ["", 0, -1, 11, Infinity],
     capacidade: ["", 0, -1, 101, NaN],
@@ -35,7 +36,7 @@ test("rejeita entradas vazias, não finitas, fora dos limites e S/P fracionário
 });
 
 test("todas as configurações: duas faces formam exatamente S+1 nós, sem curto e sem células desconectadas", () => {
-  for (let s = 1; s <= 12; s++)
+  for (let s = 1; s <= limitesPack.serie; s++)
     for (let p = 1; p <= 8; p++) {
       const parent = new Map();
       const key = (t) => `${t.grupo}:${t.celula}:${t.polo}`;
@@ -88,7 +89,7 @@ test("todas as configurações: duas faces formam exatamente S+1 nós, sem curto
 });
 
 test("BMS: B0 até BS aparecem uma vez, no positivo de cada grupo e negativo geral", () => {
-  for (let s = 1; s <= 12; s++) {
+  for (let s = 1; s <= limitesPack.serie; s++) {
     const pontos = ["superior", "inferior"].flatMap((face) =>
       pontosBmsPack(s, face).map((p) => ({ ...p, face })),
     );
@@ -102,4 +103,21 @@ test("BMS: B0 até BS aparecem uma vez, no positivo de cada grupo e negativo ger
       assert.equal(p.ponte, p.numero > 0 && p.numero < s);
     }
   }
+});
+
+test("13S2P: 26 células e ponto final B13", () => {
+  const r = calcularPack({
+    serie: 13,
+    paralelo: 2,
+    tensao: 3.7,
+    capacidade: 2.5,
+  });
+  assert.equal(r.configuracao, "13S2P");
+  assert.equal(r.celulas, 26);
+  assert.ok(Math.abs(r.tensao - 48.1) < 1e-10);
+  assert.equal(r.capacidade, 5);
+  assert.ok(Math.abs(r.energia - 240.5) < 1e-10);
+  assert.ok(
+    pontosBmsPack(13, "superior").some((p) => p.numero === 13 && !p.ponte),
+  );
 });

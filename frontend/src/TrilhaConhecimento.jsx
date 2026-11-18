@@ -3,6 +3,9 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
+  Calculator,
+  GraduationCap,
+  Wrench,
   ChevronDown,
   Cpu,
   Route,
@@ -219,10 +222,105 @@ export function CardTrilhaConhecimento({ onAbrir }) {
   );
 }
 
+function CardsFerramentas({ onAbrir }) {
+  return (
+    <section className="tc-ferramentas" aria-labelledby="tc-ferramentas-titulo">
+      <h2 id="tc-ferramentas-titulo" className="tc-titulo-secao">
+        <Wrench size={22} aria-hidden="true" /> Ferramentas de aprendizado
+      </h2>
+      <div className="tc-ferramentas-grid">
+        <button
+          id="tc-ferramenta-calculadora"
+          type="button"
+          className="tc-ferramenta-card tc-card-calculadora"
+          onClick={() => onAbrir("calculadora")}
+        >
+          <span className="tc-ferramenta-miniatura" aria-hidden="true">
+            <Calculator size={42} />
+            <span className="tc-mini-calculadora">
+              <span>
+                <small>TENSÃO NOMINAL</small>
+                <small>ENERGIA</small>
+              </span>
+              <span>
+                <b>46,8 V</b>
+                <b>936 Wh</b>
+              </span>
+              <span className="tc-mini-rodape">
+                Simule sua bateria <span>V · Ah · km</span>
+              </span>
+            </span>
+          </span>
+          <span className="tc-ferramenta-descricao">
+            <small>CALCULE E COMPARE</small>
+            <strong>Calculadora de bateria</strong>
+            <span>
+              Explore tensão, energia e autonomia estimada de veículos
+              elétricos.
+            </span>
+            <span className="tc-ferramenta-acao">
+              Abrir calculadora <ArrowRight size={19} aria-hidden="true" />
+            </span>
+          </span>
+        </button>
+        <button
+          id="tc-ferramenta-pack"
+          type="button"
+          className="tc-ferramenta-card tc-card-pack"
+          onClick={() => onAbrir("pack")}
+        >
+          <span className="tc-ferramenta-miniatura" aria-hidden="true">
+            <span className="tc-mini-pack">
+              {[0, 1, 2].map((grupo) => (
+                <span
+                  className={`tc-mini-grupo tc-mini-grupo-${grupo}`}
+                  key={grupo}
+                >
+                  <span className="tc-mini-celula">
+                    {grupo === 1 ? "−" : "+"}
+                  </span>
+                  <span className="tc-mini-celula">
+                    {grupo === 1 ? "−" : "+"}
+                  </span>
+                </span>
+              ))}
+            </span>
+          </span>
+          <span className="tc-ferramenta-descricao">
+            <small>MONTE E ENTENDA</small>
+            <strong>Monte seu pack</strong>
+            <span>
+              Visualize série, paralelo, chapas de níquel e os pontos da BMS.
+            </span>
+            <span className="tc-ferramenta-acao">
+              Explorar o pack <ArrowRight size={19} aria-hidden="true" />
+            </span>
+          </span>
+        </button>
+      </div>
+    </section>
+  );
+}
+
 export default function TrilhaConhecimento({ token, onVoltar }) {
   const recurso = useConhecimento("/api/conhecimento/trilhas", token);
   const [abertas, setAbertas] = useState([]);
   const [aulaId, setAulaId] = useState(null);
+  const [ferramenta, setFerramenta] = useState(null);
+  const tituloFerramentaRef = useRef(null);
+  useEffect(() => {
+    if (ferramenta) {
+      tituloFerramentaRef.current?.focus({ preventScroll: true });
+      tituloFerramentaRef.current?.scrollIntoView({ block: "start" });
+    }
+  }, [ferramenta]);
+  function voltarDasFerramentas() {
+    const anterior = ferramenta;
+    setFerramenta(null);
+    requestAnimationFrame(() =>
+      document.getElementById(`tc-ferramenta-${anterior}`)?.focus(),
+    );
+  }
   const trilhas = recurso.dados?.trilhas || [];
   const trilhaAtual = trilhas.find((trilha) =>
     trilha.modulos.some((modulo) =>
@@ -231,11 +329,35 @@ export default function TrilhaConhecimento({ token, onVoltar }) {
   );
   return (
     <section
-      className="tc-pagina"
-      aria-labelledby={aulaId ? undefined : "tc-titulo"}
+      className={`tc-pagina ${ferramenta ? "tc-tela-ferramenta" : aulaId ? "" : "tc-catalogo"}`}
+      aria-labelledby={
+        ferramenta ? "tc-ferramenta-titulo" : aulaId ? undefined : "tc-titulo"
+      }
       aria-label={aulaId ? "Leitura da aula" : undefined}
     >
-      {aulaId && trilhaAtual ? (
+      {ferramenta ? (
+        <>
+          <button
+            type="button"
+            className="tc-voltar"
+            onClick={voltarDasFerramentas}
+          >
+            <ArrowLeft size={18} aria-hidden="true" /> Voltar à Trilha do
+            Conhecimento
+          </button>
+          <h1
+            id="tc-ferramenta-titulo"
+            className="tc-titulo-ferramenta"
+            tabIndex={-1}
+            ref={tituloFerramentaRef}
+          >
+            {ferramenta === "pack"
+              ? "Monte seu pack"
+              : "Calculadora de bateria"}
+          </h1>
+          {ferramenta === "pack" ? <MontePack /> : <CalculadoraBateria />}
+        </>
+      ) : aulaId && trilhaAtual ? (
         <AulaConhecimento
           key={aulaId}
           id={aulaId}
@@ -254,24 +376,22 @@ export default function TrilhaConhecimento({ token, onVoltar }) {
           <button type="button" className="tc-voltar" onClick={onVoltar}>
             <ArrowLeft size={18} aria-hidden="true" /> Voltar
           </button>
-          <header className="tc-cabecalho">
-            <span className="tc-etiqueta">UM CAMINHO PARA APRENDER</span>
-            <h1 id="tc-titulo">Trilha do Conhecimento</h1>
-          </header>
-          <MontePack />
-          <CalculadoraBateria />
-          <p className="tc-introducao">
-            Dos fundamentos à prática na oficina. Escolha uma trilha, explore
-            os módulos e abra uma aula para começar.
-          </p>
-          <div className="tc-orientacao">
-            <BookOpen size={22} aria-hidden="true" />
+          <header className="tc-catalogo-cabecalho">
+            <span className="tc-etiqueta">APRENDA PASSO A PASSO</span>
+            <div className="tc-catalogo-titulo">
+              <BookOpen aria-hidden="true" />
+              <h1 id="tc-titulo">Trilha do Conhecimento</h1>
+            </div>
+            <h2>Entenda. Simule. Aprenda.</h2>
             <p>
-              <strong>Por onde começar?</strong> Se você está construindo sua
-              base, siga a ordem: Elétrica → Eletrônica → Mobilidade elétrica.
-              Já tem experiência? Explore a trilha do seu interesse.
+              Da base elétrica à prática na oficina. Explore as ferramentas e
+              siga seu caminho de aprendizado.
             </p>
-          </div>
+          </header>
+          <CardsFerramentas onAbrir={setFerramenta} />
+          <h2 className="tc-titulo-secao tc-escolha-trilha">
+            <Route size={22} aria-hidden="true" /> Escolha sua trilha
+          </h2>
           {recurso.carregando || recurso.erro ? (
             <EstadoConteudo {...recurso} />
           ) : !trilhas.length ? (
@@ -358,6 +478,14 @@ export default function TrilhaConhecimento({ token, onVoltar }) {
               })}
             </div>
           )}
+          <aside className="tc-orientacao tc-catalogo-orientacao">
+            <GraduationCap size={28} aria-hidden="true" />
+            <p>
+              <strong>Por onde começar?</strong> Siga Elétrica → Eletrônica →
+              Mobilidade elétrica. As ferramentas podem ser exploradas a
+              qualquer momento.
+            </p>
+          </aside>
         </>
       )}
     </section>

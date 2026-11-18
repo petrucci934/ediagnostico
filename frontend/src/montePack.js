@@ -1,4 +1,4 @@
-export const limitesPack = { serie: 12, paralelo: 8 };
+export const limitesPack = { serie: 13, paralelo: 8 };
 
 export function calcularPack({ serie, paralelo, tensao, capacidade }) {
   const valores = [serie, paralelo, tensao, capacidade].map((v) =>

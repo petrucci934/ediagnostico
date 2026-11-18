@@ -17,6 +17,7 @@ import {
   pontosBmsPack,
 } from "./montePack";
 import "./MontePack.css";
+import MateriaisPack from "./MateriaisPack";
 
 const cores = [
   "#00d9ed",
@@ -31,6 +32,7 @@ const cores = [
   "#a1ca61",
   "#f19070",
   "#74c6f0",
+  "#e6e88a",
 ];
 const fmt = (v) => v.toLocaleString("pt-BR", { maximumFractionDigits: 3 });
 
@@ -502,8 +504,9 @@ export default function MontePack() {
       </div>
       {!resultado ? (
         <p role="alert">
-          Informe S inteiro de 1 a 12 e P inteiro de 1 a 8; tensão de 0,01 a 10
-          V e capacidade de 0,01 a 100 Ah.
+          Informe S inteiro de 1 a {limitesPack.serie} e P inteiro de 1 a{" "}
+          {limitesPack.paralelo}; tensão de 0,01 a 10 V e capacidade de 0,01 a
+          100 Ah.
         </p>
       ) : (
         <>
@@ -618,6 +621,7 @@ export default function MontePack() {
           </details>
         </>
       )}
+      <MateriaisPack resultado={resultado} />
       <small className="mp-aviso">
         <Info size={16} aria-hidden="true" /> Ilustração educativa. Não
         substitui um projeto de fabricação; isolação, dimensionamento do níquel,
